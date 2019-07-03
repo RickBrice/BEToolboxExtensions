@@ -17,7 +17,7 @@ Other Experemental Aspects
 The other experimental aspects of this project are
 
 #. Generation of end user documentation with Sphinx and Read the Docs
-#. Autogenerate developer documentation from C++ source files and publish them with Read the Docs
+
 
 Contents:
 
@@ -26,8 +26,7 @@ Contents:
    
    m3c
    svt
-   api
-
+   
 
 Indices and tables
 ==================
