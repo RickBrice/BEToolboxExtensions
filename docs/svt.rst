@@ -12,6 +12,7 @@ Operations
 General Information
 -------------------
 The table below provides general information (this is really just to learn how to make a table with reST)
+
 +----------------------------+-----------------------------------------------------------------------+
 | Item                       | Description                                                           |
 +============================+=======================================================================+
