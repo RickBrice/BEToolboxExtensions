@@ -6,7 +6,7 @@ This project implements experimental extensions to BridgeLink::BEToolbox. These 
 
 Moment Curvature of Circular Columns
 ------------------------------------
-This extension computes the moment curvature response of circular columns.
+This extension computes the moment curvature response of circular columns with bonded and unbonded longitudinal reinforcement and unbonded prestressed tendons.
 
 St. Venant Torsional Constant
 -----------------------------
@@ -16,6 +16,7 @@ Other Experemental Aspects
 --------------------------
 The other experimental aspects of this project are
 
+#. Experiment with generating documentation using reSTructured text
 #. Generation of end user documentation with Sphinx and Read the Docs
 
 
