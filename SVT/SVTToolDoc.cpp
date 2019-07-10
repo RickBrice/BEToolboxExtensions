@@ -288,8 +288,7 @@ std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
 
 void CSVTToolDoc::GenerateMesh(UniformFDMesh& mesh)
 {
-   Float64 min_mesh_element_size = 0.25;
-   FDMeshGenerator mesh_generator(min_mesh_element_size, min_mesh_element_size);
+   FDMeshGenerator mesh_generator(m_Dmax, m_Dmax);
 
    mesh_generator.GenerateMesh(m_pShape, mesh);
 }
