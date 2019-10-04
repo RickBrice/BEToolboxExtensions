@@ -22,6 +22,39 @@
 
 #pragma once
 
+#include <WBFLGeometry.h>
+
+
+namespace _NUBeam
+{
+   enum NUBeamDimensions { D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1 };
+}
+
+namespace _ILBeam
+{
+   enum NUBeamDimensions { D1, D2, D3, D4, D5, R1, R2, T, W1, W2, C1 };
+}
+
+namespace IBeam
+{
+   enum IBeamDimensions { C1, D1, D2, D3, D4, D5, D6, D7, T1, T2, W1, W2, W3, W4 };
+}
+
+namespace _UBeam
+{
+   enum Dimensions { D1, D2, D3, D4, D5, D6, D7, T, W1, W2, W3, W4, W5 };
+}
+
+using Results = struct
+{
+   Float64 J;
+   Float64 Japprox;
+   IndexType nElements;
+   IndexType nInteriorNodes;
+   Float64 ApproxArea;
+   CComPtr<IShapeProperties> Props;
+};
+
 /// Gets parameters for sharing the processing of many items over multiple threads
 void GetThreadParameters(IndexType nItems, /**< [in] total number of items to be processed*/
                          IndexType& nWorkerThreads, /**< [out] number of worker threads to spawn*/

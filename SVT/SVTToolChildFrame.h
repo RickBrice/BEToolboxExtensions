@@ -41,6 +41,7 @@ protected:
    DECLARE_MESSAGE_MAP()
    afx_msg BOOL OnToolTipNotify(UINT id, NMHDR* pNMHDR, LRESULT* pResult);
    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+   afx_msg void OnTypeChanged();
    afx_msg void OnGirderChanged();
    afx_msg void OnCompute();
 

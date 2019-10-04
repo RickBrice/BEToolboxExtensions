@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CSVTToolChildFrame, CEAFChildFrame)
    ON_WM_CREATE()
    ON_NOTIFY_EX(TTN_NEEDTEXT, 0, OnToolTipNotify)
    //ON_MESSAGE(WM_HELP, OnCommandHelp)
+   ON_CBN_SELCHANGE(IDC_TYPE, OnTypeChanged)
    ON_CBN_SELCHANGE(IDC_GIRDERS, OnGirderChanged)
    ON_BN_CLICKED(IDC_COMPUTE, OnCompute)
 END_MESSAGE_MAP()
@@ -89,13 +90,6 @@ int CSVTToolChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
       EnableToolTips();
       m_DlgBar.EnableToolTips();
       SetIcon(AfxGetApp()->LoadIcon(IDR_SVT), TRUE);
-   }
-
-   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetActiveDocument();
-   if (pDoc)
-   {
-      CComboBox* pCB = (CComboBox*)m_DlgBar.GetDlgItem(IDC_GIRDERS);
-      pCB->SetCurSel((int)pDoc->GetGirder());
    }
 
 
@@ -151,16 +145,19 @@ BOOL CSVTToolChildFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle , CWnd
    return TRUE;
 }
 
+void CSVTToolChildFrame::OnTypeChanged()
+{
+   m_DlgBar.UpdateGirderList();
+   OnGirderChanged();
+}
+
 void CSVTToolChildFrame::OnGirderChanged()
 {
-   CComboBox* pCB = (CComboBox*)m_DlgBar.GetDlgItem(IDC_GIRDERS);
-   auto nCurSel = pCB->GetCurSel();
-
-   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetActiveDocument();
-   if (pDoc && nCurSel != CB_ERR)
-   {
-      pDoc->SetGirder((BeamShapeType)nCurSel);
-   }
+   IndexType typeIdx, beamIdx;
+   m_DlgBar.GetGirder(typeIdx, beamIdx);
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   pDoc->SetGirder(typeIdx, beamIdx);
+   pDoc->UpdateAllViews(nullptr);
 }
 
 void CSVTToolChildFrame::OnCompute()
@@ -168,11 +165,9 @@ void CSVTToolChildFrame::OnCompute()
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CWaitCursor cursor;
 
-   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetActiveDocument();
-   Float64 J;
-   IndexType nElements, nNodes;
-   pDoc->GetTorsionalConstant(&J,&nElements,&nNodes);
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   Results r = pDoc->GetTorsionalConstant();
    CString str;
-   str.Format(_T("J = %.0f  in^4\n# Elements = %d\n# Points = %d"), J,nElements, nNodes);
+   str.Format(_T("J = %.0f  in^4\nJapprox = %.0f\n# Elements = %d\n# Points = %d"), r.J, r.Japprox, r.nElements, r.nInteriorNodes);
    AfxMessageBox(str);
 }

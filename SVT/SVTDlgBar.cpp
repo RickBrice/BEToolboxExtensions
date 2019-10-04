@@ -27,6 +27,7 @@
 #include "..\resource.h"
 #include <EAF\EAFApp.h>
 #include "SVTDlgBar.h"
+#include "SVTToolDoc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -111,7 +112,8 @@ BOOL CSVTDlgBar::Create(CWnd* pParentWnd, LPCTSTR lpszTemplateName, UINT nStyle,
    BOOL bResult = CDialogBar::Create(pParentWnd, lpszTemplateName, nStyle, nID);
    if (bResult)
    {
-      FillGirderList();
+      FillTypeList();
+      UpdateGirderList();
    }
 
    return bResult;
@@ -122,15 +124,48 @@ BOOL CSVTDlgBar::Create(CWnd* pParentWnd, UINT nIDTemplate, UINT nStyle, UINT nI
    return CDialogBar::Create(pParentWnd, nIDTemplate, nStyle, nID);
 }
 
-void CSVTDlgBar::FillGirderList()
+void CSVTDlgBar::FillTypeList()
 {
-   CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_GIRDERS);
-
-   int n = sizeof(gs_Name) / sizeof(gs_Name[0]);
-   for (int i = 0; i < n; i++)
+   CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_TYPE);
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   IndexType nTypes = pDoc->GetTypeCount();
+   for (IndexType typeIdx = 0; typeIdx < nTypes; typeIdx++)
    {
-      pCB->AddString(gs_Name[i].c_str());
+      LPCTSTR name = pDoc->GetTypeName(typeIdx);
+      pCB->AddString(name);
    }
+   pCB->SetCurSel(0);
+}
+
+void CSVTDlgBar::UpdateGirderList()
+{
+   CComboBox* pcbType = (CComboBox*)GetDlgItem(IDC_TYPE);
+   IndexType typeIdx = (IndexType)(pcbType->GetCurSel());
+   if (typeIdx == INVALID_INDEX)
+   {
+      typeIdx = 0;
+   }
+
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   IndexType nBeams = pDoc->GetBeamCount(typeIdx);
+
+   CComboBox* pcbGirders = (CComboBox*)GetDlgItem(IDC_GIRDERS);
+   pcbGirders->ResetContent();
+   for (IndexType beamIdx = 0; beamIdx < nBeams; beamIdx++)
+   {
+      LPCTSTR beam = pDoc->GetBeamName(typeIdx, beamIdx);
+      pcbGirders->AddString(beam);
+   }
+   pcbGirders->SetCurSel(0);
+}
+
+void CSVTDlgBar::GetGirder(IndexType& typeIdx, IndexType& beamIdx)
+{
+   CComboBox* pcbType = (CComboBox*)GetDlgItem(IDC_TYPE);
+   typeIdx = (IndexType)(pcbType->GetCurSel());
+
+   CComboBox* pcbGirders = (CComboBox*)GetDlgItem(IDC_GIRDERS);
+   beamIdx = (IndexType)(pcbGirders->GetCurSel());
 }
 
 void CSVTDlgBar::DoDataExchange(CDataExchange* pDX)

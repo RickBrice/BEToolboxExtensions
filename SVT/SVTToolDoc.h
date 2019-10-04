@@ -25,6 +25,8 @@
 #include <BEToolboxDoc.h>
 #include <WBFLGeometry.h>
 #include "UniformFDMesh.h"
+#include "AbstractBeamFactory.h"
+#include "Helpers.h"
 
 class CSVTToolDoc : public CBEToolboxDoc
 {
@@ -35,6 +37,9 @@ public:
 	virtual ~CSVTToolDoc();
 
    virtual CString GetToolbarSectionName() override;
+
+   std::vector<LPCTSTR> GetTypes() const;
+   std::vector<LPCTSTR> GetBeams(LPCTSTR type) const;
 
 #ifdef _DEBUG
 	virtual void AssertValid() const override;
@@ -62,15 +67,19 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 
-   void SetGirder(BeamShapeType type);
-   BeamShapeType GetGirder() const;
+   IndexType GetTypeCount() const;
+   LPCTSTR GetTypeName(IndexType typeIdx) const;
+   IndexType GetBeamCount(IndexType typeIdx) const;
+   LPCTSTR GetBeamName(IndexType typeIdx, IndexType beamIdx) const;
+
+   void SetGirder(IndexType typeIdx, IndexType beamIdx);
 
    void SetMaxElementSize(Float64 dMax);
    Float64 GetMaxElementSize() const;
 
    void GetShape(IShape** ppShape);
 
-   void GetTorsionalConstant(Float64* pJ,IndexType* pnElements,IndexType* pnPoints);
+   Results GetTorsionalConstant();
 
    std::vector<CComPtr<IRectangle>> GetMesh();
 
@@ -82,10 +91,11 @@ protected:
    virtual void LoadToolbarResource() override;
 
 private:
-   BeamShapeType m_Type;
    CComPtr<IShape> m_pShape;
    CComPtr<IBeamShapeFactory> m_Factory;
    std::unique_ptr<UniformFDMesh> m_pMesh;
+
+   std::vector < std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
 
    Float64 m_Dmax;
 

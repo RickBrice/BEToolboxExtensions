@@ -136,6 +136,27 @@
     <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\AASHTOBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\WSDOTBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\CTBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\ILBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\NUBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\TxDOTBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\ValidationShapeFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -250,6 +271,30 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\UnsymmetricBandedMatrix.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\AASHTOBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\WSDOTBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\AbstractBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\CTBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\ILBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\NUBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\TxDOTBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\ValidationShapeFactory.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

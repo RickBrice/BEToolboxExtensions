@@ -284,16 +284,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SVT\AASHTOBeamFactory.cpp" />
+    <ClCompile Include="SVT\CTBeamFactory.cpp" />
     <ClCompile Include="SVT\FDMeshGenerator.cpp" />
     <ClCompile Include="SVT\Helpers.cpp" />
+    <ClCompile Include="SVT\ILBeamFactory.cpp" />
+    <ClCompile Include="SVT\NUBeamFactory.cpp" />
     <ClCompile Include="SVT\PrandtlMembrane.cpp" />
     <ClCompile Include="SVT\SVTDlgBar.cpp" />
     <ClCompile Include="SVT\SVTToolChildFrame.cpp" />
     <ClCompile Include="SVT\SVTToolDoc.cpp" />
     <ClCompile Include="SVT\SVTToolDocTemplate.cpp" />
     <ClCompile Include="SVT\SVTToolView.cpp" />
+    <ClCompile Include="SVT\TxDOTBeamFactory.cpp" />
     <ClCompile Include="SVT\UniformFDMesh.cpp" />
     <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp" />
+    <ClCompile Include="SVT\ValidationShapeFactory.cpp" />
+    <ClCompile Include="SVT\WSDOTBeamFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BEToolboxToolExtensions_i.h" />
@@ -320,8 +327,13 @@
     <ClInclude Include="M3C\MC3Tools.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SVT\AASHTOBeamFactory.h" />
+    <ClInclude Include="SVT\AbstractBeamFactory.h" />
+    <ClInclude Include="SVT\CTBeamFactory.h" />
     <ClInclude Include="SVT\FDMeshGenerator.h" />
     <ClInclude Include="SVT\Helpers.h" />
+    <ClInclude Include="SVT\ILBeamFactory.h" />
+    <ClInclude Include="SVT\NUBeamFactory.h" />
     <ClInclude Include="SVT\PrandtlMembrane.h" />
     <ClInclude Include="SVT\SVT.h" />
     <ClInclude Include="SVT\SVT.hh" />
@@ -332,8 +344,11 @@
     <ClInclude Include="SVT\SVTToolDoc.h" />
     <ClInclude Include="SVT\SVTToolDocTemplate.h" />
     <ClInclude Include="SVT\SVTToolView.h" />
+    <ClInclude Include="SVT\TxDOTBeamFactory.h" />
     <ClInclude Include="SVT\UniformFDMesh.h" />
     <ClInclude Include="SVT\UnsymmetricBandedMatrix.h" />
+    <ClInclude Include="SVT\ValidationShapeFactory.h" />
+    <ClInclude Include="SVT\WSDOTBeamFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BEToolboxToolExtensions.rc" />

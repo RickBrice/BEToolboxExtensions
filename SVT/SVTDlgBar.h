@@ -34,9 +34,14 @@ public:
    virtual BOOL Create(CWnd* pParentWnd, LPCTSTR lpszTemplateName, UINT nStyle, UINT nID) override;
    virtual BOOL Create(CWnd* pParentWnd, UINT nIDTemplate, UINT nStyle, UINT nID) override;
 
+   void UpdateGirderList();
+
+   void GetGirder(IndexType& typeIdx, IndexType& beamIdx);
+
 protected:
 	DECLARE_MESSAGE_MAP()
+
    virtual void DoDataExchange(CDataExchange* pDX) override;
 
-   void FillGirderList();
+   void FillTypeList();
 };

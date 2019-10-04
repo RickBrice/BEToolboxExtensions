@@ -34,6 +34,14 @@
 #include <EAF\EAFApp.h>
 #include <EAF\EAFHelp.h>
 
+#include "ValidationShapeFactory.h"
+#include "AASHTOBeamFactory.h"
+#include "CTBeamFactory.h"
+#include "ILBeamFactory.h"
+#include "NUBeamFactory.h"
+#include "TxDOTBeamFactory.h"
+#include "WSDOTBeamFactory.h"
+
 #include "FDMeshGenerator.h"
 #include "PrandtlMembrane.h"
 
@@ -43,13 +51,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
 // CSVTToolDoc
 
 IMPLEMENT_DYNCREATE(CSVTToolDoc, CBEToolboxDoc)
 
 CSVTToolDoc::CSVTToolDoc()
 {
+   m_BeamFactories.push_back(std::make_pair(_T("Validation Shapes"), std::make_unique<CValidationShapeFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("AASHTO"), std::make_unique<CAASHTOBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Illinios"), std::make_unique<CILBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Nebraska"), std::make_unique<CNUBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Texas"), std::make_unique<CTxDOTBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Washington"), std::make_unique<CWSDOTBeamFactory>()));
+
    UIHints(FALSE); // not using UIHints feature
 }
 
@@ -92,12 +107,9 @@ BOOL CSVTToolDoc::Init()
    }
 
    // initialize with some data
-   m_Factory.CoCreateInstance(CLSID_BeamShapeFactory);
-   m_Type = AASHTO_TypeI;
-   m_Factory->CreateShape(m_Type, &m_pShape);
-   m_Dmax = 0.25; // inch
-   m_pMesh = std::make_unique<UniformFDMesh>();
-   GenerateMesh(*(m_pMesh.get()));
+   m_Dmax = 0.125; // inch
+
+   SetGirder(0, 0);
 
    return TRUE;
 }
@@ -201,24 +213,32 @@ void CSVTToolDoc::LoadToolbarResource()
    CBEToolboxDoc::LoadToolbarResource();
 }
 
-void CSVTToolDoc::SetGirder(BeamShapeType type)
+IndexType CSVTToolDoc::GetTypeCount() const
 {
-   if (m_Type != type)
-   {
-      m_pShape.Release();
-      m_Type = type;
-      m_Factory->CreateShape(m_Type,&m_pShape);
-
-      m_pMesh = std::make_unique<UniformFDMesh>();
-      GenerateMesh(*(m_pMesh.get()));
-
-      UpdateAllViews(nullptr);
-   }
+   return (IndexType)m_BeamFactories.size();
 }
 
-BeamShapeType CSVTToolDoc::GetGirder() const
+LPCTSTR CSVTToolDoc::GetTypeName(IndexType typeIdx) const
 {
-   return m_Type;
+   return m_BeamFactories[typeIdx].first.c_str();
+}
+
+IndexType CSVTToolDoc::GetBeamCount(IndexType typeIdx) const
+{
+   return m_BeamFactories[typeIdx].second->GetBeamCount();
+}
+
+LPCTSTR CSVTToolDoc::GetBeamName(IndexType typeIdx, IndexType beamIdx) const
+{
+   return m_BeamFactories[typeIdx].second->GetBeamName(beamIdx);
+}
+
+void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
+{
+   m_pShape.Release();
+   m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, &m_pShape);
+   m_pMesh = std::make_unique<UniformFDMesh>();
+   GenerateMesh(*(m_pMesh.get()));
 }
 
 void CSVTToolDoc::GetShape(IShape** ppShape)
@@ -236,12 +256,27 @@ Float64 CSVTToolDoc::GetMaxElementSize() const
    return m_Dmax;
 }
 
-void CSVTToolDoc::GetTorsionalConstant(Float64* pJ, IndexType* pnElements, IndexType* pnPoints)
+Results CSVTToolDoc::GetTorsionalConstant()
 {
+   Results r;
    PrandtlMembrane membrane;
-   *pJ = membrane.ComputeJ(*(m_pMesh.get()));
-   *pnElements = m_pMesh->GetElementCount();
-   *pnPoints = m_pMesh->GetInteriorNodeCount();
+   r.J = membrane.ComputeJ(*(m_pMesh.get()));
+   r.nElements = m_pMesh->GetElementCount();
+   r.nInteriorNodes = m_pMesh->GetInteriorNodeCount();
+
+   r.ApproxArea = (m_pMesh->HasSymmetry() ? 2 : 1)*r.nElements * m_pMesh->GetElementArea();
+
+   m_pShape->get_ShapeProperties(&r.Props);
+
+   Float64 A, Ix, Iy;
+   r.Props->get_Area(&A);
+   r.Props->get_Ixx(&Ix);
+   r.Props->get_Iyy(&Iy);
+
+   Float64 Ip = Ix + Iy;
+   r.Japprox = A*A*A*A / (40.0*Ip);
+
+   return r;
 }
 
 std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
