@@ -66,6 +66,9 @@
     <ClInclude Include="..\WSDOTBeamFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\OhioBeamFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\WSDOTBeamFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OhioBeamFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

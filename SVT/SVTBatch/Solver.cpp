@@ -20,6 +20,7 @@
 #include "..\WSDOTBeamFactory.h"
 #include "..\CTBeamFactory.h"
 #include "..\NUBeamFactory.h"
+#include "..\OhioBeamFactory.h"
 #include "..\ILBeamFactory.h"
 #include "..\TxDOTBeamFactory.h"
 
@@ -109,6 +110,7 @@ long main()
       Beams<AASHTOBeamType, AASHTOBeamFactory>(_T("AASHTO"));
       Beams<CTBeamType, CTBeamFactory>(_T("California"));
       Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
+      Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
       Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
       Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
       Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
