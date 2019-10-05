@@ -43,6 +43,7 @@ protected:
    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
    afx_msg void OnTypeChanged();
    afx_msg void OnGirderChanged();
+   afx_msg void OnSizeChanged();
    afx_msg void OnCompute();
 
 protected:

@@ -38,10 +38,13 @@ public:
 
    void GetGirder(IndexType& typeIdx, IndexType& beamIdx);
 
+   Float64 GetMaxElementSize();
+
 protected:
 	DECLARE_MESSAGE_MAP()
 
    virtual void DoDataExchange(CDataExchange* pDX) override;
 
    void FillTypeList();
+   void FillMeshSizeList();
 };

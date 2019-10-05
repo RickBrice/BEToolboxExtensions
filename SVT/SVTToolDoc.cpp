@@ -107,7 +107,7 @@ BOOL CSVTToolDoc::Init()
    }
 
    // initialize with some data
-   m_Dmax = 0.125; // inch
+   m_Dmax = 0.5; // inch
 
    SetGirder(0, 0);
 
@@ -237,8 +237,7 @@ void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
 {
    m_pShape.Release();
    m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, &m_pShape);
-   m_pMesh = std::make_unique<UniformFDMesh>();
-   GenerateMesh(*(m_pMesh.get()));
+   Update();
 }
 
 void CSVTToolDoc::GetShape(IShape** ppShape)
@@ -249,6 +248,7 @@ void CSVTToolDoc::GetShape(IShape** ppShape)
 void CSVTToolDoc::SetMaxElementSize(Float64 dMax)
 {
    m_Dmax = dMax;
+   Update();
 }
 
 Float64 CSVTToolDoc::GetMaxElementSize() const
@@ -324,6 +324,11 @@ std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
 void CSVTToolDoc::GenerateMesh(UniformFDMesh& mesh)
 {
    FDMeshGenerator mesh_generator(m_Dmax, m_Dmax);
-
    mesh_generator.GenerateMesh(m_pShape, mesh);
+}
+
+void CSVTToolDoc::Update()
+{
+   m_pMesh = std::make_unique<UniformFDMesh>();
+   GenerateMesh(*(m_pMesh.get()));
 }

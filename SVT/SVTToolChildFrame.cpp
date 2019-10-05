@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CSVTToolChildFrame, CEAFChildFrame)
    //ON_MESSAGE(WM_HELP, OnCommandHelp)
    ON_CBN_SELCHANGE(IDC_TYPE, OnTypeChanged)
    ON_CBN_SELCHANGE(IDC_GIRDERS, OnGirderChanged)
+   ON_CBN_SELCHANGE(IDC_MESH_SIZE,OnSizeChanged)
    ON_BN_CLICKED(IDC_COMPUTE, OnCompute)
 END_MESSAGE_MAP()
 
@@ -157,6 +158,13 @@ void CSVTToolChildFrame::OnGirderChanged()
    m_DlgBar.GetGirder(typeIdx, beamIdx);
    CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
    pDoc->SetGirder(typeIdx, beamIdx);
+   pDoc->UpdateAllViews(nullptr);
+}
+
+void CSVTToolChildFrame::OnSizeChanged()
+{
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   pDoc->SetMaxElementSize(m_DlgBar.GetMaxElementSize());
    pDoc->UpdateAllViews(nullptr);
 }
 

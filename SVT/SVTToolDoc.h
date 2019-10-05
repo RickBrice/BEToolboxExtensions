@@ -100,4 +100,5 @@ private:
    Float64 m_Dmax;
 
    void GenerateMesh(UniformFDMesh& mesh);
+   void Update();
 };

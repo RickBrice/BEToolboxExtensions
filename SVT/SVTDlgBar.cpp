@@ -35,58 +35,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-static std::_tstring gs_Name[]{
-   _T("Type I"),
-   _T("Type II"),
-   _T("Type III"),
-   _T("Type IV"),
-   _T("Type V"),
-   _T("Type VI"),
-   _T("BT54"),
-   _T("BT63"),
-   _T("BT72"),
-   _T("W42G"),
-   _T("W50G"),
-   _T("W58G"),
-   _T("W74G"),
-   _T("WF36G"),
-   _T("WF42G"),
-   _T("WF50G"),
-   _T("WF58G"),
-   _T("WF66G"),
-   _T("WF74G"),
-   _T("WF83G"),
-   _T("WF95G"),
-   _T("WF100G"),
-   _T("Tx28"),
-   _T("Tx34"),
-   _T("Tx40"),
-   _T("Tx46"),
-   _T("Tx54"),
-   _T("Tx62"),
-   _T("Tx70"),
-
-   _T("U54G4"),
-   _T("U54G5"),
-   _T("U54G6"),
-   _T("U66G4"),
-   _T("U66G5"),
-   _T("U66G6"),
-   _T("U78G4"),
-   _T("U78G5"),
-   _T("U78G6"),
-   _T("UF60G4"),
-   _T("UF60G5"),
-   _T("UF60G6"),
-   _T("UF72G4"),
-   _T("UF72G5"),
-   _T("UF72G6"),
-   _T("UF84G4"),
-   _T("UF84G5"),
-   _T("UF84G6"),
-   _T("U40"),
-   _T("U54"),
-};
 
 // CSVTDlgBar
 
@@ -112,6 +60,7 @@ BOOL CSVTDlgBar::Create(CWnd* pParentWnd, LPCTSTR lpszTemplateName, UINT nStyle,
    BOOL bResult = CDialogBar::Create(pParentWnd, lpszTemplateName, nStyle, nID);
    if (bResult)
    {
+      FillMeshSizeList();
       FillTypeList();
       UpdateGirderList();
    }
@@ -134,6 +83,16 @@ void CSVTDlgBar::FillTypeList()
       LPCTSTR name = pDoc->GetTypeName(typeIdx);
       pCB->AddString(name);
    }
+   pCB->SetCurSel(0);
+}
+
+void CSVTDlgBar::FillMeshSizeList()
+{
+   CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_MESH_SIZE);
+   pCB->SetItemData(pCB->AddString(_T("1/2\"")), 2);
+   pCB->SetItemData(pCB->AddString(_T("1/4\"")), 4);
+   pCB->SetItemData(pCB->AddString(_T("1/8\"")), 8);
+   pCB->SetItemData(pCB->AddString(_T("1/16\"")), 16);
    pCB->SetCurSel(0);
 }
 
@@ -166,6 +125,14 @@ void CSVTDlgBar::GetGirder(IndexType& typeIdx, IndexType& beamIdx)
 
    CComboBox* pcbGirders = (CComboBox*)GetDlgItem(IDC_GIRDERS);
    beamIdx = (IndexType)(pcbGirders->GetCurSel());
+}
+
+Float64 CSVTDlgBar::GetMaxElementSize()
+{
+   CComboBox* pcbSize = (CComboBox*)GetDlgItem(IDC_MESH_SIZE);
+   int curSel = pcbSize->GetCurSel();
+   int base = (int)pcbSize->GetItemData(curSel);
+   return 1.0 / base;
 }
 
 void CSVTDlgBar::DoDataExchange(CDataExchange* pDX)
