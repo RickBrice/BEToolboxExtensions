@@ -241,7 +241,7 @@ Float64 PrandtlMembrane::ComputeVolume(IndexType startElementIdx, IndexType endE
       }
 
       // if there are no interior nodes, all nodes are on the boundary and
-      // there values are zero so no contribution to the volume under the membrane
+      // their values are zero so no contribution to the volume under the membrane
       if (nInteriorNodes != 0)
       {
          Float64 avg_value = sum_values / nInteriorNodes;
@@ -249,5 +249,6 @@ Float64 PrandtlMembrane::ComputeVolume(IndexType startElementIdx, IndexType endE
          V += dV;
       }
    }
+
    return V;
 }
