@@ -48,7 +48,8 @@ namespace _UBeam
 using Results = struct
 {
    Float64 J;
-   Float64 Japprox;
+   Float64 Japprox1;
+   Float64 Japprox2;
    IndexType nElements;
    IndexType nInteriorNodes;
    Float64 ApproxArea;

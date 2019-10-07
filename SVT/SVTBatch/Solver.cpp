@@ -67,13 +67,15 @@ Results ComputeJ(T type)
 
    shape->get_ShapeProperties(&r.Props);
 
+   r.Japprox1 = FACTORY::GetJApprox(type);
+
    Float64 A, Ix, Iy;
    r.Props->get_Area(&A);
    r.Props->get_Ixx(&Ix);
    r.Props->get_Iyy(&Iy);
 
    Float64 Ip = Ix + Iy;
-   r.Japprox = A*A*A*A / (40.0*Ip);
+   r.Japprox2 = A*A*A*A / (40.0*Ip);
 
    return r;
 }
@@ -82,7 +84,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Amesh (in4),Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Japprox (in4),Amesh/A,Japprox/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Amesh (in4),Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Japprox-1 (in4),Japprox-2 (in4),Amesh/A,Japprox-1/J,Japprox-2/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -99,7 +101,14 @@ void Beams(TCHAR* strAgency)
       results.Props->get_Ixx(&Ix);
       results.Props->get_Iyy(&Iy);
 
-      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%zd,%lld\n"), FACTORY::GetName(type), results.ApproxArea, A, Yt, Yb, Ix, Iy, results.J, results.Japprox, results.ApproxArea/A, results.Japprox/results.J, results.nInteriorNodes, duration.count());
+      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%zd,%lld\n"), 
+         FACTORY::GetName(type), results.ApproxArea, 
+         A, Yt, Yb, Ix, Iy, 
+         results.J, results.Japprox1, results.Japprox2, 
+         results.ApproxArea/A, 
+         results.Japprox1/results.J, 
+         results.Japprox2 / results.J, 
+         results.nInteriorNodes, duration.count());
    }
    _tprintf(_T("\n"));
 }
@@ -110,14 +119,14 @@ long main()
    {
       Beams<ValidationShapeType, ValidationShapeFactory>(_T("Validation"));
       Beams<AASHTOBeamType, AASHTOBeamFactory>(_T("AASHTO"));
-      Beams<CTBeamType, CTBeamFactory>(_T("California"));
-      Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
-      Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
-      Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
-      Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
-      Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
-      Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
-      Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
+      //Beams<CTBeamType, CTBeamFactory>(_T("California"));
+      //Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
+      //Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
+      //Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
+      //Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
+      //Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
+      //Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
+      //Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
    }
    ::CoUninitialize();
 

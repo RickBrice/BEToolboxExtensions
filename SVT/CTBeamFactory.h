@@ -17,6 +17,7 @@ class CTBeamFactory
 public:
    static void CreateBeam(CTBeamType type, IShape** ppShape);
    static LPCTSTR GetName(CTBeamType type);
+   static Float64 GetJApprox(CTBeamType type);
 };
 
 
@@ -26,4 +27,5 @@ public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<CTBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<CTBeamType, CTBeamFactory>(beamIdx); }
    virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<CTBeamType, CTBeamFactory>(beamIdx, ppShape); }
+   virtual Float64 GetJApprox(IndexType beamIdx) const override { return _GetJApprox<CTBeamType, CTBeamFactory>(beamIdx); }
 };

@@ -18,6 +18,51 @@ static Float64 gs_ILBeamDimensions[][11] = {
    {      5,    7.5, 37.5, 15, 7, 6, 12, 7, 38, 38, 0.75 }, //IL72_3838
 };
 
+void ILBeamFactory::GetNUDimensions(int i, Float64& d1, Float64& d2, Float64& d3, Float64& d4, Float64& d5, Float64& r1, Float64& r2, Float64& r3, Float64& r4, Float64& t, Float64& w1, Float64& w2, Float64& c1)
+{
+   // convert IL dimensions to NU dimensions
+   using namespace _ILBeam;
+   d1 = gs_ILBeamDimensions[i][D1];
+   d2 = gs_ILBeamDimensions[i][D2];
+   d3 = gs_ILBeamDimensions[i][D3];
+   d4 = gs_ILBeamDimensions[i][D4];
+   d5 = gs_ILBeamDimensions[i][D5];
+   r1 = gs_ILBeamDimensions[i][R1];
+   r2 = gs_ILBeamDimensions[i][R2];
+   t = gs_ILBeamDimensions[i][T];
+   w1 = gs_ILBeamDimensions[i][W1];
+   w2 = gs_ILBeamDimensions[i][W2];
+   c1 = gs_ILBeamDimensions[i][C1];
+
+   r3 = 0;
+   r4 = 0;
+
+   Float64 K = d2;
+   Float64 F = 0.5*(w1 - t);
+   Float64 L = F - r1;
+   Float64 alpha = atan2(K, L);
+   Float64 d = sqrt(K*K + L*L);
+   Float64 beta = acos(r1 / d);
+   Float64 delta = M_PI - alpha - beta;
+   Float64 D2 = fabs(F / tan(delta));
+
+   K = d4;
+   F = 0.5*(w2 - t);
+   L = F - r2;
+   alpha = atan2(K, L);
+   d = sqrt(K*K + L*L);
+   beta = acos(r2 / d);
+   delta = M_PI - alpha - beta;
+   Float64 D4 = fabs(F / tan(delta));
+
+   Float64 D3 = d2 + d3 + d4 - D2 - D4;
+
+   ATLASSERT(IsEqual(d1 + d2 + d3 + d4 + d5, d1 + D2 + D3 + D4 + d5)); // make sure height didn't change
+
+   d2 = D2;
+   d3 = D3;
+   d4 = D4;
+}
 
 void ILBeamFactory::CreateBeam(ILBeamType type, IShape** ppShape)
 {
@@ -28,51 +73,16 @@ void ILBeamFactory::CreateBeam(ILBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_NUBeam);
       using namespace _ILBeam;
 
-      Float64 d1 = gs_ILBeamDimensions[i][D1];
-      Float64 d2 = gs_ILBeamDimensions[i][D2];
-      Float64 d3 = gs_ILBeamDimensions[i][D3];
-      Float64 d4 = gs_ILBeamDimensions[i][D4];
-      Float64 d5 = gs_ILBeamDimensions[i][D5];
-      Float64 r1 = gs_ILBeamDimensions[i][R1];
-      Float64 r2 = gs_ILBeamDimensions[i][R2];
-      Float64 t  = gs_ILBeamDimensions[i][T];
-      Float64 w1 = gs_ILBeamDimensions[i][W1];
-      Float64 w2 = gs_ILBeamDimensions[i][W2];
-      Float64 c1 = gs_ILBeamDimensions[i][C1];
-
-      // Convert IL dimensions to NU dimensions
-      Float64 r3 = 0;
-      Float64 r4 = 0;
-
-      Float64 K = d2;
-      Float64 F = 0.5*(w1 - t);
-      Float64 L = F - r1;
-      Float64 alpha = atan2(K, L);
-      Float64 d = sqrt(K*K + L*L);
-      Float64 beta = acos(r1 / d);
-      Float64 delta = M_PI - alpha - beta;
-      Float64 D2 = fabs(F / tan(delta));
-
-      K = d4;
-      F = 0.5*(w2 - t);
-      L = F - r2;
-      alpha = atan2(K, L);
-      d = sqrt(K*K + L*L);
-      beta = acos(r2 / d);
-      delta = M_PI - alpha - beta;
-      Float64 D4 = fabs(F / tan(delta));
-
-      Float64 D3 = d2 + d3 + d4 - D2 - D4;
-
-      ATLASSERT(IsEqual(d1 + d2 + d3 + d4 + d5, d1 + D2 + D3 + D4 + d5)); // make sure height didn't change
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      GetNUDimensions(i, d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1);
 
       // set the dimensions on the NU Girder
       beam->put_W1(w1);
       beam->put_W2(w2);
       beam->put_D1(d1);
-      beam->put_D2(D2);
-      beam->put_D3(D3);
-      beam->put_D4(D4);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
       beam->put_D5(d5);
       beam->put_T(t);
       beam->put_R1(r1);
@@ -107,4 +117,27 @@ static std::_tstring gs_ILnames[] = {
 LPCTSTR ILBeamFactory::GetName(ILBeamType type)
 {
    return gs_ILnames[(int)type].c_str();
+}
+
+Float64 ILBeamFactory::GetJApprox(ILBeamType type)
+{
+   int i = (int)type - (int)ILBeamType::IL27_1830;
+
+   Float64 D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1;
+   GetNUDimensions(i, D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1);
+
+   Float64 b = (W1 - T) / 2;
+   Float64 t = 0.5*(D1 + (D1 + D2));
+   Float64 J = 2 * b*t*t*t; // top flange, left and right
+
+   b = (W2 - T) / 2;
+   t = 0.5*(D4 + (D4 + D5));
+   J += 2 * b*t*t*t; // bottom flange, left and right
+
+   Float64 H = D1 + D2 + D3 + D4 + D5;
+   J += H*T*T*T; // web, full depth
+
+   J *= 1. / 3.;
+
+   return J;
 }

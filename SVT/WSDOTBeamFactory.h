@@ -13,6 +13,7 @@ class WSDOTBeamFactory
 public:
    static void CreateBeam(WSDOTBeamType type, IShape** ppShape);
    static LPCTSTR GetName(WSDOTBeamType type);
+   static Float64 GetJApprox(WSDOTBeamType type);
 };
 
 class CWSDOTBeamFactory : public CAbstractBeamFactory
@@ -21,4 +22,5 @@ public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<WSDOTBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<WSDOTBeamType, WSDOTBeamFactory>(beamIdx); }
    virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<WSDOTBeamType, WSDOTBeamFactory>(beamIdx, ppShape); }
+   virtual Float64 GetJApprox(IndexType beamIdx) const override { return _GetJApprox<WSDOTBeamType, WSDOTBeamFactory>(beamIdx); }
 };

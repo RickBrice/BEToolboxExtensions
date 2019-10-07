@@ -60,3 +60,39 @@ LPCTSTR AASHTOBeamFactory::GetName(AASHTOBeamType type)
 {
    return gs_AASHTOnames[(int)type].c_str();
 }
+
+Float64 AASHTOBeamFactory::GetJApprox(AASHTOBeamType type)
+{
+   int i = (int)type - (int)AASHTOBeamType::TypeI;
+   using namespace IBeam;
+
+   Float64 d1 = gs_AASHTOBeamDimensions[i][D1];
+   Float64 d2 = gs_AASHTOBeamDimensions[i][D2];
+   Float64 d3 = gs_AASHTOBeamDimensions[i][D3];
+   Float64 d4 = gs_AASHTOBeamDimensions[i][D4];
+   Float64 d5 = gs_AASHTOBeamDimensions[i][D5];
+   Float64 d6 = gs_AASHTOBeamDimensions[i][D6];
+   Float64 d7 = gs_AASHTOBeamDimensions[i][D7];
+   Float64 t1 = gs_AASHTOBeamDimensions[i][T1];
+   Float64 t2 = gs_AASHTOBeamDimensions[i][T2];
+   Float64 w1 = gs_AASHTOBeamDimensions[i][W1];
+   Float64 w2 = gs_AASHTOBeamDimensions[i][W2];
+   Float64 w3 = gs_AASHTOBeamDimensions[i][W3];
+   Float64 w4 = gs_AASHTOBeamDimensions[i][W4];
+
+   Float64 b = w1 + w2;
+   Float64 t = 0.5*(d1 + (d1 + d2));
+   Float64 J = 2 * b*t*t*t; // top flange, left and right
+
+   b = w3 + w4;
+   t = 0.5*(d4 + (d4 + d5));
+   J += 2 * b*t*t*t; // bottom flange, left and right
+
+   b = d1 + d2 + d3 + d4 + d5 + d6 + d7;
+   t = 0.5*(t1 + t2);
+   J += b*t*t*t; // web, full depth
+
+   J *= 1. / 3.;
+
+   return J;
+}

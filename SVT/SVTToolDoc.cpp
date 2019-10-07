@@ -241,6 +241,8 @@ LPCTSTR CSVTToolDoc::GetBeamName(IndexType typeIdx, IndexType beamIdx) const
 
 void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
 {
+   m_TypeIdx = typeIdx;
+   m_BeamIdx = beamIdx;
    m_pShape.Release();
    m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, &m_pShape);
    Update();
@@ -274,13 +276,15 @@ Results CSVTToolDoc::GetTorsionalConstant()
 
    m_pShape->get_ShapeProperties(&r.Props);
 
+   r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox(m_BeamIdx);
+
    Float64 A, Ix, Iy;
    r.Props->get_Area(&A);
    r.Props->get_Ixx(&Ix);
    r.Props->get_Iyy(&Iy);
 
    Float64 Ip = Ix + Iy;
-   r.Japprox = A*A*A*A / (40.0*Ip);
+   r.Japprox2 = A*A*A*A / (40.0*Ip);
 
    return r;
 }

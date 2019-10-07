@@ -176,6 +176,6 @@ void CSVTToolChildFrame::OnCompute()
    CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
    Results r = pDoc->GetTorsionalConstant();
    CString str;
-   str.Format(_T("J = %.0f  in^4\nJapprox = %.0f\n# Elements = %d\n# Points = %d"), r.J, r.Japprox, r.nElements, r.nInteriorNodes);
+   str.Format(_T("J = %.0f  in^4\nJapprox1 = %.0f\nJapprox = %.0f\n# Elements = %d\n# Points = %d"), r.J, r.Japprox1, r.Japprox2, r.nElements, r.nInteriorNodes);
    AfxMessageBox(str);
 }

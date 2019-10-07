@@ -13,6 +13,7 @@ class OhioBeamFactory
 public:
    static void CreateBeam(OhioBeamType type, IShape** ppShape);
    static LPCTSTR GetName(OhioBeamType type);
+   static Float64 GetJApprox(OhioBeamType type);
 };
 
 class COhioBeamFactory : public CAbstractBeamFactory
@@ -21,4 +22,5 @@ public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<OhioBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<OhioBeamType, OhioBeamFactory>(beamIdx); }
    virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<OhioBeamType, OhioBeamFactory>(beamIdx, ppShape); }
+   virtual Float64 GetJApprox(IndexType beamIdx) const override { return _GetJApprox<OhioBeamType, OhioBeamFactory>(beamIdx); }
 };

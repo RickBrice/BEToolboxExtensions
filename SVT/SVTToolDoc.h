@@ -95,6 +95,8 @@ private:
    CComPtr<IBeamShapeFactory> m_Factory;
    std::unique_ptr<UniformFDMesh> m_pMesh;
 
+   IndexType m_TypeIdx, m_BeamIdx;
+
    std::vector < std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
 
    Float64 m_Dmax;
