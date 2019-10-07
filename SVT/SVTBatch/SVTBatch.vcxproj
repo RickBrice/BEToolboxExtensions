@@ -219,6 +219,7 @@
     <ClInclude Include="..\UniformFDMesh.h" />
     <ClInclude Include="..\UnsymmetricBandedMatrix.h" />
     <ClInclude Include="..\ValidationShapeFactory.h" />
+    <ClInclude Include="..\VirginiaBeamFactory.h" />
     <ClInclude Include="..\WSDOTBeamFactory.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\UniformFDMesh.cpp" />
     <ClCompile Include="..\UnsymmetricBandedMatrix..cpp" />
     <ClCompile Include="..\ValidationShapeFactory.cpp" />
+    <ClCompile Include="..\VirginiaBeamFactory.cpp" />
     <ClCompile Include="..\WSDOTBeamFactory.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="stdafx.cpp">

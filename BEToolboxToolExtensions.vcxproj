@@ -302,6 +302,7 @@
     <ClCompile Include="SVT\UniformFDMesh.cpp" />
     <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp" />
     <ClCompile Include="SVT\ValidationShapeFactory.cpp" />
+    <ClCompile Include="SVT\VirginiaBeamFactory.cpp" />
     <ClCompile Include="SVT\WSDOTBeamFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +353,7 @@
     <ClInclude Include="SVT\UniformFDMesh.h" />
     <ClInclude Include="SVT\UnsymmetricBandedMatrix.h" />
     <ClInclude Include="SVT\ValidationShapeFactory.h" />
+    <ClInclude Include="SVT\VirginiaBeamFactory.h" />
     <ClInclude Include="SVT\WSDOTBeamFactory.h" />
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,7 @@
 #include "..\OregonBeamFactory.h"
 #include "..\ILBeamFactory.h"
 #include "..\TxDOTBeamFactory.h"
+#include "..\VirginiaBeamFactory.h"
 
 #include <initguid.h>
 #include <WBFLGeometry_i.c>
@@ -115,6 +116,7 @@ long main()
       Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
       Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
       Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
+      Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
       Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
    }
    ::CoUninitialize();
