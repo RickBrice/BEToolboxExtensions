@@ -166,6 +166,9 @@
     <ClCompile Include="SVT\VirginiaBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\CDOTBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -313,6 +316,9 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\VirginiaBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\CDOTBeamFactory.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,6 +17,7 @@
 
 #include "..\ValidationShapeFactory.h"
 #include "..\AASHTOBeamFactory.h"
+#include "..\CDOTBeamFactory.h"
 #include "..\WSDOTBeamFactory.h"
 #include "..\CTBeamFactory.h"
 #include "..\NUBeamFactory.h"
@@ -119,14 +120,15 @@ long main()
    {
       Beams<ValidationShapeType, ValidationShapeFactory>(_T("Validation"));
       Beams<AASHTOBeamType, AASHTOBeamFactory>(_T("AASHTO"));
-      //Beams<CTBeamType, CTBeamFactory>(_T("California"));
-      //Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
-      //Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
-      //Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
-      //Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
-      //Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
-      //Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
-      //Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
+      Beams<CTBeamType, CTBeamFactory>(_T("California"));
+      Beams<CDOTBeamType, CDOTBeamFactory>(_T("Colorado"));
+      Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
+      Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
+      Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
+      Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
+      Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
+      Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
+      Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
    }
    ::CoUninitialize();
 

@@ -285,6 +285,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SVT\AASHTOBeamFactory.cpp" />
+    <ClCompile Include="SVT\CDOTBeamFactory.cpp" />
     <ClCompile Include="SVT\CTBeamFactory.cpp" />
     <ClCompile Include="SVT\FDMeshGenerator.cpp" />
     <ClCompile Include="SVT\Helpers.cpp" />
@@ -332,6 +333,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SVT\AASHTOBeamFactory.h" />
     <ClInclude Include="SVT\AbstractBeamFactory.h" />
+    <ClInclude Include="SVT\CDOTBeamFactory.h" />
     <ClInclude Include="SVT\CTBeamFactory.h" />
     <ClInclude Include="SVT\FDMeshGenerator.h" />
     <ClInclude Include="SVT\Helpers.h" />

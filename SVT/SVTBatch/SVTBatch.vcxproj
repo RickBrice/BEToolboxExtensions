@@ -207,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="..\AASHTOBeamFactory.h" />
     <ClInclude Include="..\AbstractBeamFactory.h" />
+    <ClInclude Include="..\CDOTBeamFactory.h" />
     <ClInclude Include="..\CTBeamFactory.h" />
     <ClInclude Include="..\FDMeshGenerator.h" />
     <ClInclude Include="..\Helpers.h" />
@@ -227,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AASHTOBeamFactory.cpp" />
+    <ClCompile Include="..\CDOTBeamFactory.cpp" />
     <ClCompile Include="..\CTBeamFactory.cpp" />
     <ClCompile Include="..\FDMeshGenerator.cpp" />
     <ClCompile Include="..\Helpers.cpp" />

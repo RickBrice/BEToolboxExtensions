@@ -36,6 +36,7 @@
 
 #include "ValidationShapeFactory.h"
 #include "AASHTOBeamFactory.h"
+#include "CDOTBeamFactory.h"
 #include "CTBeamFactory.h"
 #include "ILBeamFactory.h"
 #include "NUBeamFactory.h"
@@ -63,6 +64,7 @@ CSVTToolDoc::CSVTToolDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Validation Shapes"), std::make_unique<CValidationShapeFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("AASHTO"), std::make_unique<CAASHTOBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Colorado"), std::make_unique<CCDOTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Illinios"), std::make_unique<CILBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Nebraska"), std::make_unique<CNUBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Ohio"), std::make_unique<COhioBeamFactory>()));
