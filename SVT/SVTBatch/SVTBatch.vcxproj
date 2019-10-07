@@ -212,6 +212,7 @@
     <ClInclude Include="..\FDMeshGenerator.h" />
     <ClInclude Include="..\Helpers.h" />
     <ClInclude Include="..\ILBeamFactory.h" />
+    <ClInclude Include="..\NorthCarolinaBeamFactory.h" />
     <ClInclude Include="..\NUBeamFactory.h" />
     <ClInclude Include="..\OhioBeamFactory.h" />
     <ClInclude Include="..\OregonBeamFactory.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="..\FDMeshGenerator.cpp" />
     <ClCompile Include="..\Helpers.cpp" />
     <ClCompile Include="..\ILBeamFactory.cpp" />
+    <ClCompile Include="..\NorthCarolinaBeamFactory.cpp" />
     <ClCompile Include="..\NUBeamFactory.cpp" />
     <ClCompile Include="..\OhioBeamFactory.cpp" />
     <ClCompile Include="..\OregonBeamFactory.cpp" />
