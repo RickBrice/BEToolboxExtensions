@@ -172,6 +172,9 @@
     <ClCompile Include="SVT\NorthCarolinaBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\MNBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -325,6 +328,9 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\NorthCarolinaBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\MNBeamFactory.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

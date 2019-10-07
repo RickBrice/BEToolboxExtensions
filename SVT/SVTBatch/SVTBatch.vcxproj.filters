@@ -81,6 +81,9 @@
     <ClInclude Include="..\NorthCarolinaBeamFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\MNBeamFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\NorthCarolinaBeamFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MNBeamFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

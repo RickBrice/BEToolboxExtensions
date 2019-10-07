@@ -290,6 +290,7 @@
     <ClCompile Include="SVT\FDMeshGenerator.cpp" />
     <ClCompile Include="SVT\Helpers.cpp" />
     <ClCompile Include="SVT\ILBeamFactory.cpp" />
+    <ClCompile Include="SVT\MNBeamFactory.cpp" />
     <ClCompile Include="SVT\NorthCarolinaBeamFactory.cpp" />
     <ClCompile Include="SVT\NUBeamFactory.cpp" />
     <ClCompile Include="SVT\OhioBeamFactory.cpp" />
@@ -339,6 +340,7 @@
     <ClInclude Include="SVT\FDMeshGenerator.h" />
     <ClInclude Include="SVT\Helpers.h" />
     <ClInclude Include="SVT\ILBeamFactory.h" />
+    <ClInclude Include="SVT\MNBeamFactory.h" />
     <ClInclude Include="SVT\NorthCarolinaBeamFactory.h" />
     <ClInclude Include="SVT\NUBeamFactory.h" />
     <ClInclude Include="SVT\OhioBeamFactory.h" />

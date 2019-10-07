@@ -20,6 +20,7 @@
 #include "..\CDOTBeamFactory.h"
 #include "..\WSDOTBeamFactory.h"
 #include "..\CTBeamFactory.h"
+#include "..\MNBeamFactory.h"
 #include "..\NUBeamFactory.h"
 #include "..\OhioBeamFactory.h"
 #include "..\OregonBeamFactory.h"
@@ -86,7 +87,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Amesh (in4),Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Japprox-1 (in4),Japprox-2 (in4),Amesh/A,Japprox-1/J,Japprox-2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Amesh (in4),Area (in2),Amesh/A,Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Japprox-1 (in4),Japprox-1/J,Japprox-2 (in4),Japprox-2/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -105,11 +106,10 @@ void Beams(TCHAR* strAgency)
 
       _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%zd,%lld\n"), 
          FACTORY::GetName(type), results.ApproxArea, 
-         A, Yt, Yb, Ix, Iy, 
-         results.J, results.Japprox1, results.Japprox2, 
-         results.ApproxArea/A, 
-         results.Japprox1/results.J, 
-         results.Japprox2 / results.J, 
+         A, results.ApproxArea / A, Yt, Yb, Ix, Iy,
+         results.J, 
+         results.Japprox1, results.Japprox1 / results.J, 
+         results.Japprox2, results.Japprox2 / results.J,
          results.nInteriorNodes, duration.count());
    }
    _tprintf(_T("\n"));
@@ -124,6 +124,7 @@ long main()
       Beams<CTBeamType, CTBeamFactory>(_T("California"));
       Beams<CDOTBeamType, CDOTBeamFactory>(_T("Colorado"));
       Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
+      Beams<MNBeamType, MNBeamFactory>(_T("Minnesota"));
       Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
       Beams<NCBeamType, NCBeamFactory>(_T("North Carolina"));
       Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
