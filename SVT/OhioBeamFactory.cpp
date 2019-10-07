@@ -61,9 +61,9 @@ static std::_tstring gs_Ohionames[] = {
    _T("WF60-49"),
    _T("WF66-49"),
    _T("WF72-49"),
-   _T("TypeIV_60"),
-   _T("TypeIV_66"),
-   _T("TypeIV_72"),
+   _T("Modified Type IV (60\")"),
+   _T("Modified Type IV (66\")"),
+   _T("Modified Type IV (72\")"),
 };
 
 LPCTSTR OhioBeamFactory::GetName(OhioBeamType type)
