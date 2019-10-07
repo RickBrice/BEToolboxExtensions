@@ -87,7 +87,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Amesh (in4),Area (in2),Amesh/A,Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Japprox-1 (in4),Japprox-1/J,Japprox-2 (in4),Japprox-2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Amesh (in4),Area (in2),Amesh/A,Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
