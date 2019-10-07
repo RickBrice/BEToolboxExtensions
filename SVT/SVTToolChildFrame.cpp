@@ -175,7 +175,15 @@ void CSVTToolChildFrame::OnCompute()
 
    CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
    Results r = pDoc->GetTorsionalConstant();
+   Float64 A, Yt, Yb, Ix, Iy;
+   r.Props->get_Area(&A);
+   r.Props->get_Ytop(&Yt);
+   r.Props->get_Ybottom(&Yb);
+   r.Props->get_Ixx(&Ix);
+   r.Props->get_Iyy(&Iy);
+
    CString str;
-   str.Format(_T("J = %.0f  in^4\nJapprox1 = %.0f\nJapprox = %.0f\n# Elements = %d\n# Points = %d"), r.J, r.Japprox1, r.Japprox2, r.nElements, r.nInteriorNodes);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nJapprox1 = %f\nJapprox2 = %f\n#Elements = %d\n#Points = %d"),
+      A, Yt, Yb, Ix, Iy, r.J, r.Japprox1, r.Japprox2, r.nElements, r.nInteriorNodes);
    AfxMessageBox(str);
 }
