@@ -160,6 +160,9 @@
     <ClCompile Include="SVT\OhioBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\OregonBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -301,6 +304,9 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\OhioBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\OregonBeamFactory.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

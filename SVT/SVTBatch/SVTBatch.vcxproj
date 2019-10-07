@@ -213,6 +213,7 @@
     <ClInclude Include="..\ILBeamFactory.h" />
     <ClInclude Include="..\NUBeamFactory.h" />
     <ClInclude Include="..\OhioBeamFactory.h" />
+    <ClInclude Include="..\OregonBeamFactory.h" />
     <ClInclude Include="..\PrandtlMembrane.h" />
     <ClInclude Include="..\TxDOTBeamFactory.h" />
     <ClInclude Include="..\UniformFDMesh.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\ILBeamFactory.cpp" />
     <ClCompile Include="..\NUBeamFactory.cpp" />
     <ClCompile Include="..\OhioBeamFactory.cpp" />
+    <ClCompile Include="..\OregonBeamFactory.cpp" />
     <ClCompile Include="..\PrandtlMembrane.cpp" />
     <ClCompile Include="..\TxDOTBeamFactory.cpp" />
     <ClCompile Include="..\UniformFDMesh.cpp" />
