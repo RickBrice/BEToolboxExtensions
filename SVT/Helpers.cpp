@@ -62,17 +62,19 @@ Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14])
    Float64 w3 = dimensions[i][W3];
    Float64 w4 = dimensions[i][W4];
 
-   Float64 b = w1 + w2;
+   Float64 b = 2*(w1 + w2) + 0.5*(t1+t2);
    Float64 t = 0.5*(d1 + (d1 + d2));
-   Float64 J = 2 * b*t*t*t; // top flange, left and right
+   Float64 t_top = t;
+   Float64 J = b*t*t*t; // top flange
 
-   b = w3 + w4;
+   b = 2*(w3 + w4) + 0.5*(t1+t2);
    t = 0.5*(d4 + (d4 + d5));
-   J += 2 * b*t*t*t; // bottom flange, left and right
+   Float64 t_bot = t;
+   J += b*t*t*t; // bottom flange
 
-   b = d1 + d2 + d3 + d4 + d5 + d6 + d7;
+   b = d1 + d2 + d3 + d4 + d5 + d6 + d7 - t_top - t_bot;
    t = 0.5*(t1 + t2);
-   J += b*t*t*t; // web, full depth
+   J += b*t*t*t; // web
 
    J *= 1. / 3.;
 
@@ -92,15 +94,17 @@ Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13])
    Float64 w1 = dimensions[i][W1];
    Float64 w2 = dimensions[i][W2];
 
-   Float64 b = (w1 - tw) / 2;
+   Float64 b = w1;
    Float64 t = 0.5*(d1 + (d1 + d2));
-   Float64 J = 2 * b*t*t*t; // top flange, left and right
+   Float64 t_top = t;
+   Float64 J = b*t*t*t; // top flange
 
-   b = (w2 - tw) / 2;
+   b = w2;
    t = 0.5*(d4 + (d4 + d5));
-   J += 2 * b*t*t*t; // bottom flange, left and right
+   Float64 t_bot = t;
+   J += b*t*t*t; // bottom flange
 
-   b = d1 + d2 + d3 + d4 + d5;
+   b = d1 + d2 + d3 + d4 + d5 - t_top - t_bot;
    J += b*tw*tw*tw; // web, full depth
 
    J *= 1. / 3.;

@@ -126,15 +126,17 @@ Float64 ILBeamFactory::GetJApprox(ILBeamType type)
    Float64 D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1;
    GetNUDimensions(i, D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1);
 
-   Float64 b = (W1 - T) / 2;
+   Float64 b = W1;
    Float64 t = 0.5*(D1 + (D1 + D2));
-   Float64 J = 2 * b*t*t*t; // top flange, left and right
+   Float64 t_top = t;
+   Float64 J = b*t*t*t; // top flange
 
-   b = (W2 - T) / 2;
+   b = W2;
    t = 0.5*(D4 + (D4 + D5));
-   J += 2 * b*t*t*t; // bottom flange, left and right
+   Float64 t_bot = t;
+   J += b*t*t*t; // bottom flange
 
-   Float64 H = D1 + D2 + D3 + D4 + D5;
+   Float64 H = D1 + D2 + D3 + D4 + D5 - t_top - t_bot;
    J += H*T*T*T; // web, full depth
 
    J *= 1. / 3.;

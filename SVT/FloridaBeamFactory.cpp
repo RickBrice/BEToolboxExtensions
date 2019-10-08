@@ -177,15 +177,17 @@ Float64 FloridaBeamFactory::GetJApprox(FloridaBeamType type)
    Float64 w3 = gs_FIBBeamDimensions[i][W3];
    Float64 c1 = gs_FIBBeamDimensions[i][C1];
 
-   Float64 b = w1 + w2;
+   Float64 b = 2*(w1 + w2) + tw;
    Float64 t = 0.5*(d1 + (d1 + d2));
-   Float64 J = 2 * b*t*t*t; // top flange, left and right
+   Float64 t_top = t;
+   Float64 J = b*t*t*t; // top flange
 
-   b = (w3 - tw) / 2;
+   b = w3;
    t = 0.5*(d4 + (d4 + d5));
-   J += 2 * b*t*t*t; // bottom flange, left and right
+   Float64 t_bot = t;
+   J += b*t*t*t; // bottom flange
 
-   J += h*tw*tw*tw; // web, full depth
+   J += (h - t_top - t_bot)*tw*tw*tw; // web, full depth
 
    J *= 1. / 3.;
 
