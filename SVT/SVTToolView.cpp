@@ -59,7 +59,7 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void CSVTToolView::AssertValid() const
 {
-   CDisplayView::AssertValid();
+//   CDisplayView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
@@ -136,6 +136,60 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
       compound_strategy->AddStrategy(shape_draw_strategy);
    }
 
+   if (pDoc->IsComputed())
+   {
+      Float64* pNodeValues = pDoc->GetNodeOrdinates();
+      const auto* pFDMesh = pDoc->GetFDMesh();
+      IndexType nElements = pFDMesh->GetElementCount();
+      ATLASSERT(vMesh.size() == nElements);
+      Float64 min_value = 0;
+      Float64 max_value = 0;
+      IndexType nNodes = pFDMesh->GetInteriorNodeCount();
+      for (IndexType nodeIdx = 0; nodeIdx < nNodes; nodeIdx++)
+      {
+         max_value = Max(max_value, pNodeValues[nodeIdx]);
+      }
+
+      for (IndexType elementIdx = 0; elementIdx < nElements; elementIdx++)
+      {
+         CComQIPtr<IShape> shape(vMesh[elementIdx]);
+         CComPtr<IShape> clone;
+         shape->Clone(&clone);
+         CComQIPtr<IRectangle> rect(clone);
+         CComPtr<IPoint2d> pnt;
+         rect->get_HookPoint(&pnt);
+         Float64 X;
+         pnt->get_X(&X);
+         pnt->put_X(-X);
+
+
+         const auto* pElement = pFDMesh->GetElement(elementIdx);
+         Float64 value = 0;
+         for (IndexType i = 0; i < 4; i++)
+         {
+            if (pElement->Node[i] == INVALID_INDEX)
+            {
+               // boundary element
+               value += 0;
+            }
+            else
+            {
+               value += pNodeValues[pElement->Node[i]];
+            }
+         }
+         value /= 4;
+
+         COLORREF color = GetColor(min_value,max_value,value);
+         CComPtr<iShapeDrawStrategy> shape_draw_strategy;
+         shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
+         shape_draw_strategy->SetShape(clone);
+         shape_draw_strategy->SetSolidLineStyle(lsNull);
+         shape_draw_strategy->DoFill(true);
+         shape_draw_strategy->SetSolidFillColor(color);
+         compound_strategy->AddStrategy(shape_draw_strategy);
+      }
+   }
+
 
    dispObj->SetDrawingStrategy(compound_strategy);
 
@@ -144,6 +198,14 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
    ScaleToFit();
 }
 
+COLORREF CSVTToolView::GetColor(Float64 min, Float64 max, Float64 value)
+{
+   Float64 ratio = 2 * (value - min) / (max - min);
+   int b = (int)Max(0., 255 * (1 - ratio));
+   int r = (int)Max(0., 255 * (ratio - 1));
+   int g = 255 - b - r;
+   return RGB(r, g, b);
+}
 
 void CSVTToolView::OnSize(UINT nType, int cx, int cy)
 {
@@ -163,4 +225,9 @@ void CSVTToolView::OnSize(UINT nType, int cx, int cy)
 
    CDManipClientDC dc(this);
    ScaleToFit();
+}
+
+void CSVTToolView::OnDraw(CDC* pDC)
+{
+   __super::OnDraw(pDC);
 }

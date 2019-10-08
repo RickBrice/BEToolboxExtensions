@@ -43,6 +43,8 @@ protected:
 #endif
 
 protected:
+   virtual void OnDraw(CDC* pDC) override;      // overridden to draw this view
+   COLORREF GetColor(Float64 min, Float64 max, Float64 value);
 
    CSVTToolChildFrame* m_pFrame;
 

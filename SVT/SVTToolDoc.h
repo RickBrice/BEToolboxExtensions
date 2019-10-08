@@ -82,6 +82,11 @@ public:
    Results GetTorsionalConstant();
 
    std::vector<CComPtr<IRectangle>> GetMesh();
+   const UniformFDMesh* GetFDMesh();
+
+   bool IsComputed() const { return m_bComputed; }
+
+   Float64* GetNodeOrdinates() { return m_bComputed ? m_pValues : nullptr; }
 
    // over-ride default behavior by destroying column
    virtual void OnCloseDocument() override;
@@ -94,6 +99,8 @@ private:
    CComPtr<IShape> m_pShape;
    CComPtr<IBeamShapeFactory> m_Factory;
    std::unique_ptr<UniformFDMesh> m_pMesh;
+   Float64* m_pValues;
+   bool m_bComputed;
 
    IndexType m_TypeIdx, m_BeamIdx;
 

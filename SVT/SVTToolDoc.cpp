@@ -82,10 +82,14 @@ CSVTToolDoc::CSVTToolDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Washington"), std::make_unique<CWSDOTBeamFactory>()));
 
    UIHints(FALSE); // not using UIHints feature
+
+   m_pValues = nullptr;
+   m_bComputed = false;
 }
 
 CSVTToolDoc::~CSVTToolDoc()
 {
+   delete[] m_pValues;
 }
 
 
@@ -251,6 +255,7 @@ LPCTSTR CSVTToolDoc::GetBeamName(IndexType typeIdx, IndexType beamIdx) const
 
 void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
 {
+   m_bComputed = false;
    m_TypeIdx = typeIdx;
    m_BeamIdx = beamIdx;
    m_pShape.Release();
@@ -265,6 +270,7 @@ void CSVTToolDoc::GetShape(IShape** ppShape)
 
 void CSVTToolDoc::SetMaxElementSize(Float64 dMax)
 {
+   m_bComputed = false;
    m_Dmax = dMax;
    Update();
 }
@@ -278,7 +284,9 @@ Results CSVTToolDoc::GetTorsionalConstant()
 {
    Results r;
    PrandtlMembrane membrane;
-   r.J = membrane.ComputeJ(*(m_pMesh.get()));
+   delete[] m_pValues;
+   m_pValues = nullptr;
+   r.J = membrane.ComputeJ(*(m_pMesh.get()),&m_pValues);
    r.nElements = m_pMesh->GetElementCount();
    r.nInteriorNodes = m_pMesh->GetInteriorNodeCount();
 
@@ -295,6 +303,10 @@ Results CSVTToolDoc::GetTorsionalConstant()
 
    Float64 Ip = Ix + Iy;
    r.Japprox2 = A*A*A*A / (40.0*Ip);
+
+   m_bComputed = true;
+   
+   UpdateAllViews(nullptr);
 
    return r;
 }
@@ -339,6 +351,11 @@ std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
    }
 
    return mesh_shapes;
+}
+
+const UniformFDMesh* CSVTToolDoc::GetFDMesh()
+{
+   return m_pMesh.get();
 }
 
 void CSVTToolDoc::GenerateMesh(UniformFDMesh& mesh)
