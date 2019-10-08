@@ -45,6 +45,11 @@ namespace _UBeam
    enum Dimensions { D1, D2, D3, D4, D5, D6, D7, T, W1, W2, W3, W4, W5 };
 }
 
+namespace _FIBBeam
+{
+   enum Dimensions{ D1, D2, D3, D4, D5, H, T, R, W1, W2, W3, C1 };
+}
+
 using Results = struct
 {
    Float64 J;
