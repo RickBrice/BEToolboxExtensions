@@ -30,12 +30,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+static IndexType gs_hardware_threads = std::thread::hardware_concurrency();
+
 void GetThreadParameters(IndexType nItems, IndexType& nWorkerThreads, IndexType& nItemsPerThread)
 {
-   IndexType min_per_thread = 100;
+   IndexType min_per_thread = 10000;
    IndexType max_threads = (nItems + min_per_thread - 1) / min_per_thread;
-   IndexType hardware_threads = std::thread::hardware_concurrency();
-   IndexType nThreads = min(hardware_threads != 0 ? hardware_threads : 2, max_threads);
+   IndexType nThreads = min(gs_hardware_threads != 0 ? gs_hardware_threads : 2, max_threads);
    nWorkerThreads = nThreads - 1;
    nItemsPerThread = nItems / nThreads;
 
