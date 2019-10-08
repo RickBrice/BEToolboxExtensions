@@ -102,67 +102,12 @@ Float64 MNBeamFactory::GetJApprox(MNBeamType type)
    if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
    {
       int i = (int)type - (int)MNBeamType::M27;
-
-      using namespace IBeam; // this is so we don't have to use the name space below (eg IBeam::C1, IBeam::D2...)
-
-      Float64 d1 = gs_MNIBeamDimensions[i][D1];
-      Float64 d2 = gs_MNIBeamDimensions[i][D2];
-      Float64 d3 = gs_MNIBeamDimensions[i][D3];
-      Float64 d4 = gs_MNIBeamDimensions[i][D4];
-      Float64 d5 = gs_MNIBeamDimensions[i][D5];
-      Float64 d6 = gs_MNIBeamDimensions[i][D6];
-      Float64 d7 = gs_MNIBeamDimensions[i][D7];
-      Float64 t1 = gs_MNIBeamDimensions[i][T1];
-      Float64 t2 = gs_MNIBeamDimensions[i][T2];
-      Float64 w1 = gs_MNIBeamDimensions[i][W1];
-      Float64 w2 = gs_MNIBeamDimensions[i][W2];
-      Float64 w3 = gs_MNIBeamDimensions[i][W3];
-      Float64 w4 = gs_MNIBeamDimensions[i][W4];
-
-      Float64 b = w1 + w2;
-      Float64 t = 0.5*(d1 + (d1 + d2));
-      Float64 J = 2 * b*t*t*t; // top flange, left and right
-
-      b = w3 + w4;
-      t = 0.5*(d4 + (d4 + d5));
-      J += 2 * b*t*t*t; // bottom flange, left and right
-
-      b = d1 + d2 + d3 + d4 + d5 + d6 + d7;
-      t = 0.5*(t1 + t2);
-      J += b*t*t*t; // web, full depth
-
-      J *= 1. / 3.;
-
-      return J;
+      return ComputeJApprox_IBeam(i, gs_MNIBeamDimensions);
    }
    else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
    {
       int i = (int)type - (int)MNBeamType::MH30;
-      using namespace _NUBeam;
-
-      Float64 d1 = gs_MNNUBeamDimensions[i][D1];
-      Float64 d2 = gs_MNNUBeamDimensions[i][D2];
-      Float64 d3 = gs_MNNUBeamDimensions[i][D3];
-      Float64 d4 = gs_MNNUBeamDimensions[i][D4];
-      Float64 d5 = gs_MNNUBeamDimensions[i][D5];
-      Float64 tw = gs_MNNUBeamDimensions[i][T];
-      Float64 w1 = gs_MNNUBeamDimensions[i][W1];
-      Float64 w2 = gs_MNNUBeamDimensions[i][W2];
-
-      Float64 b = (w1 - tw) / 2;
-      Float64 t = 0.5*(d1 + (d1 + d2));
-      Float64 J = 2 * b*t*t*t; // top flange, left and right
-
-      b = (w2 - tw) / 2;
-      t = 0.5*(d4 + (d4 + d5));
-      J += 2 * b*t*t*t; // bottom flange, left and right
-
-      b = d1 + d2 + d3 + d4 + d5;
-      J += b*tw*tw*tw; // web, full depth
-
-      J *= 1. / 3.;
-
-      return J;
+      return ComputeJApprox_NU(i, gs_MNNUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

@@ -61,3 +61,6 @@ void GetThreadParameters(IndexType nItems, /**< [in] total number of items to be
                          IndexType& nWorkerThreads, /**< [out] number of worker threads to spawn*/
                          IndexType& nItemsPerThread /**< [out] number of items to process per thread*/);
 
+
+Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14]);
+Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
