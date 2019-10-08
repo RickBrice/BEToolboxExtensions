@@ -213,6 +213,7 @@
     <ClInclude Include="..\Helpers.h" />
     <ClInclude Include="..\ILBeamFactory.h" />
     <ClInclude Include="..\MNBeamFactory.h" />
+    <ClInclude Include="..\NEBeamFactory.h" />
     <ClInclude Include="..\NorthCarolinaBeamFactory.h" />
     <ClInclude Include="..\NUBeamFactory.h" />
     <ClInclude Include="..\OhioBeamFactory.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\Helpers.cpp" />
     <ClCompile Include="..\ILBeamFactory.cpp" />
     <ClCompile Include="..\MNBeamFactory.cpp" />
+    <ClCompile Include="..\NEBeamFactory.cpp" />
     <ClCompile Include="..\NorthCarolinaBeamFactory.cpp" />
     <ClCompile Include="..\NUBeamFactory.cpp" />
     <ClCompile Include="..\OhioBeamFactory.cpp" />

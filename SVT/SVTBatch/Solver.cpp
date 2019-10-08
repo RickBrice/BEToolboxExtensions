@@ -28,6 +28,7 @@
 #include "..\TxDOTBeamFactory.h"
 #include "..\VirginiaBeamFactory.h"
 #include "..\NorthCarolinaBeamFactory.h"
+#include "..\NEBeamFactory.h"
 
 #include <initguid.h>
 #include <WBFLGeometry_i.c>
@@ -126,6 +127,7 @@ long main()
       Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
       Beams<MNBeamType, MNBeamFactory>(_T("Minnesota"));
       Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
+      Beams<NEBeamType, NEBeamFactory>(_T("New England"));
       Beams<NCBeamType, NCBeamFactory>(_T("North Carolina"));
       Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
       Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));

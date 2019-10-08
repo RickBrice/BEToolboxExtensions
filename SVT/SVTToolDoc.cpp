@@ -40,8 +40,9 @@
 #include "CTBeamFactory.h"
 #include "ILBeamFactory.h"
 #include "MNBeamFactory.h"
-#include "NorthCarolinaBeamFactory.h"
 #include "NUBeamFactory.h"
+#include "NEBeamFactory.h"
+#include "NorthCarolinaBeamFactory.h"
 #include "OhioBeamFactory.h"
 #include "OregonBeamFactory.h"
 #include "TxDOTBeamFactory.h"
@@ -70,6 +71,7 @@ CSVTToolDoc::CSVTToolDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Illinios"), std::make_unique<CILBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Minnesota"), std::make_unique<CMNBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Nebraska"), std::make_unique<CNUBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("New England"), std::make_unique<CNEBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("North Carolina"), std::make_unique<CNCBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Ohio"), std::make_unique<COhioBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Oregon"), std::make_unique<COregonBeamFactory>()));
