@@ -4,18 +4,22 @@
 #include "Helpers.h"
 
 static Float64 gs_AASHTOBeamDimensions[][14] = {
-   { 0, 4, 3,   0, 5,   5, 0, 11, 6, 6,   3, 0,   5, 0 }, // TypeI
-   { 0, 6, 3,   0, 6,   6, 0, 15, 6, 6,   3, 0,   6, 0 }, // TypeII
-   { 0, 7, 4.5, 0, 7, 7.5, 0, 19, 7, 7, 4.5, 0, 7.5, 0 }, // TypeIII
-   { 0, 8, 6,   0, 8,   9, 0, 23, 8, 8,   6, 0,   9, 0 }, // TypeIV
-   { 0, 5, 3,   4, 8,  10, 0, 33, 8, 8,  13, 4,  10, 0 }, // TypeV
-   { 0, 5, 3,   4, 8,  10, 0, 42, 8, 8,  13, 4,  10, 0 }, // TypeVI
+   //  C1    D1    D2   D3   D4    D5    D6     D7    T1   T2    W1   W2    W3   W4
+   {    0,    4,    3,   0,   5,    5,    0,    11,    6,   6,    3,   0,    5,   0 }, // TypeI
+   {    0,    6,    3,   0,   6,    6,    0,    15,    6,   6,    3,   0,    6,   0 }, // TypeII
+   {    0,    7,  4.5,   0,   7,  7.5,    0,    19,    7,   7,  4.5,   0,  7.5,   0 }, // TypeIII
+   {    0,    8,    6,   0,   8,    9,    0,    23,    8,   8,    6,   0,    9,   0 }, // TypeIV
+   {    0,    5,    3,   4,   8,   10,    0,    33,    8,   8,   13,   4,   10,   0 }, // TypeV
+   {    0,    5,    3,   4,   8,   10,    0,    42,    8,   8,   13,   4,   10,   0 }, // TypeVI
+   {    0,  3.5,    2,   2,   6,  4.5,    0,    36,    6,   6,   16,   2,   10,   0 }, // BT54
+   {    0,  3.5,    2,   2,   6,  4.5,    0,    45,    6,   6,   16,   2,   10,   0 }, // BT63
+   {    0,  3.5,    2,   2,   6,  4.5,    0,    54,    6,   6,   16,   2,   10,   0 }, // BT72
 };
 
 
 void AASHTOBeamFactory::CreateBeam(AASHTOBeamType type, IShape** ppShape)
 {
-   if ((int)AASHTOBeamType::TypeI <= (int)type && (int)type <= (int)AASHTOBeamType::TypeVI)
+   if ((int)AASHTOBeamType::TypeI <= (int)type && (int)type < (int)AASHTOBeamType::nSections)
    {
       int i = (int)type - (int)AASHTOBeamType::TypeI;
       CComPtr<IPrecastBeam> beam;
@@ -54,6 +58,9 @@ static std::_tstring gs_AASHTOnames[] = {
    _T("Type IV"),
    _T("Type V"),
    _T("Type VI"),
+   _T("BT-54"),
+   _T("BT-63"),
+   _T("BT-72"),
 };
 
 LPCTSTR AASHTOBeamFactory::GetName(AASHTOBeamType type)

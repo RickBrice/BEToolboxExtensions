@@ -5,7 +5,7 @@
 
 enum class AASHTOBeamType
 {
-   TypeI, TypeII, TypeIII, TypeIV, TypeV, TypeVI, nSections
+   TypeI, TypeII, TypeIII, TypeIV, TypeV, TypeVI, BT54, BT63, BT72, nSections
 };
 
 class AASHTOBeamFactory
