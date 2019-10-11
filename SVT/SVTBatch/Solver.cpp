@@ -89,7 +89,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Amesh (in4),Area (in2),Amesh/A,Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -107,9 +107,10 @@ void Beams(TCHAR* strAgency)
       results.Props->get_Iyy(&Iy);
 
       _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%zd,%lld\n"), 
-         FACTORY::GetName(type), results.ApproxArea, 
-         A, results.ApproxArea / A, Yt, Yb, Ix, Iy,
+         FACTORY::GetName(type), 
+         A, Yt, Yb, Ix, Iy,
          results.J, 
+         results.ApproxArea, results.ApproxArea / A,
          results.Japprox1, results.Japprox1 / results.J, 
          results.Japprox2, results.Japprox2 / results.J,
          results.nInteriorNodes, duration.count());
