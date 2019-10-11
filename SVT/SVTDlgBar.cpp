@@ -93,7 +93,9 @@ void CSVTDlgBar::FillMeshSizeList()
    pCB->SetItemData(pCB->AddString(_T("1/4\"")), 4);
    pCB->SetItemData(pCB->AddString(_T("1/8\"")), 8);
    pCB->SetItemData(pCB->AddString(_T("1/16\"")), 16);
-   pCB->SetCurSel(0);
+   pCB->SetItemData(pCB->AddString(_T("1/32\"")), 32);
+   pCB->SetItemData(pCB->AddString(_T("1/64\"")), 64);
+   pCB->SetCurSel(2); // default to 1/8" because this is the study mesh size
 }
 
 void CSVTDlgBar::UpdateGirderList()
