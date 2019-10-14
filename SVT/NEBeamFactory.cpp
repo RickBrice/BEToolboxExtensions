@@ -64,7 +64,12 @@ LPCTSTR NEBeamFactory::GetName(NEBeamType type)
    return gs_NEnames[(int)type].c_str();
 }
 
-Float64 NEBeamFactory::GetJApprox(NEBeamType type)
+int NEBeamFactory::GetApproxMethods(NEBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 NEBeamFactory::GetJApprox1(NEBeamType type)
 {
    int i = (int)type - (int)NEBeamType::NEBT39;
    return ComputeJApprox_NU(i, gs_NEBeamDimensions);

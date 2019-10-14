@@ -158,7 +158,12 @@ LPCTSTR FloridaBeamFactory::GetName(FloridaBeamType type)
    return gs_FloridaNames[(int)type].c_str();
 }
 
-Float64 FloridaBeamFactory::GetJApprox(FloridaBeamType type)
+int FloridaBeamFactory::GetApproxMethods(FloridaBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 FloridaBeamFactory::GetJApprox1(FloridaBeamType type)
 {
    int i = (int)type - (int)FloridaBeamType::FIB36;
 

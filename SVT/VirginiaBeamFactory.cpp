@@ -68,7 +68,12 @@ LPCTSTR VirginiaBeamFactory::GetName(VirginiaBeamType type)
    return gs_Virginianames[(int)type].c_str();
 }
 
-Float64 VirginiaBeamFactory::GetJApprox(VirginiaBeamType type)
+int VirginiaBeamFactory::GetApproxMethods(VirginiaBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 VirginiaBeamFactory::GetJApprox1(VirginiaBeamType type)
 {
    int i = (int)type - (int)VirginiaBeamType::PCBT_29;
    return ComputeJApprox_IBeam(i, gs_VirginiaBeamDimensions);

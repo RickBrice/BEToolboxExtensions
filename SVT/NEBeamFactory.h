@@ -13,7 +13,8 @@ class NEBeamFactory
 public:
    static void CreateBeam(NEBeamType type, IShape** ppShape);
    static LPCTSTR GetName(NEBeamType type);
-   static Float64 GetJApprox(NEBeamType type);
+   static int GetApproxMethods(NEBeamType type);
+   static Float64 GetJApprox1(NEBeamType type);
 };
 
 class CNEBeamFactory : public CAbstractBeamFactory
@@ -22,5 +23,6 @@ public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<NEBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<NEBeamType, NEBeamFactory>(beamIdx); }
    virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<NEBeamType, NEBeamFactory>(beamIdx, ppShape); }
-   virtual Float64 GetJApprox(IndexType beamIdx) const override { return _GetJApprox<NEBeamType, NEBeamFactory>(beamIdx); }
+   virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<NEBeamType, NEBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<NEBeamType, NEBeamFactory>(beamIdx); }
 };

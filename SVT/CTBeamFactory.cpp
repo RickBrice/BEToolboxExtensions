@@ -95,30 +95,30 @@ void CTBeamFactory::CreateBeam(CTBeamType type, IShape** ppShape)
 
       beam.QueryInterface(ppShape);
    }
-   //else if ((int)Tub55 <= (int)type && (int)type <= (int)Tub85)
-   //{
-   //   int i = (int)type - (int)Tub55;
+   else if ((int)CTBeamType::Tub55 <= (int)type && (int)type <= (int)CTBeamType::Tub85)
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
 
-   //   CComPtr<IUBeam> beam;
-   //   beam.CoCreateInstance(CLSID_UBeam);
-   //   using namespace _UBeam; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
+      CComPtr<IUBeam> beam;
+      beam.CoCreateInstance(CLSID_UBeam);
+      using namespace _UBeam; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
 
-   //   beam->put_D1(gs_CTUBeamDimensions[i][D1]);
-   //   beam->put_D2(gs_CTUBeamDimensions[i][D2]);
-   //   beam->put_D3(gs_CTUBeamDimensions[i][D3]);
-   //   beam->put_D4(gs_CTUBeamDimensions[i][D4]);
-   //   beam->put_D5(gs_CTUBeamDimensions[i][D5]);
-   //   beam->put_D6(gs_CTUBeamDimensions[i][D6]);
-   //   beam->put_D7(gs_CTUBeamDimensions[i][D7]);
-   //   beam->put_T(gs_CTUBeamDimensions[i][T]);
-   //   beam->put_W1(gs_CTUBeamDimensions[i][W1]);
-   //   beam->put_W2(gs_CTUBeamDimensions[i][W2]);
-   //   beam->put_W3(gs_CTUBeamDimensions[i][W3]);
-   //   beam->put_W4(gs_CTUBeamDimensions[i][W4]);
-   //   beam->put_W5(gs_CTUBeamDimensions[i][W5]);
+      beam->put_D1(gs_CTUBeamDimensions[i][D1]);
+      beam->put_D2(gs_CTUBeamDimensions[i][D2]);
+      beam->put_D3(gs_CTUBeamDimensions[i][D3]);
+      beam->put_D4(gs_CTUBeamDimensions[i][D4]);
+      beam->put_D5(gs_CTUBeamDimensions[i][D5]);
+      beam->put_D6(gs_CTUBeamDimensions[i][D6]);
+      beam->put_D7(gs_CTUBeamDimensions[i][D7]);
+      beam->put_T(gs_CTUBeamDimensions[i][T]);
+      beam->put_W1(gs_CTUBeamDimensions[i][W1]);
+      beam->put_W2(gs_CTUBeamDimensions[i][W2]);
+      beam->put_W3(gs_CTUBeamDimensions[i][W3]);
+      beam->put_W4(gs_CTUBeamDimensions[i][W4]);
+      beam->put_W5(gs_CTUBeamDimensions[i][W5]);
 
-   //   beam->QueryInterface(ppShape);
-   //}
+      beam->QueryInterface(ppShape);
+   }
    else
    {
       *ppShape = nullptr;
@@ -166,7 +166,23 @@ LPCTSTR CTBeamFactory::GetName(CTBeamType type)
    return gs_CTnames[(int)type].c_str();
 }
 
-Float64 CTBeamFactory::GetJApprox(CTBeamType type)
+int CTBeamFactory::GetApproxMethods(CTBeamType type)
+{
+   if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
+   {
+      return AM_J1 | AM_J2;
+   }
+   else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
+   {
+      return AM_J1 | AM_J2;
+   }
+   else
+   {
+      return AM_J1;
+   }
+}
+
+Float64 CTBeamFactory::GetJApprox1(CTBeamType type)
 {
    if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
    {
@@ -177,6 +193,11 @@ Float64 CTBeamFactory::GetJApprox(CTBeamType type)
    {
       int i = (int)type - (int)CTBeamType::I36;
       return ComputeJApprox_IBeam(i, gs_CTIBeamDimensions);
+   }
+   else
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
+      return ComputeJApprox_UBeam(i, gs_CTUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

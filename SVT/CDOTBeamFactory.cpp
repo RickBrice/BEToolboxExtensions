@@ -66,7 +66,12 @@ LPCTSTR CDOTBeamFactory::GetName(CDOTBeamType type)
    return gs_CDOTnames[(int)type].c_str();
 }
 
-Float64 CDOTBeamFactory::GetJApprox(CDOTBeamType type)
+int CDOTBeamFactory::GetApproxMethods(CDOTBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 CDOTBeamFactory::GetJApprox1(CDOTBeamType type)
 {
    int i = (int)type - (int)CDOTBeamType::CBT_30;
    return ComputeJApprox_IBeam(i, gs_CDOTBeamDimensions);

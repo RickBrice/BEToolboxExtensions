@@ -53,7 +53,7 @@ void OhioBeamFactory::CreateBeam(OhioBeamType type, IShape** ppShape)
 }
 
 
-static std::_tstring gs_Ohionames[] = {
+static std::_tstring gs_OhioNames[] = {
    _T("WF36-49"),
    _T("WF42-49"),
    _T("WF48-49"),
@@ -68,10 +68,15 @@ static std::_tstring gs_Ohionames[] = {
 
 LPCTSTR OhioBeamFactory::GetName(OhioBeamType type)
 {
-   return gs_Ohionames[(int)type].c_str();
+   return gs_OhioNames[(int)type].c_str();
 }
 
-Float64 OhioBeamFactory::GetJApprox(OhioBeamType type)
+int OhioBeamFactory::GetApproxMethods(OhioBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type)
 {
    int i = (int)type - (int)OhioBeamType::WF36_49;
    return ComputeJApprox_IBeam(i, gs_OhioBeamDimensions);

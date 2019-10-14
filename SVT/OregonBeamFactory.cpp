@@ -70,7 +70,12 @@ LPCTSTR OregonBeamFactory::GetName(OregonBeamType type)
    return gs_Oregonnames[(int)type].c_str();
 }
 
-Float64 OregonBeamFactory::GetJApprox(OregonBeamType type)
+int OregonBeamFactory::GetApproxMethods(OregonBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 OregonBeamFactory::GetJApprox1(OregonBeamType type)
 {
    int i = (int)type - (int)OregonBeamType::BI51;
    return ComputeJApprox_IBeam(i, gs_OregonBeamDimensions);

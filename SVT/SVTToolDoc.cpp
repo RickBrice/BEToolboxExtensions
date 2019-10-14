@@ -286,7 +286,7 @@ Results CSVTToolDoc::GetTorsionalConstant()
    PrandtlMembrane membrane;
    delete[] m_pValues;
    m_pValues = nullptr;
-   r.J = membrane.ComputeJ(*(m_pMesh.get()),&m_pValues);
+   r.J = membrane.ComputeJ(*(m_pMesh.get()), &m_pValues);
    r.nElements = m_pMesh->GetElementCount();
    r.nInteriorNodes = m_pMesh->GetInteriorNodeCount();
 
@@ -294,15 +294,18 @@ Results CSVTToolDoc::GetTorsionalConstant()
 
    m_pShape->get_ShapeProperties(&r.Props);
 
-   r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox(m_BeamIdx);
+   r.ApproxMethods = m_BeamFactories[m_TypeIdx].second->GetApproxMethods(m_BeamIdx);
+   r.Japprox1 = 0;
+   r.Japprox2 = 0;
+   if (r.ApproxMethods & AM_J1)
+   {
+      r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx);
+   }
 
-   Float64 A, Ix, Iy;
-   r.Props->get_Area(&A);
-   r.Props->get_Ixx(&Ix);
-   r.Props->get_Iyy(&Iy);
-
-   Float64 Ip = Ix + Iy;
-   r.Japprox2 = A*A*A*A / (40.0*Ip);
+   if (r.ApproxMethods & AM_J2)
+   {
+      r.Japprox2 = GetJApprox2(r.Props);
+   }
 
    m_bComputed = true;
    

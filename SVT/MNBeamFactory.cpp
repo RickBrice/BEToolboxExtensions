@@ -97,7 +97,12 @@ LPCTSTR MNBeamFactory::GetName(MNBeamType type)
    return gs_MNnames[(int)type].c_str();
 }
 
-Float64 MNBeamFactory::GetJApprox(MNBeamType type)
+int MNBeamFactory::GetApproxMethods(MNBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 MNBeamFactory::GetJApprox1(MNBeamType type)
 {
    if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
    {

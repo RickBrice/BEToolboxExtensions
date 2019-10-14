@@ -52,7 +52,12 @@ LPCTSTR ValidationShapeFactory::GetName(ValidationShapeType type)
    return gs_ShapeNames[(int)type].c_str();
 }
 
-Float64 ValidationShapeFactory::GetJApprox(ValidationShapeType type)
+int ValidationShapeFactory::GetApproxMethods(ValidationShapeType type)
+{
+   return AM_NONE;
+}
+
+Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type)
 {
    // the approximate equation doesn't really fit with this type
    return 0;

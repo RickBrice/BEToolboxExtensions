@@ -72,15 +72,19 @@ Results ComputeJ(T type)
 
    shape->get_ShapeProperties(&r.Props);
 
-   r.Japprox1 = FACTORY::GetJApprox(type);
+   r.ApproxMethods = FACTORY::GetApproxMethods(type);
+   r.Japprox1 = 0;
+   r.Japprox2 = 0;
 
-   Float64 A, Ix, Iy;
-   r.Props->get_Area(&A);
-   r.Props->get_Ixx(&Ix);
-   r.Props->get_Iyy(&Iy);
+   if (r.ApproxMethods & AM_J1)
+   {
+      r.Japprox1 = FACTORY::GetJApprox1(type);
+   }
 
-   Float64 Ip = Ix + Iy;
-   r.Japprox2 = A*A*A*A / (40.0*Ip);
+   if (r.ApproxMethods & AM_J2)
+   {
+      r.Japprox2 = GetJApprox2(r.Props);
+   }
 
    return r;
 }
@@ -106,14 +110,31 @@ void Beams(TCHAR* strAgency)
       results.Props->get_Ixx(&Ix);
       results.Props->get_Iyy(&Iy);
 
-      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%zd,%lld\n"), 
-         FACTORY::GetName(type), 
+      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f"),
+         FACTORY::GetName(type),
          A, Yt, Yb, Ix, Iy,
-         results.J, 
-         results.ApproxArea, results.ApproxArea / A,
-         results.Japprox1, results.Japprox1 / results.J, 
-         results.Japprox2, results.Japprox2 / results.J,
-         results.nInteriorNodes, duration.count());
+         results.J,
+         results.ApproxArea, results.ApproxArea / A);
+      
+      if (results.ApproxMethods & AM_J1)
+      {
+         _tprintf(_T(",%f,%f"), results.Japprox1, results.Japprox1 / results.J);
+      }
+      else
+      {
+         _tprintf(_T(",-,-"));
+      }
+
+      if (results.ApproxMethods & AM_J2)
+      {
+         _tprintf(_T(",%f,%f"), results.Japprox2, results.Japprox2 / results.J);
+      }
+      else
+      {
+         _tprintf(_T(",-,-"));
+      }
+      
+      _tprintf(_T(",%zd,%lld\n"), results.nInteriorNodes, duration.count());
    }
    _tprintf(_T("\n"));
 }

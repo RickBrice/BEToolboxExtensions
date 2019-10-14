@@ -183,7 +183,34 @@ void CSVTToolChildFrame::OnCompute()
    r.Props->get_Iyy(&Iy);
 
    CString str;
-   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nJapprox1 = %f\nJapprox2 = %f\n#Elements = %d\n#Points = %d"),
-      A, Yt, Yb, Ix, Iy, r.J, r.Japprox1, r.Japprox2, r.nElements, r.nInteriorNodes);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\n"), A, Yt, Yb, Ix, Iy, r.J);
+
+   if (r.ApproxMethods & AM_J1)
+   {
+      CString s;
+      s.Format(_T("Japprox1 = %f\n"), r.Japprox1);
+      str += s;
+   }
+   else
+   {
+      str += _T("Japprox1 = -\n");
+   }
+   
+   if (r.ApproxMethods & AM_J2)
+   {
+      CString s;
+      s.Format(_T("Japprox2 = %f\n"), r.Japprox2);
+      str += s;
+   }
+   else
+   {
+      str += _T("Japprox2 = -\n");
+   }
+
+   CString s;
+   s.Format(_T("#Elements = %d\n#Points = %d"), r.nElements, r.nInteriorNodes);
+
+   str += s;
+
    AfxMessageBox(str);
 }

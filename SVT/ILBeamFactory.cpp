@@ -119,7 +119,12 @@ LPCTSTR ILBeamFactory::GetName(ILBeamType type)
    return gs_ILnames[(int)type].c_str();
 }
 
-Float64 ILBeamFactory::GetJApprox(ILBeamType type)
+int ILBeamFactory::GetApproxMethods(ILBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 ILBeamFactory::GetJApprox1(ILBeamType type)
 {
    int i = (int)type - (int)ILBeamType::IL27_1830;
 

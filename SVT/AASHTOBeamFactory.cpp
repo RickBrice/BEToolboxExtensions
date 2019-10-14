@@ -68,7 +68,12 @@ LPCTSTR AASHTOBeamFactory::GetName(AASHTOBeamType type)
    return gs_AASHTOnames[(int)type].c_str();
 }
 
-Float64 AASHTOBeamFactory::GetJApprox(AASHTOBeamType type)
+int AASHTOBeamFactory::GetApproxMethods(AASHTOBeamType type)
+{
+   return AM_J1 | AM_J2;
+}
+
+Float64 AASHTOBeamFactory::GetJApprox1(AASHTOBeamType type)
 {
    int i = (int)type - (int)AASHTOBeamType::TypeI;
    return ComputeJApprox_IBeam(i, gs_AASHTOBeamDimensions);

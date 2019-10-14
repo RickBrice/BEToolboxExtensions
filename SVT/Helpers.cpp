@@ -23,6 +23,7 @@
 #include "stdafx.h"
 #include "Helpers.h"
 #include <thread>
+#include <MathEx.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -43,6 +44,19 @@ void GetThreadParameters(IndexType nItems, IndexType& nWorkerThreads, IndexType&
    // this makes everything run in the main thread
    //nWorkerThreads = 0;
    //nItemsPerThread = nItems;
+}
+
+
+Float64 GetJApprox2(IShapeProperties* pProps)
+{
+   Float64 A, Ix, Iy;
+   pProps->get_Area(&A);
+   pProps->get_Ixx(&Ix);
+   pProps->get_Iyy(&Iy);
+
+   Float64 Ip = Ix + Iy;
+   Float64 J = A*A*A*A / (40.0*Ip);
+   return J;
 }
 
 Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14])
@@ -109,6 +123,75 @@ Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13])
    J += b*tw*tw*tw; // web, full depth
 
    J *= 1. / 3.;
+
+   return J;
+}
+
+Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13])
+{
+   using namespace _UBeam;
+
+   Float64 d1 = dimensions[i][D1];
+   Float64 d2 = dimensions[i][D2];
+   Float64 d3 = dimensions[i][D3];
+   Float64 d4 = dimensions[i][D4];
+   Float64 d5 = dimensions[i][D5];
+   Float64 d6 = dimensions[i][D6];
+   Float64 d7 = dimensions[i][D7];
+   Float64 t  = dimensions[i][T];
+   Float64 w1 = dimensions[i][W1];
+   Float64 w2 = dimensions[i][W2];
+   Float64 w3 = dimensions[i][W3];
+   Float64 w4 = dimensions[i][W4];
+   Float64 w5 = dimensions[i][W5];
+
+   Float64 rise = d1 - d4 - d5;
+   Float64 run = (w2 - w1) / 2 - w5;
+   Float64 slope = (IsZero(run) ? DBL_MAX : rise / run);
+
+   Float64 Jweb = (d1 - d2)*sqrt(slope*slope + 1)/slope*t*t*t;
+   Float64 Jflg = w1*d2*d2*d2;
+
+   Float64 J = (2 * Jweb + Jflg)/3.;
+
+   return J;
+}
+
+Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14])
+{
+   CComPtr<IUBeam2> beam;
+   beam.CoCreateInstance(CLSID_UBeam2);
+   using namespace _UBeam2; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
+
+   beam->put_C1(dimensions[i][C1]);
+   beam->put_D1(dimensions[i][D1]);
+   beam->put_D2(dimensions[i][D2]);
+   beam->put_D3(dimensions[i][D3]);
+   beam->put_D4(dimensions[i][D4]);
+   beam->put_D5(dimensions[i][D5]);
+   beam->put_D6(dimensions[i][D6]);
+   beam->put_W1(dimensions[i][W1]);
+   beam->put_W2(dimensions[i][W2]);
+   beam->put_W3(dimensions[i][W3]);
+   beam->put_W4(dimensions[i][W4]);
+   beam->put_W5(dimensions[i][W5]);
+   beam->put_W6(dimensions[i][W6]);
+   beam->put_W7(dimensions[i][W7]);
+
+   Float64 slope;
+   beam->get_Slope(0,&slope);
+
+   Float64 d1 = dimensions[i][D1];
+   Float64 d2 = dimensions[i][D2];
+   Float64 w1 = dimensions[i][W1];
+
+   Float64 t;
+   beam->get_T(&t);
+
+   Float64 Jweb = (d1 - d2)*sqrt(slope*slope+1)/slope*t*t*t;
+   Float64 Jflg = w1*d2*d2*d2;
+
+   Float64 J = (2 * Jweb + Jflg) / 3.;
 
    return J;
 }

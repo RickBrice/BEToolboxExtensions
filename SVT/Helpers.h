@@ -45,6 +45,11 @@ namespace _UBeam
    enum Dimensions { D1, D2, D3, D4, D5, D6, D7, T, W1, W2, W3, W4, W5 };
 }
 
+namespace _UBeam2
+{
+   enum Dimensions { C1, D1, D2, D3, D4, D5, D6, W1, W2, W3, W4, W5, W6, W7 };
+}
+
 namespace _FIBBeam
 {
    enum Dimensions{ D1, D2, D3, D4, D5, H, T, R, W1, W2, W3, C1 };
@@ -53,6 +58,7 @@ namespace _FIBBeam
 using Results = struct
 {
    Float64 J;
+   int ApproxMethods;
    Float64 Japprox1;
    Float64 Japprox2;
    IndexType nElements;
@@ -66,6 +72,10 @@ void GetThreadParameters(IndexType nItems, /**< [in] total number of items to be
                          IndexType& nWorkerThreads, /**< [out] number of worker threads to spawn*/
                          IndexType& nItemsPerThread /**< [out] number of items to process per thread*/);
 
+Float64 GetJApprox2(IShapeProperties* pProps);
+
 
 Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14]);
 Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14]);
