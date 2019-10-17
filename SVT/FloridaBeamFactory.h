@@ -5,7 +5,7 @@
 
 enum class FloridaBeamType
 {
-   FIB36, FIB45, FIB54, FIB63, FIB72, FIB78, FIB84, FIB96, nSections
+   FIB36, FIB45, FIB54, FIB63, FIB72, FIB78, FIB84, FIB96, FIB102, nSections
 };
 
 class FloridaBeamFactory

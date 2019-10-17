@@ -15,6 +15,7 @@ static Float64 gs_FIBBeamDimensions[][12] = {
    { 3.5,   1.5,   3.5,   7,   7.5,   78,   7,   15,   17,   3.5,   38,   0.75}, // FIB 78
    { 3.5,   1.5,   3.5,   7,   7.5,   84,   7,   15,   17,   3.5,   38,   0.75}, // FIB 84
    { 3.5,   1.5,   3.5,   7,   7.5,   96,   7,   15,   17,   3.5,   38,   0.75}, // FIB 93
+   { 3.5,   1.5,   3.5,   7,   7.5,  102,   8,   15,   17,   3.5,   39,   0.75 }, // FIB 102
 };
 
 
@@ -151,6 +152,7 @@ static std::_tstring gs_FloridaNames[] = {
    _T("FIB 78"),
    _T("FIB 84"),
    _T("FIB 96"),
+   _T("FIB 102"),
 };
 
 LPCTSTR FloridaBeamFactory::GetName(FloridaBeamType type)
