@@ -167,12 +167,7 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
          Float64 value = 0;
          for (IndexType i = 0; i < 4; i++)
          {
-            if (pElement->Node[i] == INVALID_INDEX)
-            {
-               // boundary element
-               value += 0;
-            }
-            else
+            if (pElement->Node[i] != INVALID_INDEX)
             {
                value += pNodeValues[pElement->Node[i]];
             }
@@ -187,8 +182,8 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
          shape_draw_strategy->DoFill(true);
          shape_draw_strategy->SetSolidFillColor(color);
          compound_strategy->AddStrategy(shape_draw_strategy);
-      }
-   }
+      } // next mesh element
+   } // if results computed
 
 
    dispObj->SetDrawingStrategy(compound_strategy);
