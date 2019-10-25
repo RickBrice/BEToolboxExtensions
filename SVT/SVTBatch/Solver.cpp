@@ -65,6 +65,7 @@ Results ComputeJ(T type)
    Float64 J = membrane.ComputeJ(mesh);
 
    Results r;
+   r.Shape = shape;
    r.J = J;
    r.nElements = mesh.GetElementCount();
    r.nInteriorNodes = mesh.GetInteriorNodeCount();
@@ -139,6 +140,42 @@ void Beams(TCHAR* strAgency)
    _tprintf(_T("\n"));
 }
 
+
+template<typename T, class FACTORY>
+void BDMTable(TCHAR* strAgency)
+{
+   _tprintf(_T("%s\n"), strAgency);
+   _tprintf(_T("Name,Depth (in),Area (in2),Yb (in),Ix (in4),Iy (in4),J (in4),Wt (k/ft),VS (in)\n"));
+   for (int i = 0; i < (int)T::nSections; i++)
+   {
+      T type = (T)i;
+
+      std::chrono::time_point<std::chrono::steady_clock> start = std::chrono::steady_clock::now();
+      Results results = ComputeJ<T, FACTORY>(type);
+      std::chrono::time_point<std::chrono::steady_clock> end = std::chrono::steady_clock::now();
+      std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+      Float64 A, Yt, Yb, Ix, Iy;
+      results.Props->get_Area(&A);
+      results.Props->get_Ytop(&Yt);
+      results.Props->get_Ybottom(&Yb);
+      results.Props->get_Ixx(&Ix);
+      results.Props->get_Iyy(&Iy);
+
+      Float64 H = Yt + Yb;
+      Float64 w = A*0.165 / 144;
+
+      Float64 P;
+      results.Shape->get_Perimeter(&P);
+      Float64 VS = A / P;
+
+      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f\n"),
+         FACTORY::GetName(type),
+         H, A, Yb, Ix, Iy, results.J, w, VS);
+   }
+   _tprintf(_T("\n"));
+}
+
 long main()
 {
    ::CoInitialize(nullptr);
@@ -158,6 +195,9 @@ long main()
       Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
       Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
       Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
+
+      // Lists values for WSDOT BDM girder properties table
+      //BDMTable<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
    }
    ::CoUninitialize();
 

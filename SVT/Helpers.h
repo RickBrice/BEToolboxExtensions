@@ -64,6 +64,7 @@ using Results = struct
    IndexType nElements;
    IndexType nInteriorNodes;
    Float64 ApproxArea;
+   CComPtr<IShape> Shape;
    CComPtr<IShapeProperties> Props;
 };
 
