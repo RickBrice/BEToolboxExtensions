@@ -81,7 +81,7 @@ CSVTToolDoc::CSVTToolDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Virginia"), std::make_unique<CVirginiaBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Washington"), std::make_unique<CWSDOTBeamFactory>()));
 
-   UIHints(FALSE); // not using UIHints feature
+   EnableUIHints(FALSE); // not using UIHints feature
 
    m_pValues = nullptr;
    m_bComputed = false;
