@@ -127,7 +127,7 @@ BOOL CSVTToolDoc::Init()
    }
 
    // initialize with some data
-   m_Dmax = 0.5; // inch
+   m_Dmax = 0.125; // inch
 
    SetGirder(0, 0);
 

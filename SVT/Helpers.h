@@ -40,6 +40,11 @@ namespace IBeam
    enum IBeamDimensions { C1, D1, D2, D3, D4, D5, D6, D7, T1, T2, W1, W2, W3, W4 };
 }
 
+namespace IBeam2
+{
+   enum IBeamDimensions { C1, D1, D2, D3, D4, D5, D6, H, T1, T2, W1, W2, W3, W4, W5 };
+}
+
 namespace _UBeam
 {
    enum Dimensions { D1, D2, D3, D4, D5, D6, D7, T, W1, W2, W3, W4, W5 };
@@ -77,6 +82,7 @@ Float64 GetJApprox2(IShapeProperties* pProps);
 
 
 Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14]);
+Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15]);
 Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14]);

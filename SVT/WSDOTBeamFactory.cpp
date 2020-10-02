@@ -19,6 +19,10 @@ static Float64 gs_WSDOTBeamDimensions[][14] = {
    { 1,3,3,3,5.125,4.5,3,78.375,6.125,6.125,18.4375,3,13.125,3 }, // WF100G
 };
 
+static Float64 gs_WSDOTModifiedBeamDimensions[][15] = {
+   { 1,3,3,3,3,4.5,5.125,100,6.125,6.125,6,18.4375,3,3,13.125 } // WF100G_Modified
+};
+
 
 static Float64 gs_WSDOTUBeamDimensions[][13] =
 {
@@ -68,6 +72,31 @@ void WSDOTBeamFactory::CreateBeam(WSDOTBeamType type, IShape** ppShape)
       beam->put_W3(gs_WSDOTBeamDimensions[i][W3]);
       beam->put_W4(gs_WSDOTBeamDimensions[i][W4]);
 
+      beam.QueryInterface(ppShape);
+   }
+   else if (WSDOTBeamType::WF100G_Modified == type)
+   {
+      int i = (int)type - (int)WSDOTBeamType::WF100G_Modified;
+      CComPtr<IPrecastBeam2> beam;
+      beam.CoCreateInstance(CLSID_PrecastBeam2);
+
+      using namespace IBeam2;
+
+      beam->put_C1(gs_WSDOTModifiedBeamDimensions[i][C1]);
+      beam->put_D1(gs_WSDOTModifiedBeamDimensions[i][D1]);
+      beam->put_D2(gs_WSDOTModifiedBeamDimensions[i][D2]);
+      beam->put_D3(gs_WSDOTModifiedBeamDimensions[i][D3]);
+      beam->put_D4(gs_WSDOTModifiedBeamDimensions[i][D4]);
+      beam->put_D5(gs_WSDOTModifiedBeamDimensions[i][D5]);
+      beam->put_D6(gs_WSDOTModifiedBeamDimensions[i][D6]);
+      beam->put_H(gs_WSDOTModifiedBeamDimensions[i][H]);
+      beam->put_T1(gs_WSDOTModifiedBeamDimensions[i][T1]);
+      beam->put_T2(gs_WSDOTModifiedBeamDimensions[i][T2]);
+      beam->put_W1(gs_WSDOTModifiedBeamDimensions[i][W1]);
+      beam->put_W2(gs_WSDOTModifiedBeamDimensions[i][W2]);
+      beam->put_W3(gs_WSDOTModifiedBeamDimensions[i][W3]);
+      beam->put_W4(gs_WSDOTModifiedBeamDimensions[i][W4]);
+      beam->put_W5(gs_WSDOTModifiedBeamDimensions[i][W5]);
 
       beam.QueryInterface(ppShape);
    }
@@ -116,6 +145,7 @@ static std::_tstring gs_WSDOTnames[] = {
    _T("WF83G"),
    _T("WF95G"),
    _T("WF100G"),
+   _T("WF100G_modified"),
    _T("U54G4"),
    _T("U54G5"),
    _T("U54G6"),
@@ -148,6 +178,11 @@ int WSDOTBeamFactory::GetApproxMethods(WSDOTBeamType type)
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return AM_J1 | AM_J2;
    }
+   else if (type == WSDOTBeamType::WF100G_Modified)
+   {
+      int i = (int)type - (int)WSDOTBeamType::WF100G_Modified;
+      return AM_J1 | AM_J2;
+   }
    else if ((int)WSDOTBeamType::U54G4 <= (int)type && (int)type < (int)WSDOTBeamType::nSections)
    {
       int i = (int)type - (int)WSDOTBeamType::U54G4;
@@ -162,6 +197,11 @@ Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return ComputeJApprox_IBeam(i, gs_WSDOTBeamDimensions);
+   }
+   else if (type == WSDOTBeamType::WF100G_Modified)
+   {
+      int i = (int)type - (int)WSDOTBeamType::WF100G_Modified;
+      return ComputeJApprox_IBeam2(i, gs_WSDOTModifiedBeamDimensions);
    }
    else if ((int)WSDOTBeamType::U54G4 <= (int)type && (int)type < (int)WSDOTBeamType::nSections)
    {
