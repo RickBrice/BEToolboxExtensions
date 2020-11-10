@@ -5,7 +5,7 @@
 
 enum class ValidationShapeType
 {
-   Square, Circle, Triangle, nSections
+   Square, Rectangle101, Rectangle201, Circle, Triangle, nSections
 };
 
 class ValidationShapeFactory
