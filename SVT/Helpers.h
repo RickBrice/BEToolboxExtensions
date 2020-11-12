@@ -78,6 +78,8 @@ void GetThreadParameters(IndexType nItems, /**< [in] total number of items to be
                          IndexType& nWorkerThreads, /**< [out] number of worker threads to spawn*/
                          IndexType& nItemsPerThread /**< [out] number of items to process per thread*/);
 
+std::tuple<Float64, Float64, Float64> GetColor(Float64 min, Float64 max, Float64 value);
+
 Float64 GetJApprox2(IShapeProperties* pProps);
 
 

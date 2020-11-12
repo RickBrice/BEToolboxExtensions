@@ -29,7 +29,7 @@
 typedef struct FDMeshElement
 {
    // access array with Corner enum
-   enum Corner { TopLeft, TopRight, BottomRight, BottomLeft };
+   enum Corner { BottomLeft, BottomRight, TopRight, TopLeft }; // the order of this must match the order of the poly points in a rectangle object
 
    /// Indicies of the nodes of the mesh element. Use the Corner enum to access the array. 
    /// Indicies are INVALID_INDEX when the node attached to a boundary or the index of

@@ -181,6 +181,12 @@
     <ClCompile Include="SVT\FloridaBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\SVTToolView3D.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVT\SVTToolViewer3D.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -343,6 +349,12 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\FloridaBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\SVTToolView3D.h">
+      <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\SVTToolViewer3D.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

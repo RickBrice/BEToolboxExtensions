@@ -46,6 +46,14 @@ void GetThreadParameters(IndexType nItems, IndexType& nWorkerThreads, IndexType&
    //nItemsPerThread = nItems;
 }
 
+std::tuple<Float64, Float64, Float64> GetColor(Float64 min, Float64 max, Float64 value)
+{
+   Float64 ratio = 2 * (value - min) / (max - min);
+   Float64 b = Max(0., (1 - ratio));
+   Float64 r = Max(0., (ratio - 1));
+   Float64 g = 1 - b - r;
+   return std::tuple<Float64, Float64, Float64>(r, b, g);
+}
 
 Float64 GetJApprox2(IShapeProperties* pProps)
 {

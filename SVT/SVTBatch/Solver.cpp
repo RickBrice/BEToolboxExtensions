@@ -183,33 +183,25 @@ void BDMTable(TCHAR* strAgency)
    _tprintf(_T("\n"));
 }
 
-template<typename T,class FACTORY>
-void Plot(T type)
-{
-   // See SVTToolDoc.cpp - need to get mesh coordinates and node results values
-}
-
 long main()
 {
    ::CoInitialize(nullptr);
    {
-      //Beams<ValidationShapeType, ValidationShapeFactory>(_T("Validation"));
-      //Beams<AASHTOBeamType, AASHTOBeamFactory>(_T("AASHTO"));
-      //Beams<CTBeamType, CTBeamFactory>(_T("California"));
-      //Beams<CDOTBeamType, CDOTBeamFactory>(_T("Colorado"));
-      //Beams<FloridaBeamType, FloridaBeamFactory>(_T("Florida"));
-      //Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
-      //Beams<MNBeamType, MNBeamFactory>(_T("Minnesota"));
-      //Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
-      //Beams<NEBeamType, NEBeamFactory>(_T("New England"));
-      //Beams<NCBeamType, NCBeamFactory>(_T("North Carolina"));
-      //Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
-      //Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
-      //Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
-      //Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
-      //Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
-
-      Plot<AASHTOBeamType, AASHTOBeamFactory>(AASHTOBeamType::TypeII);
+      Beams<ValidationShapeType, ValidationShapeFactory>(_T("Validation"));
+      Beams<AASHTOBeamType, AASHTOBeamFactory>(_T("AASHTO"));
+      Beams<CTBeamType, CTBeamFactory>(_T("California"));
+      Beams<CDOTBeamType, CDOTBeamFactory>(_T("Colorado"));
+      Beams<FloridaBeamType, FloridaBeamFactory>(_T("Florida"));
+      Beams<ILBeamType, ILBeamFactory>(_T("Illinois"));
+      Beams<MNBeamType, MNBeamFactory>(_T("Minnesota"));
+      Beams<NUBeamType, NUBeamFactory>(_T("Nebraska"));
+      Beams<NEBeamType, NEBeamFactory>(_T("New England"));
+      Beams<NCBeamType, NCBeamFactory>(_T("North Carolina"));
+      Beams<OhioBeamType, OhioBeamFactory>(_T("Ohio"));
+      Beams<OregonBeamType, OregonBeamFactory>(_T("Oregon"));
+      Beams<TxDOTBeamType, TxDOTBeamFactory>(_T("Texas"));
+      Beams<VirginiaBeamType, VirginiaBeamFactory>(_T("Virginia"));
+      Beams<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
 
       // Lists values for WSDOT BDM girder properties table
       //BDMTable<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
