@@ -16,7 +16,7 @@ API
 ---
 This is the developer documentation for the BEToolbox Extensions. These are experimental extensions that are not intended for production engineering work.
 
-.. doxygenclass::
+.. doxygenclass:: FDMeshGenerator
    :project: BEToolbox Extensions
    :members:
 

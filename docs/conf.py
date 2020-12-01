@@ -37,6 +37,8 @@ import subprocess, os
 read_the_docs_build = os.environ.get('READTHEDOCS',None) == 'True'
 if read_the_docs_build:
     subprocess.call('doxygen', shell=True)
+else:
+    subprocess.call('doxygen', shell=True)
 
 # -- General configuration ------------------------------------------------
 
@@ -281,5 +283,5 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 
-breathe_projects = {"BEToolbox Extensions":"/docs/xml/"}
+breathe_projects = {"BEToolbox Extensions":"./xml/"}
 breathe_default_project = "BEToolbox Extensions"
