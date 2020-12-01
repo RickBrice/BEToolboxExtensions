@@ -38,9 +38,9 @@ import os
 import subprocess
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if on_rtd:
-	subprocess.call('doxygen; mv html/index.html html/api.html', shell=True)
+	subprocess.call('doxygen ../devdocs/Doxyfile.dox; mv html/index.html html/api.html', shell=True)
 else:
-	subprocess.call('doxygen', shell=True)
+	subprocess.call('doxygen ..\devdocs\Doxyfile.dox', shell=True)
 	subprocess.call('move .\\html\\index.html .\\html\\api.html', shell=True)
 
 # -- General configuration ------------------------------------------------
