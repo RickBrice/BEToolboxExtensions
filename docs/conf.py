@@ -33,11 +33,10 @@
 # index.html file we want to key. To fix this problem, rename html\index.html
 # to html\api.html. When the contents of html_extra_path is copied, our placeholder
 # api.hml file is replaced
-import sys, subprocess, os
-#sys.path.append("/docs/ext/breathe/")
+import subprocess, os
 read_the_docs_build = os.environ.get('READTHEDOCS',None) == 'True'
 if read_the_docs_build:
-    subprocess.call('cd ../doxygen; doxygen Doxyfile.dox', shell=True)
+    subprocess.call('doxygen', shell=True)
 
 # -- General configuration ------------------------------------------------
 
@@ -51,7 +50,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-	'breathe'
+	'breathe',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -62,9 +61,6 @@ source_suffix = '.rst'
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
-
-breathe_projects = {"BEToolbox Extensions":"/docs/xml/"}
-breathe_default_project = "BEToolbox Extensions"
 
 # The master toctree document.
 master_doc = 'index'
@@ -283,3 +279,7 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+breathe_projects = {"BEToolbox Extensions":"/docs/xml/"}
+breathe_default_project = "BEToolbox Extensions"
