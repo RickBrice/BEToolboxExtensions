@@ -16,6 +16,10 @@ API
 ---
 This is the developer documentation for the BEToolbox Extensions. These are experimental extensions that are not intended for production engineering work.
 
+.. doxygenclass::
+   :project: BEToolbox Extensions
+   :members:
+
 Example
 =======
 This tool computes the St. Venant torsional constant for precast prestressed girder bridge girders. 
