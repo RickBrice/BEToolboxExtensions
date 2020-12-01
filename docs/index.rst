@@ -16,12 +16,12 @@ API
 ---
 This is the developer documentation for the BEToolbox Extensions. These are experimental extensions that are not intended for production engineering work.
 
-.. doxygenclass:: FDMeshGenerator
+.. doxygenindex::
    :project: BEToolbox Extensions
-   :members:
+   :path: .\xml\
 
 Example
-=======
+-------
 This tool computes the St. Venant torsional constant for precast prestressed girder bridge girders. 
 
     // shape = Build a shape
@@ -49,7 +49,7 @@ Contents:
    
    m3c
    svt
-   
+
 
 Indices and tables
 ==================
