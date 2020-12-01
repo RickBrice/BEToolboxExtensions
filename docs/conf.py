@@ -66,12 +66,12 @@ source_suffix = '.rst'
 
 breathe_projects = {"DevDocs":"/docs/xml/"}
 breathe_default_project = "DevDocs"
-.. doxygenindex::
-.. doxygenfunction::
-.. doxygenstruct::
-.. doxygenenum::
-.. doxygentypedef::
-.. doxygenclass::
+#.. doxygenindex::
+#.. doxygenfunction::
+#.. doxygenstruct::
+#.. doxygenenum::
+#.. doxygentypedef::
+#.. doxygenclass::
 
 # The master toctree document.
 master_doc = 'index'
