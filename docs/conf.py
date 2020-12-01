@@ -33,15 +33,15 @@
 # index.html file we want to key. To fix this problem, rename html\index.html
 # to html\api.html. When the contents of html_extra_path is copied, our placeholder
 # api.hml file is replaced
-#import sys
-#import os
-#import subprocess
-#on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-#if on_rtd:
-#	subprocess.call('doxygen; mv html/index.html html/api.html', shell=True)
-#else:
-#	subprocess.call('doxygen', shell=True)
-#	subprocess.call('move .\\html\\index.html .\\html\\api.html', shell=True)
+import sys
+import os
+import subprocess
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if on_rtd:
+	subprocess.call('doxygen; mv html/index.html html/api.html', shell=True)
+else:
+	subprocess.call('doxygen', shell=True)
+	subprocess.call('move .\\html\\index.html .\\html\\api.html', shell=True)
 
 # -- General configuration ------------------------------------------------
 
