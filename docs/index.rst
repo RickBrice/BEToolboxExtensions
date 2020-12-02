@@ -49,7 +49,7 @@ Contents:
    
    m3c
    svt
-
+   api/library_root
 
 Indices and tables
 ==================

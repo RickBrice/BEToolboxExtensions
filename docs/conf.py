@@ -53,6 +53,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 	'breathe',
+	'exhale'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -285,3 +286,15 @@ texinfo_documents = [
 
 breathe_projects = {"BEToolbox Extensions":"./xml/"}
 breathe_default_project = "BEToolbox Extensions"
+exhale_args = {
+"containmentFolder": "./api",
+"rootFileName": "library_root.rst",
+"rootFileTitle": "Library API",
+"doxygenStripFromPath": "..",
+"createTreeView": True,
+"exhaleExecutresDoxygen": True,
+"exhaleDoxygenStdin": "INPUT = ../include"
+}
+
+primary_domain = 'cpp'
+highlight_language = 'cpp'
