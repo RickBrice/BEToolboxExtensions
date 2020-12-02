@@ -286,15 +286,17 @@ texinfo_documents = [
 
 breathe_projects = {"BEToolbox Extensions":"./xml/"}
 breathe_default_project = "BEToolbox Extensions"
-exhale_args = {
-"containmentFolder": "./api",
-"rootFileName": "library_root.rst",
-"rootFileTitle": "Library API",
-"doxygenStripFromPath": "..",
-"createTreeView": True,
-#"exhaleExecutesDoxygen": True,
-"exhaleDoxygenStdin": "INPUT = ../include"
-}
+breathe_default_members = ('members', 'undoc-members')
 
-primary_domain = 'cpp'
-highlight_language = 'cpp'
+### exhale stuff
+#exhale_args = {
+#"containmentFolder": "./api",
+#"rootFileName": "library_root.rst",
+#"rootFileTitle": "Library API",
+#"doxygenStripFromPath": "..",
+#"createTreeView": True,
+##"exhaleExecutesDoxygen": True,
+##"exhaleDoxygenStdin": "INPUT = ../include"
+#}
+#primary_domain = 'cpp'
+#highlight_language = 'cpp'
