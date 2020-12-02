@@ -1,5 +1,9 @@
-/*! \mainpage BEToolbox Extensions Deverloper Documentation
- * This is some introductory text that you might want to read
+/*! \mainpage BEToolbox Extensions Developer Documentation
+The BEToolbox Extensions project implements extension components for the BridgeLink::BEToolbox application.
+
+The following extensions are contained in this project:
+   - M3C, Moment Capacity of Circular Columns with unbonded, non-prestressed, tendons
+   - SVT, Saint Ventant Torsion Constant computed using the Prandtl membrane analogy
 */
 
 // dllmain.h : Declaration of module class.
