@@ -24,8 +24,27 @@
 # and make it part of the overall documentation set.
 #
 # Before Sphinx runs, generate API documentation with Doxygen
-import subprocess
-subprocess.call('doxygen', shell=True)
+# import subprocess, os
+
+# def configureDoxyfile(input_dir,output_dir):
+    # with open('Doxyfile','r') as file :
+       # filedata = file.read()
+	  
+    # filedata = filedata.replace('../', input_dir)
+	# filedata = filedata.replace('./_build/html/api/', output_dir)
+	  
+	# with open('Doxyfile','w') as file :
+	   # file.write(filedata)
+
+# # Check if we are running on Read the Docs' servers
+# read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+
+# if read_the_docs_build:
+   # input_dir = '../'
+   # output_dir = 'build'
+   # configureDoxyfile(input_dir,output_dir)
+   
+# subprocess.call('doxygen', shell=True)
 
 # -- General configuration ------------------------------------------------
 
@@ -80,7 +99,7 @@ copyright = '2019, WSDOT'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'xml']
+exclude_patterns = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.

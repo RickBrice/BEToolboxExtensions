@@ -12,12 +12,6 @@ St. Venant Torsional Constant
 -----------------------------
 This extension computes the St. Venant Torsional Constant for precast, prestressed concrete bridge girders. Calculations are carried out by the finite difference method solving Prandtl's membrane analogy.
 
-API
----
-This is the developer documentation for the BEToolbox Extensions. These are experimental extensions that are not intended for production engineering work.
-
-`Link to API <./api/html/index.html>`_
-
 Example
 -------
 This tool computes the St. Venant torsional constant for precast prestressed girder bridge girders. 
