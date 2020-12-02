@@ -16,14 +16,15 @@ API
 ---
 This is the developer documentation for the BEToolbox Extensions. These are experimental extensions that are not intended for production engineering work.
 
-.. doxygenindex::
-   :project: BEToolbox Extensions
-   :path: .\xml\
+`Link to API <./api/html/index.html>`_
 
 Example
 -------
 This tool computes the St. Venant torsional constant for precast prestressed girder bridge girders. 
 
+.. code-block::
+   :caption: Example code for creating a finite difference mesh for a shape and then computing J with the Prandtl membrane analogy
+   
     // shape = Build a shape
     Float64 min_element_size = 0.25;
     FDMeshGenerator mesh_generator(min_element_size,min_element_size);
@@ -49,8 +50,7 @@ Contents:
    
    m3c
    svt
-   api/library_root
-
+   
 Indices and tables
 ==================
 

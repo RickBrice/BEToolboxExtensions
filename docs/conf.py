@@ -23,22 +23,9 @@
 # This is custom code to generate API docuementation using Doxygen
 # and make it part of the overall documentation set.
 #
-# There are two key elements to making this work
-# 1) Before Sphinx runs, generate API documentation with Doxygen
-# 2) Copy the documentation into the sphinx output so it is hosted on RtD.
-#    This is accomplished with the html_extra_path option below
-#
-# There is one problem... everything in html_extra_path is copied into the
-# sphinx output. Doxygen generates and index.html file and it replaces the
-# index.html file we want to key. To fix this problem, rename html\index.html
-# to html\api.html. When the contents of html_extra_path is copied, our placeholder
-# api.hml file is replaced
-import subprocess, os
-read_the_docs_build = os.environ.get('READTHEDOCS',None) == 'True'
-if read_the_docs_build:
-    subprocess.call('doxygen', shell=True)
-else:
-    subprocess.call('doxygen', shell=True)
+# Before Sphinx runs, generate API documentation with Doxygen
+import subprocess
+subprocess.call('doxygen', shell=True)
 
 # -- General configuration ------------------------------------------------
 
@@ -52,7 +39,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-	'breathe',
+	#'breathe',
 	#'exhale'
 ]
 
@@ -93,7 +80,7 @@ copyright = '2019, WSDOT'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', 'xml']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -284,19 +271,23 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 
-breathe_projects = {"BEToolbox Extensions":"./xml/"}
-breathe_default_project = "BEToolbox Extensions"
-breathe_default_members = ('members', 'undoc-members')
+#breathe_projects = {"BEToolbox Extensions":"./xml/"}
+#breathe_default_project = "BEToolbox Extensions"
+#breathe_default_members = ('members', 'undoc-members')
 
-### exhale stuff
-#exhale_args = {
-#"containmentFolder": "./api",
-#"rootFileName": "library_root.rst",
-#"rootFileTitle": "Library API",
-#"doxygenStripFromPath": "..",
-#"createTreeView": True,
-##"exhaleExecutesDoxygen": True,
-##"exhaleDoxygenStdin": "INPUT = ../include"
-#}
-#primary_domain = 'cpp'
-#highlight_language = 'cpp'
+## exhale stuff
+# # exhale_args = {
+   # These arguments are required
+   # # "containmentFolder": "./api",
+   # # "rootFileName": "library_root.rst",
+   # # "rootFileTitle": "Library API",
+   # # "doxygenStripFromPath": "..",
+   # Suggested optional arguments
+   # # "createTreeView": True,
+# # }
+
+# Tell sphinx what the primary language being documented is
+# # primary_domain = 'cpp'
+
+# Tell sphinx what the pygments highlight language should be.
+# # highlight_language = 'cpp'
