@@ -11,23 +11,23 @@
 # Before Sphinx runs, generate API documentation with Doxygen
 import subprocess, os
 
-# def configureDoxyfile(input_dir,output_dir):
-    # with open('Doxyfile','r') as file :
-       # filedata = file.read()
+def configureDoxyfile(input_dir,output_dir):
+    with open('Doxyfile','r') as file :
+       filedata = file.read()
 	  
-    # filedata = filedata.replace('../', input_dir)
-	# filedata = filedata.replace('./_build/html/api/', output_dir)
-	  
-	# with open('Doxyfile','w') as file :
-	   # file.write(filedata)
+    #filedata = filedata.replace('../', input_dir)
+    filedata = filedata.replace('./_build/', output_dir)
+    	  
+    with open('Doxyfile','w') as file :
+        file.write(filedata)
 
-# # Check if we are running on Read the Docs' servers
-# read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+# Check if we are running on Read the Docs' servers
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
-# if read_the_docs_build:
-   # input_dir = '../'
-   # output_dir = 'build'
-   # configureDoxyfile(input_dir,output_dir)
+if read_the_docs_build:
+   input_dir = '../'
+   output_dir = 'latest'
+   configureDoxyfile(input_dir,output_dir)
    
 subprocess.call('doxygen', shell=True)
 
@@ -77,4 +77,7 @@ html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#html_static_path = ['_static']
+
+#html_extra_path = ['./_build/html']
+
