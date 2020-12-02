@@ -19,33 +19,6 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
-# -- Before Sphinx runs (RAB) -----------------------------------------------
-# This is custom code to generate API docuementation using Doxygen
-# and make it part of the overall documentation set.
-#
-# Before Sphinx runs, generate API documentation with Doxygen
-# import subprocess, os
-
-# def configureDoxyfile(input_dir,output_dir):
-    # with open('Doxyfile','r') as file :
-       # filedata = file.read()
-	  
-    # filedata = filedata.replace('../', input_dir)
-	# filedata = filedata.replace('./_build/html/api/', output_dir)
-	  
-	# with open('Doxyfile','w') as file :
-	   # file.write(filedata)
-
-# # Check if we are running on Read the Docs' servers
-# read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
-
-# if read_the_docs_build:
-   # input_dir = '../'
-   # output_dir = 'build'
-   # configureDoxyfile(input_dir,output_dir)
-   
-# subprocess.call('doxygen', shell=True)
-
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -58,8 +31,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-	#'breathe',
-	#'exhale'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -130,7 +101,8 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+#html_theme = 'default'
+html_theme = 'haiku'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -288,25 +260,3 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
-
-
-#breathe_projects = {"BEToolbox Extensions":"./xml/"}
-#breathe_default_project = "BEToolbox Extensions"
-#breathe_default_members = ('members', 'undoc-members')
-
-## exhale stuff
-# # exhale_args = {
-   # These arguments are required
-   # # "containmentFolder": "./api",
-   # # "rootFileName": "library_root.rst",
-   # # "rootFileTitle": "Library API",
-   # # "doxygenStripFromPath": "..",
-   # Suggested optional arguments
-   # # "createTreeView": True,
-# # }
-
-# Tell sphinx what the primary language being documented is
-# # primary_domain = 'cpp'
-
-# Tell sphinx what the pygments highlight language should be.
-# # highlight_language = 'cpp'

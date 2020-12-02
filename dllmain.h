@@ -1,3 +1,7 @@
+/*! \mainpage BEToolbox Extensions Deverloper Documentation
+ * This is some introductory text that you might want to read
+*/
+
 // dllmain.h : Declaration of module class.
 #include "Resource.h"
 class CBEToolboxExtensionsModule : public ATL::CAtlDllModuleT< CBEToolboxExtensionsModule >
