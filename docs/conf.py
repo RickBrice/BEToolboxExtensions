@@ -292,7 +292,7 @@ exhale_args = {
 "rootFileTitle": "Library API",
 "doxygenStripFromPath": "..",
 "createTreeView": True,
-"exhaleExecutresDoxygen": True,
+#"exhaleExecutesDoxygen": True,
 "exhaleDoxygenStdin": "INPUT = ../include"
 }
 
