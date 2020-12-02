@@ -343,6 +343,5 @@ Documentation/doc/
 /docs/_static
 /docs/html
 /devdocs/_build
-/devdocs/_static
-/devdocs/_templates
+/devdocs/API
 /SVT/SVTBatch/Results.txt

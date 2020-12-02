@@ -11,28 +11,28 @@
 # Before Sphinx runs, generate API documentation with Doxygen
 import subprocess, os
 
-def configureDoxyfile(input_dir,output_dir):
-    with open('Doxyfile','r') as file :
-       filedata = file.read()
+# def configureDoxyfile(input_dir,output_dir):
+    # with open('Doxyfile','r') as file :
+       # filedata = file.read()
 	  
-    filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
-    filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
+    # filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
+    # filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
     	  
-    with open('Doxyfile','w') as file :
-        file.write(filedata)
+    # with open('Doxyfile','w') as file :
+        # file.write(filedata)
 
-# Check if we are running on Read the Docs' servers
-read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+# # Check if we are running on Read the Docs' servers
+# read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
-input_dir = '../'
-output_dir = '_build'
+# input_dir = '../'
+# output_dir = '_build'
 
-if read_the_docs_build:
-   input_dir = '../'
-   output_dir = 'build'
+# if read_the_docs_build:
+   # input_dir = '../'
+   # output_dir = 'build'
    
    
-configureDoxyfile(input_dir,output_dir)
+# configureDoxyfile(input_dir,output_dir)
 subprocess.call('doxygen', shell=True)
 
 
@@ -83,5 +83,5 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 #html_static_path = ['_static']
 
-html_extra_path = ['./_build/html']
+html_extra_path = ['./API/html']
 
