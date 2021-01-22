@@ -16,6 +16,24 @@ void ValidationShapeFactory::CreateBeam(ValidationShapeType type, IShape** ppSha
       CComQIPtr<IShape> shape(square);
       shape.CopyTo(ppShape);
    }
+   else if (type == ValidationShapeType::Rectangle101)
+   {
+      CComPtr<IRectangle> square;
+      square.CoCreateInstance(CLSID_Rect);
+      square->put_Height(5);
+      square->put_Width(50);
+      CComQIPtr<IShape> shape(square);
+      shape.CopyTo(ppShape);
+   }
+   else if (type == ValidationShapeType::Rectangle201)
+   {
+      CComPtr<IRectangle> square;
+      square.CoCreateInstance(CLSID_Rect);
+      square->put_Height(5);
+      square->put_Width(100);
+      CComQIPtr<IShape> shape(square);
+      shape.CopyTo(ppShape);
+   }
    else if (type == ValidationShapeType::Circle)
    {
       CComPtr<ICircle> circle;
@@ -43,6 +61,8 @@ void ValidationShapeFactory::CreateBeam(ValidationShapeType type, IShape** ppSha
 
 static std::_tstring gs_ShapeNames[] = {
    _T("Square"),
+   _T("Rectangle 10:1"),
+   _T("Rectangle 20:1"),
    _T("Circle"),
    _T("Equalateral Triangle"),
 };

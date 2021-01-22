@@ -13,35 +13,13 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import sphinx_rtd_theme
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-
-# -- Before Sphinx runs (RAB) -----------------------------------------------
-# This is custom code to generate API docuementation using Doxygen
-# and make it part of the overall documentation set.
-#
-# There are two key elements to making this work
-# 1) Before Sphinx runs, generate API documentation with Doxygen
-# 2) Copy the documentation into the sphinx output so it is hosted on RtD.
-#    This is accomplished with the html_extra_path option below
-#
-# There is one problem... everything in html_extra_path is copied into the
-# sphinx output. Doxygen generates and index.html file and it replaces the
-# index.html file we want to key. To fix this problem, rename html\index.html
-# to html\api.html. When the contents of html_extra_path is copied, our placeholder
-# api.hml file is replaced
-#import sys
-#import os
-#import subprocess
-#on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-#if on_rtd:
-#	subprocess.call('doxygen; mv html/index.html html/api.html', shell=True)
-#else:
-#	subprocess.call('doxygen', shell=True)
-#	subprocess.call('move .\\html\\index.html .\\html\\api.html', shell=True)
 
 # -- General configuration ------------------------------------------------
 
@@ -54,7 +32,8 @@
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.viewcode',
+	'sphinx_rtd_theme',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -125,7 +104,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -187,9 +166,11 @@ html_theme = 'default'
 
 # If true, links to the reST sources are added to the pages.
 #html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True

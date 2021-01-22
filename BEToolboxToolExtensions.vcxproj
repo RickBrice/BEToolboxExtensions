@@ -75,31 +75,35 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(BRIDGELINKDIR)\RegFreeCOM\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(COINDIR)\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(BRIDGELINKDIR)\RegFreeCOM\$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(COINDIR)\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(BRIDGELINKDIR)\RegFreeCOM\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LibraryPath>$(COINDIR)\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(BRIDGELINKDIR)\RegFreeCOM\$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(COINDIR)\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -131,9 +135,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -171,9 +175,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -207,9 +211,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(WBFLDIR)\Include;$(WBFLDIR)\Include\$(Configuration);$(WBFLDIR)\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -303,6 +307,8 @@
     <ClCompile Include="SVT\SVTToolDoc.cpp" />
     <ClCompile Include="SVT\SVTToolDocTemplate.cpp" />
     <ClCompile Include="SVT\SVTToolView.cpp" />
+    <ClCompile Include="SVT\SVTToolView3D.cpp" />
+    <ClCompile Include="SVT\SVTToolViewer3D.cpp" />
     <ClCompile Include="SVT\TxDOTBeamFactory.cpp" />
     <ClCompile Include="SVT\UniformFDMesh.cpp" />
     <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp" />
@@ -359,6 +365,8 @@
     <ClInclude Include="SVT\SVTToolDoc.h" />
     <ClInclude Include="SVT\SVTToolDocTemplate.h" />
     <ClInclude Include="SVT\SVTToolView.h" />
+    <ClInclude Include="SVT\SVTToolView3D.h" />
+    <ClInclude Include="SVT\SVTToolViewer3D.h" />
     <ClInclude Include="SVT\TxDOTBeamFactory.h" />
     <ClInclude Include="SVT\UniformFDMesh.h" />
     <ClInclude Include="SVT\UnsymmetricBandedMatrix.h" />

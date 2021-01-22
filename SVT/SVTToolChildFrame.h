@@ -25,6 +25,8 @@
 #include <EAF\EAFTypes.h>
 #include "SVTDlgBar.h"
 
+#include <afxsplitterwndex.h>
+
 class CSVTToolChildFrame :
    public CEAFChildFrame
 {
@@ -48,6 +50,7 @@ protected:
 
 protected:
    CSVTDlgBar m_DlgBar;
+   CSplitterWndEx m_SplitterWnd;
 
 public:
 #if defined _DEBUG
@@ -55,6 +58,7 @@ public:
 #endif // _DEBUG
 protected:
    virtual BOOL PreCreateWindow(CREATESTRUCT& cs) override;
+   virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) override;
 public:
 
    // Must over-ride this method and call AFX_MANAGE_STATE(AfxGetStaticModuleState()) before

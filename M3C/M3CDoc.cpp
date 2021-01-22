@@ -74,7 +74,7 @@ CM3CDoc::CM3CDoc()
    m_bIsSolutionValid = false;
    m_bIsModelValid = false;
 
-   UIHints(FALSE); // not using UIHints feature
+   EnableUIHints(FALSE); // not using UIHints feature
 }
 
 CM3CDoc::~CM3CDoc()

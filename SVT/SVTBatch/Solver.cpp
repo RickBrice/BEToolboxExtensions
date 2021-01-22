@@ -94,7 +94,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Height (in), Width(in) ,Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -104,17 +104,24 @@ void Beams(TCHAR* strAgency)
       std::chrono::time_point<std::chrono::steady_clock> end = std::chrono::steady_clock::now();
       std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-      Float64 A, Yt, Yb, Ix, Iy;
+      Float64 A, Yt, Yb, Ix, Iy, Xl, Xr;
       results.Props->get_Area(&A);
       results.Props->get_Ytop(&Yt);
       results.Props->get_Ybottom(&Yb);
       results.Props->get_Ixx(&Ix);
       results.Props->get_Iyy(&Iy);
+      results.Props->get_Xleft(&Xl);
+      results.Props->get_Xright(&Xr);
 
-      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f"),
+      Float64 H = Yb + Yt;
+      Float64 W = Xl + Xr;
+      
+
+      _tprintf(_T("%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f"),
          FACTORY::GetName(type),
          A, Yt, Yb, Ix, Iy,
          results.J,
+         H,W,
          results.ApproxArea, results.ApproxArea / A);
       
       if (results.ApproxMethods & AM_J1)

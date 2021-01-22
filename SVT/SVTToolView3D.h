@@ -22,18 +22,20 @@
 
 #pragma once
 
-
-// CSVTToolView view
-#include <DManip\DManip.h>
+// CSVTToolView3D view
 #include "SVTToolChildFrame.h"
+#include "SVTToolViewer3D.h"
 
-class CSVTToolView : public CDisplayView
+interface IPoint2dCollection;
+interface IPoint3dCollection;
+
+class CSVTToolView3D : public CView
 {
-	DECLARE_DYNCREATE(CSVTToolView)
+	DECLARE_DYNCREATE(CSVTToolView3D)
 
 protected:
-   CSVTToolView();           // protected constructor used by dynamic creation
-	virtual ~CSVTToolView();
+   CSVTToolView3D();           // protected constructor used by dynamic creation
+	virtual ~CSVTToolView3D();
 
 #ifdef _DEBUG
 	virtual void AssertValid() const override;
@@ -46,6 +48,16 @@ protected:
    virtual void OnDraw(CDC* pDC) override;      // overridden to draw this view
 
    CSVTToolChildFrame* m_pFrame;
+   CSVTToolViewer3D* m_pViewer;
+
+   SoGroup* m_pGirder;
+   SoGroup* m_pGrid;
+   SoGroup* m_pMembrane;
+
+   void BuildGirderShape();
+   void BuildGrid();
+   void BuildMembrane();
+   SoGroup* BuildFacet(IPoint2dCollection* pPoints, const std::tuple<Float64, Float64, Float64>& color);
 
 	DECLARE_MESSAGE_MAP()
 public:

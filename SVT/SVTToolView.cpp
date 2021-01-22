@@ -174,13 +174,13 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
          }
          value /= 4;
 
-         COLORREF color = GetColor(min_value,max_value,value);
+         auto color = GetColor(min_value,max_value,value);
          CComPtr<iShapeDrawStrategy> shape_draw_strategy;
          shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
          shape_draw_strategy->SetShape(clone);
          shape_draw_strategy->SetSolidLineStyle(lsNull);
          shape_draw_strategy->DoFill(true);
-         shape_draw_strategy->SetSolidFillColor(color);
+         shape_draw_strategy->SetSolidFillColor(RGB(255*std::get<0>(color), 255*std::get<1>(color), 255*std::get<2>(color)));
          compound_strategy->AddStrategy(shape_draw_strategy);
       } // next mesh element
    } // if results computed
@@ -191,56 +191,6 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
    display_list->AddDisplayObject(dispObj);
 
    ScaleToFit();
-}
-
-// https://stackoverflow.com/questions/22607043/color-gradient-algorithm
-//COLORREF InverseSRGBCompanding(COLORREF c)
-//{
-//   float r = GetRValue(c) / 255.;
-//   float g = GetGValue(c) / 255.;
-//   float b = GetBValue(c) / 255.;
-//
-//   r = (0.04045 < r ? pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
-//   g = (0.04045 < g ? pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
-//   b = (0.04045 < b ? pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
-//
-//   return RGB(255 * r, 255 * g, 255 * b);
-//}
-//
-//COLORREF SRGBCompanding(COLORREF c)
-//{
-//   float r = GetRValue(c) / 255.;
-//   float g = GetGValue(c) / 255.;
-//   float b = GetBValue(c) / 255.;
-//
-//   r = (0.0031308 < r ? 1.055*pow(r, 1 / 2.4) - 0.055 : r*12.92);
-//   g = (0.0031308 < g ? 1.055*pow(g, 1 / 2.4) - 0.055 : g*12.92);
-//   b = (0.0031308 < b ? 1.055*pow(b, 1 / 2.4) - 0.055 : b*12.92);
-//
-//   return RGB(255 * r, 255 * g, 255 * b);
-//}
-
-COLORREF CSVTToolView::GetColor(Float64 min, Float64 max, Float64 value)
-{
-   Float64 ratio = 2 * (value - min) / (max - min);
-   int b = (int)Max(0., 255 * (1 - ratio));
-   int r = (int)Max(0., 255 * (ratio - 1));
-   int g = 255 - b - r;
-   return RGB(r, g, b);
-
-   // Color gradient between two colors
-   //COLORREF C1 = BLUE;
-   //COLORREF C2 = RED;
-   //float mix = (value - min) / (max - min);
-
-   //COLORREF c1 = InverseSRGBCompanding(C1);
-   //COLORREF c2 = InverseSRGBCompanding(C2);
-
-   //COLORREF c = RGB(GetRValue(c1)*(1 - mix) + GetRValue(c2)*mix,
-   //                 GetGValue(c1)*(1 - mix) + GetGValue(c2)*mix,
-   //                 GetBValue(c1)*(1 - mix) + GetBValue(c2)*mix);
-
-   //return SRGBCompanding(c);
 }
 
 void CSVTToolView::OnSize(UINT nType, int cx, int cy)

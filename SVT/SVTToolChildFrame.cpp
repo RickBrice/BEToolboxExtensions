@@ -24,6 +24,7 @@
 #include "..\resource.h"
 #include "SVTToolChildFrame.h"
 #include "SVTToolDoc.h"
+#include "SVTToolView3D.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -73,6 +74,42 @@ BOOL CSVTToolChildFrame::PreCreateWindow(CREATESTRUCT& cs)
    cs.lpszClass = nullptr;
 
    return CEAFChildFrame::PreCreateWindow(cs);
+}
+
+
+BOOL CSVTToolChildFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+   // Create a splitter window with 1 row and 2 columns
+   if (!m_SplitterWnd.CreateStatic(this, 1, 2))
+   {
+      TRACE0("Failed to create static splitter");
+      return FALSE;
+   }
+
+   // Add the first pane
+   int left_size = (int)(((Float64)lpcs->cx)*0.5);
+   int right_size = lpcs->cx - left_size;
+   if (!m_SplitterWnd.CreateView(0, 0, pContext->m_pNewViewClass, CSize(left_size, lpcs->cy), pContext))
+   {
+      TRACE0("Failed to create first pane");
+      return FALSE;
+   }
+
+   // Add the second pane
+   if (!m_SplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CSVTToolView3D), CSize(right_size, lpcs->cy), pContext))
+   {
+      TRACE0("Failed to create second pane");
+      return FALSE;
+   }
+
+   // Activate the first pane
+   SetActiveView((CView*)m_SplitterWnd.GetPane(0, 0));
+
+   // I don't know why you don't call the parent but it makes the difference between
+   // the splitter working and not.  See the ViewEx example. They don't call the
+   // parent method either.
+   //return CChildFrame::OnCreateClient(lpcs, pContext);
+   return TRUE;
 }
 
 int CSVTToolChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
