@@ -83,7 +83,7 @@ void CM3CDlgBar::FillStrandList()
       const matPsStrand* pStrand = iter.GetCurrentStrand();
       int idx = pCB->AddString(pStrand->GetName().c_str());
 
-      Int32 key = pPool->GetStrandKey(pStrand);
+      auto key = pPool->GetStrandKey(pStrand);
       pCB->SetItemData(idx, key);
    }
 }
@@ -133,7 +133,7 @@ void CM3CDlgBar::DoDataExchange(CDataExchange* pDX)
 
    // Unbonded Tendons
    lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
-   Int32 strandKey = pPool->GetStrandKey(m_ProblemParams.pStrand);
+   auto strandKey = pPool->GetStrandKey(m_ProblemParams.pStrand);
    DDX_CBItemData(pDX, IDC_TENDON_TYPE, strandKey);
    if (pDX->m_bSaveAndValidate)
    {

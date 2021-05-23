@@ -352,9 +352,22 @@ void CM3CDoc::BuildRebarModel(IStressStrain** ppSteel) const
    rebar.QueryInterface(ppSteel);
 }
 
+StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
+{
+   StrandGradeType grade_type;
+   switch (grade)
+   {
+   case matPsStrand::Gr1725: grade_type = sgtGrade250; break;
+   case matPsStrand::Gr1860: grade_type = sgtGrade270; break;
+   case matPsStrand::Gr2070: grade_type = sgtGrade300; break;
+   default: ATLASSERT(false); // is there a new strand grade?
+   }
+   return grade_type;
+}
+
 void CM3CDoc::BuildStrandModel(IStressStrain** ppStrand) const
 {
-   StrandGradeType grade = m_ProblemParams.pStrand->GetGrade() == matPsStrand::Gr1725 ? sgtGrade250 : sgtGrade270;
+   StrandGradeType grade = GetStrandGradeType(m_ProblemParams.pStrand->GetGrade());
    ProductionMethodType type = m_ProblemParams.pStrand->GetType() == matPsStrand::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
 
    CComPtr<IPowerFormula> powerFormula;
