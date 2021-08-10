@@ -102,6 +102,9 @@ private:
    Float64* m_pValues;
    bool m_bComputed;
 
+   CComPtr<IUnitServer> m_UnitServer;
+   CComPtr<IUnitConvert> m_UnitConvert;
+
    IndexType m_TypeIdx, m_BeamIdx;
 
    std::vector < std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;

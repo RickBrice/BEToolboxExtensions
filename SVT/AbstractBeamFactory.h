@@ -1,6 +1,7 @@
 #pragma once
 
 #include <WBFLGeometry.h>
+#include <WBFLUnitServer.h>
 
 #define AM_NONE 0x0000
 #define AM_J1 0x0001
@@ -19,13 +20,13 @@ public:
    virtual LPCTSTR GetBeamName(IndexType beamIdx/**< [in] beam index*/) const = 0;
 
    /// Creates a shape object for a beam
-   virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const = 0;
+   virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const = 0;
 
    /// Returns AM_NONE if approximate methods aren't supported otherwise a computation of AM_J1 | AM_J2
    virtual int GetApproxMethods(IndexType beamIdx /**< [in] beam index*/) const = 0; 
 
    /// Computes Approx J by AASHTO LRFD C4.6.2.2.1-1
-   virtual Float64 GetJApprox1(IndexType beamIdx /**< [in] beam index*/) const = 0; 
+   virtual Float64 GetJApprox1(IndexType beamIdx /**< [in] beam index*/,IUnitConvert* pConvert) const = 0; 
 };
 
 /// Template method that returns the number of beam types based on an enum T
@@ -41,9 +42,9 @@ LPCTSTR _GetBeamName(IndexType beamIdx)
 
 /// Template method create a beam shape
 template<typename T, class FACTORY>
-bool _CreateBeam(IndexType beamIdx, IShape** ppShape)
+bool _CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape)
 {
-   FACTORY::CreateBeam((T)beamIdx, ppShape);
+   FACTORY::CreateBeam((T)beamIdx, pConvert, ppShape);
    return *ppShape != nullptr;
 }
 
@@ -56,7 +57,7 @@ int _ApproxMethods(IndexType beamIdx)
 
 /// Template method that computes J
 template<typename T, class FACTORY>
-Float64 _GetJApprox1(IndexType beamIdx)
+Float64 _GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert)
 {
-   return FACTORY::GetJApprox1((T)beamIdx);
+   return FACTORY::GetJApprox1((T)beamIdx,pConvert);
 }

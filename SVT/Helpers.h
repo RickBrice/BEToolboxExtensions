@@ -23,6 +23,7 @@
 #pragma once
 
 #include <WBFLGeometry.h>
+#include <WBFLUnitServer.h>
 
 
 namespace _NUBeam
@@ -83,8 +84,8 @@ std::tuple<Float64, Float64, Float64> GetColor(Float64 min, Float64 max, Float64
 Float64 GetJApprox2(IShapeProperties* pProps);
 
 
-Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14]);
-Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15]);
-Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
-Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13]);
-Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14]);
+Float64 ComputeJApprox_IBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][14]);
+Float64 ComputeJApprox_IBeam2(int i, IUnitConvert* pConvert, const Float64 dimensions[][15]);
+Float64 ComputeJApprox_NU(int i, IUnitConvert* pConvert, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam2(int i, IUnitConvert* pConvert, const Float64 dimensions[][14]);

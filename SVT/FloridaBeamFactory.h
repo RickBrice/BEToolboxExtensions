@@ -13,10 +13,10 @@ enum class FloridaBeamType
 class FloridaBeamFactory
 {
 public:
-   static void CreateBeam(FloridaBeamType type, IShape** ppShape);
+   static void CreateBeam(FloridaBeamType type, IUnitConvert* pConvert, IShape** ppShape);
    static LPCTSTR GetName(FloridaBeamType type);
    static int GetApproxMethods(FloridaBeamType type);
-   static Float64 GetJApprox1(FloridaBeamType type);
+   static Float64 GetJApprox1(FloridaBeamType type, IUnitConvert* pConvert);
 
 private:
    static void GenerateFillet(IPolyShape* pShape, Float64 cx, Float64 cy, Float64 r, Float64 startAngle, Float64 delta, long nSpaces);
@@ -27,7 +27,7 @@ class CFloridaBeamFactory : public CAbstractBeamFactory
 public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<FloridaBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<FloridaBeamType, FloridaBeamFactory>(beamIdx); }
-   virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<FloridaBeamType, FloridaBeamFactory>(beamIdx, ppShape); }
+   virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<FloridaBeamType, FloridaBeamFactory>(beamIdx, pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<FloridaBeamType, FloridaBeamFactory>(beamIdx); }
-   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<FloridaBeamType, FloridaBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<FloridaBeamType, FloridaBeamFactory>(beamIdx,pConvert); }
 };

@@ -16,10 +16,10 @@ enum class WSDOTBeamType
 class WSDOTBeamFactory
 {
 public:
-   static void CreateBeam(WSDOTBeamType type, IShape** ppShape);
+   static void CreateBeam(WSDOTBeamType type, IUnitConvert* pConvert, IShape** ppShape);
    static LPCTSTR GetName(WSDOTBeamType type);
    static int GetApproxMethods(WSDOTBeamType type);
-   static Float64 GetJApprox1(WSDOTBeamType type);
+   static Float64 GetJApprox1(WSDOTBeamType type, IUnitConvert* pConvert);
 };
 
 class CWSDOTBeamFactory : public CAbstractBeamFactory
@@ -27,7 +27,7 @@ class CWSDOTBeamFactory : public CAbstractBeamFactory
 public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<WSDOTBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<WSDOTBeamType, WSDOTBeamFactory>(beamIdx); }
-   virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<WSDOTBeamType, WSDOTBeamFactory>(beamIdx, ppShape); }
+   virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<WSDOTBeamType, WSDOTBeamFactory>(beamIdx, pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<WSDOTBeamType, WSDOTBeamFactory>(beamIdx); }
-   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<WSDOTBeamType, WSDOTBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<WSDOTBeamType, WSDOTBeamFactory>(beamIdx,pConvert); }
 };

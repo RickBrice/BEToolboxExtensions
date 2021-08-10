@@ -13,7 +13,7 @@ static Float64 gs_NUBeamDimensions[][13] = {
 };
 
 
-void NUBeamFactory::CreateBeam(NUBeamType type, IShape** ppShape)
+void NUBeamFactory::CreateBeam(NUBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if ((int)NUBeamType::NU900 <= (int)type && (int)type <= (int)NUBeamType::NU2000)
    {
@@ -22,19 +22,34 @@ void NUBeamFactory::CreateBeam(NUBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_NUBeam);
       using namespace _NUBeam;
 
-      beam->put_D1(gs_NUBeamDimensions[i][D1]);
-      beam->put_D2(gs_NUBeamDimensions[i][D2]);
-      beam->put_D3(gs_NUBeamDimensions[i][D3]);
-      beam->put_D4(gs_NUBeamDimensions[i][D4]);
-      beam->put_D5(gs_NUBeamDimensions[i][D5]);
-      beam->put_R1(gs_NUBeamDimensions[i][R1]);
-      beam->put_R2(gs_NUBeamDimensions[i][R2]);
-      beam->put_R3(gs_NUBeamDimensions[i][R3]);
-      beam->put_R4(gs_NUBeamDimensions[i][R4]);
-      beam->put_T(gs_NUBeamDimensions[i][T]);
-      beam->put_W1(gs_NUBeamDimensions[i][W1]);
-      beam->put_W2(gs_NUBeamDimensions[i][W2]);
-      beam->put_C1(gs_NUBeamDimensions[i][C1]);
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][R1], CComBSTR(_T("in")), &r1);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][R2], CComBSTR(_T("in")), &r2);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][R3], CComBSTR(_T("in")), &r3);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][R4], CComBSTR(_T("in")), &r4);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][T], CComBSTR(_T("in")),  &t);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_NUBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_R1(r1);
+      beam->put_R2(r2);
+      beam->put_R3(r3);
+      beam->put_R4(r4);
+      beam->put_T( t );
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_C1(c1);
 
       beam.QueryInterface(ppShape);
    }
@@ -64,8 +79,8 @@ int NUBeamFactory::GetApproxMethods(NUBeamType type)
    return AM_J1 | AM_J2;
 }
 
-Float64 NUBeamFactory::GetJApprox1(NUBeamType type)
+Float64 NUBeamFactory::GetJApprox1(NUBeamType type,IUnitConvert* pConvert)
 {
    int i = (int)type - (int)NUBeamType::NU900;
-   return ComputeJApprox_NU(i, gs_NUBeamDimensions);
+   return ComputeJApprox_NU(i, pConvert, gs_NUBeamDimensions);
 }

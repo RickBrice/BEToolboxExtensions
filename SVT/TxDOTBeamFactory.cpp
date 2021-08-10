@@ -19,7 +19,7 @@ static Float64 gs_TxUBeamDimensions[][14] = {
 };
 
 
-void TxDOTBeamFactory::CreateBeam(TxDOTBeamType type, IShape** ppShape)
+void TxDOTBeamFactory::CreateBeam(TxDOTBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if ((int)TxDOTBeamType::Tx28 <= (int)type && (int)type <= (int)TxDOTBeamType::Tx70)
    {
@@ -28,21 +28,36 @@ void TxDOTBeamFactory::CreateBeam(TxDOTBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_PrecastBeam);
       using namespace IBeam;
 
-      beam->put_C1(gs_TxDOTBeamDimensions[i][C1]);
-      beam->put_D1(gs_TxDOTBeamDimensions[i][D1]);
-      beam->put_D2(gs_TxDOTBeamDimensions[i][D2]);
-      beam->put_D3(gs_TxDOTBeamDimensions[i][D3]);
-      beam->put_D4(gs_TxDOTBeamDimensions[i][D4]);
-      beam->put_D5(gs_TxDOTBeamDimensions[i][D5]);
-      beam->put_D6(gs_TxDOTBeamDimensions[i][D6]);
-      beam->put_D7(gs_TxDOTBeamDimensions[i][D7]);
-      beam->put_T1(gs_TxDOTBeamDimensions[i][T1]);
-      beam->put_T2(gs_TxDOTBeamDimensions[i][T2]);
-      beam->put_W1(gs_TxDOTBeamDimensions[i][W1]);
-      beam->put_W2(gs_TxDOTBeamDimensions[i][W2]);
-      beam->put_W3(gs_TxDOTBeamDimensions[i][W3]);
-      beam->put_W4(gs_TxDOTBeamDimensions[i][W4]);
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D6], CComBSTR(_T("in")), &d6);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][D7], CComBSTR(_T("in")), &d7);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][T1], CComBSTR(_T("in")), &t1);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][T2], CComBSTR(_T("in")), &t2);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][W3], CComBSTR(_T("in")), &w3);
+      pConvert->ConvertToBaseUnits(gs_TxDOTBeamDimensions[i][W4], CComBSTR(_T("in")), &w4);
 
+      beam->put_C1(c1);
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_D6(d6);
+      beam->put_D7(d7);
+      beam->put_T1(t1);
+      beam->put_T2(t2);
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_W3(w3);
+      beam->put_W4(w4);
 
       beam.QueryInterface(ppShape);
    }
@@ -54,20 +69,36 @@ void TxDOTBeamFactory::CreateBeam(TxDOTBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_UBeam2);
       using namespace _UBeam2; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
 
-      beam->put_C1(gs_TxUBeamDimensions[i][C1]);
-      beam->put_D1(gs_TxUBeamDimensions[i][D1]);
-      beam->put_D2(gs_TxUBeamDimensions[i][D2]);
-      beam->put_D3(gs_TxUBeamDimensions[i][D3]);
-      beam->put_D4(gs_TxUBeamDimensions[i][D4]);
-      beam->put_D5(gs_TxUBeamDimensions[i][D5]);
-      beam->put_D6(gs_TxUBeamDimensions[i][D6]);
-      beam->put_W1(gs_TxUBeamDimensions[i][W1]);
-      beam->put_W2(gs_TxUBeamDimensions[i][W2]);
-      beam->put_W3(gs_TxUBeamDimensions[i][W3]);
-      beam->put_W4(gs_TxUBeamDimensions[i][W4]);
-      beam->put_W5(gs_TxUBeamDimensions[i][W5]);
-      beam->put_W6(gs_TxUBeamDimensions[i][W6]);
-      beam->put_W7(gs_TxUBeamDimensions[i][W7]);
+      Float64 c1, d1, d2, d3, d4, d5, d6, w1, w2, w3, w4, w5, w6, w7;
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][D6], CComBSTR(_T("in")), &d6);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W3], CComBSTR(_T("in")), &w3);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W4], CComBSTR(_T("in")), &w4);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W5], CComBSTR(_T("in")), &w5);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W6], CComBSTR(_T("in")), &w6);
+      pConvert->ConvertToBaseUnits(gs_TxUBeamDimensions[i][W7], CComBSTR(_T("in")), &w7);
+
+      beam->put_C1(c1);
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_D6(d6);
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_W3(w3);
+      beam->put_W4(w4);
+      beam->put_W5(w5);
+      beam->put_W6(w6);
+      beam->put_W7(w7);
       
 
       beam->QueryInterface(ppShape);
@@ -114,17 +145,17 @@ int TxDOTBeamFactory::GetApproxMethods(TxDOTBeamType type)
    }
 }
 
-Float64 TxDOTBeamFactory::GetJApprox1(TxDOTBeamType type)
+Float64 TxDOTBeamFactory::GetJApprox1(TxDOTBeamType type,IUnitConvert* pConvert)
 {
    if ((int)TxDOTBeamType::Tx28 <= (int)type && (int)type <= (int)TxDOTBeamType::Tx70)
    {
       int i = (int)type - (int)TxDOTBeamType::Tx28;
-      return ComputeJApprox_IBeam(i, gs_TxDOTBeamDimensions);
+      return ComputeJApprox_IBeam(i, pConvert, gs_TxDOTBeamDimensions);
    }
    else if ((int)TxDOTBeamType::U40 <= (int)type && (int)type <= (int)TxDOTBeamType::U54)
    {
       int i = (int)type - (int)TxDOTBeamType::U40;
-      return ComputeJApprox_UBeam2(i, gs_TxUBeamDimensions);
+      return ComputeJApprox_UBeam2(i, pConvert, gs_TxUBeamDimensions);
    }
    else
    {
