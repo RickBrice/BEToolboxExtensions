@@ -161,7 +161,7 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
       pntCG->get_Y(&cgY);
 
       Float64 strain;
-      slice->get_Strain(&strain);
+      slice->get_TotalStrain(&strain);
 
       Float64 fgStress, bgStress, netStress;
       slice->get_ForegroundStress(&fgStress);

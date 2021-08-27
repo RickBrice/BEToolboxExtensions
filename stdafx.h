@@ -39,3 +39,5 @@
 
 #include <UnitMgt\UnitMgt.h>
 #include <WBFLTools.h>
+#include <grid\gxall.h>
+#include <MFCTools\MFCTools.h>

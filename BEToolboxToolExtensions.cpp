@@ -18,6 +18,7 @@
 
 #include "M3C\M3CTools.h"
 #include "SVT\SVTTools.h"
+#include "RCCapacity\RCCapacityTool.h"
 
 using namespace ATL;
 
@@ -34,11 +35,17 @@ HRESULT Register(bool bRegister)
    }
 
 
-   hr = sysComCatMgr::RegWithCategory(CLSID_SVTTool, CATID_BEToolboxTool, bRegister);
-   if (FAILED(hr))
-   {
-      return hr;
-   }
+	hr = sysComCatMgr::RegWithCategory(CLSID_SVTTool, CATID_BEToolboxTool, bRegister);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = sysComCatMgr::RegWithCategory(CLSID_RCCapacityTool, CATID_BEToolboxTool, bRegister);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
    return S_OK;
 }

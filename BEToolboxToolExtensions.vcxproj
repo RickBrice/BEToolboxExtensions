@@ -37,9 +37,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\BridgeLink\ObjectiveGrid.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\BridgeLink\ObjectiveGrid.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -164,6 +166,22 @@
     <ClCompile Include="M3C\M3CTabView.cpp" />
     <ClCompile Include="M3C\M3CTitlePageBuilder.cpp" />
     <ClCompile Include="M3C\M3CView.cpp" />
+    <ClCompile Include="RCCapacity\GirderDimensionsDlg.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityChapterBuilder.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityChildFrame.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityDoc.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityDocTemplate.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityMainView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityInputView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityMaterialView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityReportSpecification.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityReportSpecificationBuilder.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityReportView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacitySectionView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityTabView.cpp" />
+    <ClCompile Include="RCCapacity\RCCapacityResultsView.cpp" />
+    <ClCompile Include="RCCapacity\RebarGrid.cpp" />
+    <ClCompile Include="RCCapacity\StrandGrid.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -218,7 +236,25 @@
     <ClInclude Include="M3C\M3CTabView.h" />
     <ClInclude Include="M3C\M3CTitlePageBuilder.h" />
     <ClInclude Include="M3C\M3CView.h" />
-    <ClInclude Include="M3C\MC3Tools.h" />
+    <ClInclude Include="M3C\M3CTools.h" />
+    <ClInclude Include="RCCapacity\GirderDimensionsDlg.h" />
+    <ClInclude Include="RCCapacity\RCCapacityChapterBuilder.h" />
+    <ClInclude Include="RCCapacity\RCCapacityMainView.h" />
+    <ClInclude Include="RCCapacity\RCCapacityInputView.h" />
+    <ClInclude Include="RCCapacity\RCCapacityMaterialView.h" />
+    <ClInclude Include="RCCapacity\RCCapacityReportSpecification.h" />
+    <ClInclude Include="RCCapacity\RCCapacityReportSpecificationBuilder.h" />
+    <ClInclude Include="RCCapacity\RCCapacityReportView.h" />
+    <ClInclude Include="RCCapacity\RCCapacitySectionView.h" />
+    <ClInclude Include="RCCapacity\RCCapacityTabView.h" />
+    <ClInclude Include="RCCapacity\RCCapacityTool.h" />
+    <ClInclude Include="RCCapacity\RCCapacity.hh" />
+    <ClInclude Include="RCCapacity\RCCapacityChildFrame.h" />
+    <ClInclude Include="RCCapacity\RCCapacityDoc.h" />
+    <ClInclude Include="RCCapacity\RCCapacityDocTemplate.h" />
+    <ClInclude Include="RCCapacity\RCCapacityResultsView.h" />
+    <ClInclude Include="RCCapacity\RebarGrid.h" />
+    <ClInclude Include="RCCapacity\StrandGrid.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SVT\AASHTOBeamFactory.h" />
@@ -237,7 +273,6 @@
     <ClInclude Include="SVT\OregonBeamFactory.h" />
     <ClInclude Include="SVT\PrandtlMembrane.h" />
     <ClInclude Include="SVT\SVT.h" />
-    <ClInclude Include="SVT\SVT.hh" />
     <ClInclude Include="SVT\SVTDlgBar.h" />
     <ClInclude Include="SVT\SVTTools.h" />
     <ClInclude Include="SVT\SVTTool.hh" />
@@ -264,12 +299,17 @@
     <None Include="BEToolboxToolExtensions.def" />
     <None Include="BEToolboxToolExtensions.rgs" />
     <None Include="M3C\M3CTool.rgs" />
+    <None Include="RCCapacity\RCCapacityTool.rgs" />
+    <None Include="res\IBeam.emf" />
+    <None Include="res\NUbeam.emf" />
     <None Include="SVT\SVT.rgs" />
     <None Include="SVT\SVTTool.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\M3C.ico" />
     <Image Include="res\m3ctoolbar.bmp" />
+    <Image Include="res\RCCapacity.ico" />
+    <Image Include="res\RCCapacityToolbar.bmp" />
     <Image Include="res\SVTTool.ico" />
     <Image Include="res\SVTToolbar.bmp" />
   </ItemGroup>
