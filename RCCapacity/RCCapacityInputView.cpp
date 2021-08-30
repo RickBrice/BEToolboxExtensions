@@ -95,17 +95,7 @@ void CRCCapacityInputView::Dump(CDumpContext& dc) const
 BOOL CRCCapacityInputView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-   BOOL bResult = CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
-   if (bResult)
-   {
-      FillBeamType();
-      FillTypeList();
-      UpdateGirderList();
-      FillStrandSizeList();
-      FillStrandTypeList();
-   }
-
-   return bResult;
+   return CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 }
 
 void CRCCapacityInputView::OnInitialUpdate()
@@ -119,6 +109,12 @@ void CRCCapacityInputView::OnInitialUpdate()
 
    VERIFY(m_StrandGrid.SubclassDlgItem(IDC_STRANDS, this));
    m_StrandGrid.CustomInit();
+
+   FillBeamType();
+   FillTypeList();
+   UpdateGirderList();
+   FillStrandSizeList();
+   FillStrandTypeList();
 
    __super::OnInitialUpdate();
 
