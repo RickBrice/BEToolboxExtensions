@@ -103,10 +103,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -129,10 +129,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -159,10 +159,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -189,10 +189,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
