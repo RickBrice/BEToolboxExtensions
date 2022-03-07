@@ -168,7 +168,7 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
       Float64 stress;
       ss->ComputeStress(strain, &stress);
       stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
-      gpPoint2d point(signX * strain * 1000, signY * stress);
+      GraphPoint point(signX * strain * 1000, signY * stress);
       graph.AddPoint(idx, point);
    }
 

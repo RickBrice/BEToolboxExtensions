@@ -219,7 +219,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
       yMin = Min(yMin, m);
       yMax = Max(yMax, m);
 
-      graph.AddPoint(series1,gpPoint2d(k,m));      
+      graph.AddPoint(series1, GraphPoint(k,m));
    }
 
    graph.SetMinimumSize(xMin, xMax, yMin, yMax);
