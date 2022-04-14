@@ -28,7 +28,6 @@
 #include "RCCapacityMainView.h"
 #include "RCCapacityInputView.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <EAF\EAFHints.h>
 

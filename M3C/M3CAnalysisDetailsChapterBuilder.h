@@ -24,7 +24,7 @@
 #include <ReportManager\ChapterBuilder.h>
 #include "M3CDoc.h"
 
-#include <GraphicsLib\PointMapper.h>
+#include <Graphing/PointMapper.h>
 
 class CM3CAnalysisDetailsChapterBuilder :
    public CChapterBuilder
@@ -50,5 +50,5 @@ private:
 
    rptRcImage* CreateImage(IMomentCapacitySolution* pSolution) const;
    void DrawSection(CImage& image, IMomentCapacitySolution* pSolution) const;
-   void DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const;
+   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
 };

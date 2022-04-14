@@ -25,7 +25,6 @@
 #include "M3CAnalysisDetailsReportSpecification.h"
 #include "BEToolboxColors.h"
 #include <Reporter\Reporter.h>
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <algorithm>
 #include <cctype>
@@ -320,8 +319,8 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
 
 
    // set up coordinate mapping
-   grlibPointMapper mapper;
-   mapper.SetMappingMode(grlibPointMapper::Isotropic);
+   WBFL::Graphing::PointMapper mapper;
+   mapper.SetMappingMode(WBFL::Graphing::PointMapper::MapMode::Isotropic);
    mapper.SetWorldExt(width_scale*wx, wy);
 
    Float64 orgY;
@@ -527,7 +526,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    image.ReleaseDC();
 }
 
-void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const
+void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
 {
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);

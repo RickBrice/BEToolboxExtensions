@@ -29,7 +29,14 @@
 
 interface IShape;
 interface IGeneralSectionSolution;
-class grlibPointMapper;
+
+namespace WBFL
+{
+   namespace Graphing
+   {
+      class PointMapper;
+   };
+};
 
 class CRCCapacityResultsView : public CEAFView
 {
@@ -53,7 +60,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
    void OnDraw(CDC* pDC) override;
-   void DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const;
+   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
 
 public:
    virtual void OnInitialUpdate() override;

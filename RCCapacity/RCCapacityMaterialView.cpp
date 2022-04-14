@@ -28,6 +28,7 @@
 #include "RCCapacityDoc.h"
 #include "BEToolboxColors.h"
 #include <array>
+#include <Graphing/GraphXY.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -130,7 +131,7 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
 
    std::unique_ptr<arvPhysicalConverter> pStrainFormat = std::make_unique<ScalarTool>(m_Scalar);
    std::unique_ptr<arvPhysicalConverter> pStressFormat = std::make_unique<StressTool>(pDispUnits->Stress);
-   grGraphXY graph(*pStrainFormat, *pStressFormat);
+   WBFL::Graphing::GraphXY graph(*pStrainFormat, *pStressFormat);
 
    graph.SetTitle(m_pViewController->GetTitle());
    //graph.SetSubtitle(_T("GraphSubtitle"));
@@ -168,7 +169,7 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
       Float64 stress;
       ss->ComputeStress(strain, &stress);
       stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
-      GraphPoint point(signX * strain * 1000, signY * stress);
+      WBFL::Graphing::Point point(signX * strain * 1000, signY * stress);
       graph.AddPoint(idx, point);
    }
 

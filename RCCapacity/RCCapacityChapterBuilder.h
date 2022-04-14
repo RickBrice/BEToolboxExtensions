@@ -22,7 +22,7 @@
 
 #pragma once
 #include <ReportManager\ChapterBuilder.h>
-#include <GraphicsLib\PointMapper.h>
+#include <Graphing/PointMapper.h>
 
 class CRCCapacityDoc;
 

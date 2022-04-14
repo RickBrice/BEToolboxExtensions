@@ -28,7 +28,6 @@
 #include <EAF\EAFUtilities.h>
 #include "RCCapacityChildFrame.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib/GraphicsLib.h>
 #include <array>
 
 class CMaterialViewController

@@ -29,7 +29,6 @@
 #include "RCCapacityDoc.h"
 #include "RCCapacityMainView.h"
 #include "GirderDimensionsDLg.h"
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <EAF\EAFHints.h>
 #include <MfcTools\CustomDDX.h>

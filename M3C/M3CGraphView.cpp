@@ -26,11 +26,11 @@
 #include "M3CGraphView.h"
 
 #include <EAF\EAFApp.h>
-#include <GraphicsLib\GraphicsLib.h>
 #include <algorithm>
 #include "M3CDoc.h"
 
 #include "BEToolboxColors.h"
+#include <Graphing/GraphXY.h>
 
 // CM3CView
 
@@ -89,7 +89,7 @@ void CM3CGraphView::OnDraw(CDC* pDC)
 
    std::unique_ptr<arvPhysicalConverter> pStrainFormat = std::make_unique<ScalarTool>(m_Scalar);
    std::unique_ptr<arvPhysicalConverter> pStressFormat = std::make_unique<StressTool>(pDispUnits->Stress);
-   grGraphXY graph(*pStrainFormat, *pStressFormat);
+   WBFL::Graphing::GraphXY graph(*pStrainFormat, *pStressFormat);
 
    graph.SetTitle(GetGraphTitle());
    graph.SetSubtitle(GetGraphSubtitle());
@@ -124,7 +124,7 @@ void CM3CGraphView::OnDraw(CDC* pDC)
       Float64 stress;
       ss->ComputeStress(strain, &stress);
       stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
-      GraphPoint point(signX*strain*1000, signY*stress);
+      WBFL::Graphing::Point point(signX*strain*1000, signY*stress);
       graph.AddPoint(idx, point);
    }
 

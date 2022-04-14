@@ -26,10 +26,10 @@
 #include "stdafx.h"
 #include "RCCapacityResultsView.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib\GraphicsLib.h>
 #include <MFCTools\Format.h>
 
 #include <EAF\EAFHints.h>
+#include <Graphing/GraphXY.h>
 
 #include <algorithm>
 
@@ -153,8 +153,8 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    bbox->get_Height(&wy);
 
    // set up coordinate mapping to draw cross section
-   grlibPointMapper mapper;
-   mapper.SetMappingMode(grlibPointMapper::Isotropic);
+   WBFL::Graphing::PointMapper mapper;
+   mapper.SetMappingMode(WBFL::Graphing::PointMapper::MapMode::Isotropic);
    mapper.SetWorldExt(wx, wy);
 
    Float64 orgY;
@@ -527,7 +527,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    pDC->SelectObject(pOldFont);
 }
 
-void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const
+void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
 {
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);

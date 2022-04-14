@@ -24,10 +24,11 @@
 #include "M3CChapterBuilder.h"
 #include "BEToolboxColors.h"
 #include <Reporter\Reporter.h>
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <algorithm>
 #include <cctype>
+
+#include <Graphing/GraphXY.h>
 
 
 #ifdef _DEBUG
@@ -170,7 +171,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
 
    MomentTool momentTool(pDispUnits->SmallMoment);
    CurvatureTool  curvatureTool(pDispUnits->Curvature);
-   grGraphXY graph(curvatureTool,momentTool);
+   WBFL::Graphing::GraphXY graph(curvatureTool,momentTool);
 
    graph.SetOutputRect(rect);
    graph.SetClientAreaColor(GRAPH_BACKGROUND);
@@ -183,7 +184,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    strCurvature.Format(_T("Curvature (%s)"), pDispUnits->Curvature.UnitOfMeasure.UnitTag().c_str());
    graph.SetXAxisTitle(strCurvature.LockBuffer());
    strCurvature.UnlockBuffer();
-   graph.SetXAxisNiceRange(true);
+   graph.XAxisNiceRange(true);
    graph.SetXAxisNumberOfMinorTics(5);
    //graph.SetXAxisNumberOfMajorTics(21);
    graph.SetXAxisLabelAngle(350); // 35 degrees
@@ -193,7 +194,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    strMoment.Format(_T("Moment (%s)"),pDispUnits->SmallMoment.UnitOfMeasure.UnitTag().c_str());
    graph.SetYAxisTitle(strMoment.LockBuffer());
    strMoment.UnlockBuffer();
-   graph.SetYAxisNiceRange(true);
+   graph.YAxisNiceRange(true);
    graph.SetYAxisNumberOfMinorTics(0);
    graph.SetYAxisNumberOfMajorTics(11);
 
@@ -219,7 +220,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
       yMin = Min(yMin, m);
       yMax = Max(yMax, m);
 
-      graph.AddPoint(series1, GraphPoint(k,m));
+      graph.AddPoint(series1, WBFL::Graphing::Point(k,m));
    }
 
    graph.SetMinimumSize(xMin, xMax, yMin, yMax);
