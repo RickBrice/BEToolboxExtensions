@@ -71,7 +71,7 @@ rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 lev
    (*pChapter) << pPara;
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    
    rptRcTable* pLayoutTable = rptStyleManager::CreateLayoutTable(2);
@@ -155,7 +155,7 @@ CChapterBuilder* CM3CChapterBuilder::Clone() const
 rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution) const
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    CImage image;
    image.Create(500,500,32);
@@ -169,8 +169,8 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    pDC->Rectangle(rect);
    pDC->SelectObject(pOldBrush);
 
-   MomentTool momentTool(pDispUnits->SmallMoment);
-   CurvatureTool  curvatureTool(pDispUnits->Curvature);
+   WBFL::Units::MomentTool momentTool(pDispUnits->SmallMoment);
+   WBFL::Units::CurvatureTool  curvatureTool(pDispUnits->Curvature);
    WBFL::Graphing::GraphXY graph(curvatureTool,momentTool);
 
    graph.SetOutputRect(rect);
@@ -212,8 +212,8 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
       pSolution->get_Moment(i, &m);
       pSolution->get_Curvature(i, &k);
 
-      m = ::ConvertFromSysUnits(m, pDispUnits->SmallMoment.UnitOfMeasure);
-      k = ::ConvertFromSysUnits(k, pDispUnits->Curvature.UnitOfMeasure);
+      m = WBFL::Units::ConvertFromSysUnits(m, pDispUnits->SmallMoment.UnitOfMeasure);
+      k = WBFL::Units::ConvertFromSysUnits(k, pDispUnits->Curvature.UnitOfMeasure);
 
       xMin = Min(xMin, k);
       xMax = Max(xMax, k);

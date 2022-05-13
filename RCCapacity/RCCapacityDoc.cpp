@@ -522,11 +522,11 @@ Float64 CRCCapacityDoc::GetStrandDiameter(StrandSize size) const
    Float64 dia;
    switch (size)
    {
-   case Strand_050: dia = ::ConvertToSysUnits(0.50, unitMeasure::Inch); break;
-   case Strand_052: dia = ::ConvertToSysUnits(0.52, unitMeasure::Inch); break;
-   case Strand_060: dia = ::ConvertToSysUnits(0.60, unitMeasure::Inch); break;
-   case Strand_062: dia = ::ConvertToSysUnits(0.62, unitMeasure::Inch); break;
-   case Strand_070: dia = ::ConvertToSysUnits(0.70, unitMeasure::Inch); break;
+   case Strand_050: dia = WBFL::Units::ConvertToSysUnits(0.50, WBFL::Units::Measure::Inch); break;
+   case Strand_052: dia = WBFL::Units::ConvertToSysUnits(0.52, WBFL::Units::Measure::Inch); break;
+   case Strand_060: dia = WBFL::Units::ConvertToSysUnits(0.60, WBFL::Units::Measure::Inch); break;
+   case Strand_062: dia = WBFL::Units::ConvertToSysUnits(0.62, WBFL::Units::Measure::Inch); break;
+   case Strand_070: dia = WBFL::Units::ConvertToSysUnits(0.70, WBFL::Units::Measure::Inch); break;
    default: ATLASSERT(false);
    }
    return dia;
@@ -613,7 +613,7 @@ void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
          // reinforcement failed (strain too high)
          if (hr == RC_E_MATERIALFAILURE)
          {
-            Float64 Eps = ::ConvertToSysUnits(28500, unitMeasure::KSI); // carbon-steel
+            Float64 Eps = WBFL::Units::ConvertToSysUnits(28500, WBFL::Units::Measure::KSI); // carbon-steel
             Float64 esu = 0.035; // carbon-steel, 3.5% strain limit
             if (m_ModelData.StrandType == Other)
             {

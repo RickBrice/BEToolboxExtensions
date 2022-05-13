@@ -159,7 +159,7 @@ void CRCCapacityInputView::DoDataExchange(CDataExchange* pDX)
    __super::DoDataExchange(pDX);
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    DDX_Control(pDX, IDC_REBAR_TYPE, m_cbRebar);
 

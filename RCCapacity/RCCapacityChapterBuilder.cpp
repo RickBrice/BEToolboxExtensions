@@ -87,7 +87,7 @@ rptChapter* CRCCapacityChapterBuilder::Build(CReportSpecification* pRptSpec, Uin
 
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    INIT_UV_PROTOTYPE(rptAreaUnitValue, area, pDisplayUnits->Area, false);
    INIT_UV_PROTOTYPE(rptLengthUnitValue, cg, pDisplayUnits->ComponentDim, false);

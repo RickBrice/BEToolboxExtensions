@@ -139,7 +139,7 @@ void CM3CAnalysisDetailsReportView::UpdateCurvatureList()
    CM3CDoc* pDoc = (CM3CDoc*)GetDocument();
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    CComPtr<IMomentCurvatureSolution> curvature_solution;
    pDoc->GetMomentCurvature(&curvature_solution);

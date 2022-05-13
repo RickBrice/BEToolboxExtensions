@@ -127,10 +127,10 @@ CRect CRCCapacityMaterialView::GetDrawingRect()
 void CRCCapacityMaterialView::OnDraw(CDC* pDC)
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   std::unique_ptr<arvPhysicalConverter> pStrainFormat = std::make_unique<ScalarTool>(m_Scalar);
-   std::unique_ptr<arvPhysicalConverter> pStressFormat = std::make_unique<StressTool>(pDispUnits->Stress);
+   std::unique_ptr<WBFL::Units::PhysicalConverter> pStrainFormat = std::make_unique<WBFL::Units::ScalarTool>(m_Scalar);
+   std::unique_ptr<WBFL::Units::PhysicalConverter> pStressFormat = std::make_unique<WBFL::Units::StressTool>(pDispUnits->Stress);
    WBFL::Graphing::GraphXY graph(*pStrainFormat, *pStressFormat);
 
    graph.SetTitle(m_pViewController->GetTitle());
@@ -168,7 +168,7 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
    {
       Float64 stress;
       ss->ComputeStress(strain, &stress);
-      stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
+      stress = WBFL::Units::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
       WBFL::Graphing::Point point(signX * strain * 1000, signY * stress);
       graph.AddPoint(idx, point);
    }

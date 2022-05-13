@@ -93,7 +93,7 @@ void CM3CDlgBar::DoDataExchange(CDataExchange* pDX)
    CDialogBar::DoDataExchange(pDX);
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    // Column Section
    DDX_UnitValueAndTag(pDX,IDC_DIAMETER,IDC_DIAMETER_UNIT,m_ProblemParams.D,pDispUnits->ComponentDim);

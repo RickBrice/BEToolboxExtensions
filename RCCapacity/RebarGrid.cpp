@@ -162,7 +162,7 @@ void CRebarGrid::AddRow()
 void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    ROWCOL col = 1;
 
@@ -178,11 +178,11 @@ void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
 
    strValue = GetCellValue(row, col++);
    sysTokenizer::ParseDouble(strValue, &value);
-   rebar.spacing = ::ConvertToSysUnits(value,pDispUnits->ComponentDim.UnitOfMeasure);
+   rebar.spacing = WBFL::Units::ConvertToSysUnits(value,pDispUnits->ComponentDim.UnitOfMeasure);
    
    strValue = GetCellValue(row, col++);
    sysTokenizer::ParseDouble(strValue, &value);
-   rebar.location = ::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
+   rebar.location = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
    strValue = GetCellValue(row, col++);
    if (strValue == _T("Top Girder"))
@@ -203,7 +203,7 @@ void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
 void CRebarGrid::InsertRow(const RebarData& rebar)
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    CRCCapacityInputView* pParent = (CRCCapacityInputView*)GetParent();
 
@@ -245,12 +245,12 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
 
 	SetStyleRange(CGXRange(nRow,col++), CGXStyle()
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(::ConvertFromSysUnits(rebar.spacing,pDispUnits->ComponentDim.UnitOfMeasure))
+      .SetValue(WBFL::Units::ConvertFromSysUnits(rebar.spacing,pDispUnits->ComponentDim.UnitOfMeasure))
          );
 
    SetStyleRange(CGXRange(nRow, col++), CGXStyle()
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(::ConvertFromSysUnits(rebar.location, pDispUnits->ComponentDim.UnitOfMeasure))
+      .SetValue(WBFL::Units::ConvertFromSysUnits(rebar.location, pDispUnits->ComponentDim.UnitOfMeasure))
    );
 
    std::array<CString, 4> strMeasuredFrom{ _T("Top Girder"),_T("Bottom Girder"),_T("Top Slab"),_T("Bottom Slab") };
@@ -350,7 +350,7 @@ void CRebarGrid::OnUnitsModeChanged()
 void CRebarGrid::UpdateColumnHeaders()
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    // set text along top row
    ROWCOL col = 0;

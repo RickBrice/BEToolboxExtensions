@@ -283,7 +283,7 @@ void CM3CDoc::GetMomentCurvature(IMomentCurvatureSolution** ppSolution) const
    solver->put_SliceGrowthFactor(2);
    solver->put_InitialCurvatureStep(m_ProblemParams.initialStep);
    solver->putref_Section(column_section);
-   solver->put_AxialTolerance(::ConvertToSysUnits(0.01, unitMeasure::Kip));
+   solver->put_AxialTolerance(WBFL::Units::ConvertToSysUnits(0.01, WBFL::Units::Measure::Kip));
    
    m_Solution.Release();
    Float64 NASlope = 0.0;
@@ -457,7 +457,7 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
    Float64 aps = m_ProblemParams.pStrand->GetNominalArea();
    points->get_Count(&nBars);
 
-   Float64 Eps = ::ConvertToSysUnits(m_ProblemParams.pStrand->GetE(), unitMeasure::KSI);
+   Float64 Eps = WBFL::Units::ConvertToSysUnits(m_ProblemParams.pStrand->GetE(), WBFL::Units::Measure::KSI);
    for (IndexType i = 0; i < nBars; i++)
    {
       CComPtr<IPoint2d> pnt;

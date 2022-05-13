@@ -121,7 +121,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CFont* pOldFont = pDC->SelectObject(&font);
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    CollectionIndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
