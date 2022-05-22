@@ -42,7 +42,7 @@ CM3CGraphView::CM3CGraphView()
 
    m_Scalar.Width = 8;
    m_Scalar.Precision = 0;
-   m_Scalar.Format = sysNumericFormatTool::Fixed;
+   m_Scalar.Format = WBFL::System::NumericFormatTool::Format::Fixed;
 }
 
 CM3CGraphView::~CM3CGraphView()

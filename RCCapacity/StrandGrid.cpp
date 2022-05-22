@@ -167,15 +167,15 @@ void CStrandGrid::GetStrandData(ROWCOL row, StrandData& strand)
 	Float64 value;
 	strValue = GetCellValue(row, col++);
 	long iValue;
-	sysTokenizer::ParseLong(strValue, &iValue);
+	WBFL::System::Tokenizer::ParseLong(strValue, &iValue);
 	strand.nStrands = iValue;
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
 	strand.spacing = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
 	strand.location = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
 	strValue = GetCellValue(row, col++);
@@ -194,7 +194,7 @@ void CStrandGrid::GetStrandData(ROWCOL row, StrandData& strand)
 	}
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
 	strand.fpe = WBFL::Units::ConvertToSysUnits(value, pDispUnits->Stress.UnitOfMeasure);
 }
 
@@ -287,7 +287,7 @@ CString CStrandGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   if ( nCol == 2 )
 //   {
 //      long l;
-//      if ( !sysTokenizer::ParseLong(s,&l) )
+//      if ( !WBFL::System::Tokenizer::ParseLong(s,&l) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;
@@ -296,7 +296,7 @@ CString CStrandGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   else
 //   {
 //      Float64 d;
-//      if ( !sysTokenizer::ParseDouble(s,&d) )
+//      if ( !WBFL::System::Tokenizer::ParseDouble(s,&d) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;

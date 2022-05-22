@@ -46,7 +46,7 @@ CRCCapacityMaterialView::CRCCapacityMaterialView()
 {
    m_Scalar.Width = 8;
    m_Scalar.Precision = 0;
-   m_Scalar.Format = sysNumericFormatTool::Fixed;
+   m_Scalar.Format = WBFL::System::NumericFormatTool::Format::Fixed;
 
    m_pViewController = m_ViewControllers[0];
 }
