@@ -22,7 +22,7 @@ static Float64 gs_MNNUBeamDimensions[][13] = {
    {    3.5, 2.5625, 76.8125,  7.625, 5.5,  8,  8, 0.75, 2, 6.5, 34, 30, 0.75 }, // 96MW
 };
 
-void MNBeamFactory::CreateBeam(MNBeamType type, IShape** ppShape)
+void MNBeamFactory::CreateBeam(MNBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
    {
@@ -32,20 +32,36 @@ void MNBeamFactory::CreateBeam(MNBeamType type, IShape** ppShape)
 
       using namespace IBeam; // this is so we don't have to use the name space below (eg IBeam::C1, IBeam::D2...)
 
-      beam->put_C1(gs_MNIBeamDimensions[i][C1]);
-      beam->put_D1(gs_MNIBeamDimensions[i][D1]);
-      beam->put_D2(gs_MNIBeamDimensions[i][D2]);
-      beam->put_D3(gs_MNIBeamDimensions[i][D3]);
-      beam->put_D4(gs_MNIBeamDimensions[i][D4]);
-      beam->put_D5(gs_MNIBeamDimensions[i][D5]);
-      beam->put_D6(gs_MNIBeamDimensions[i][D6]);
-      beam->put_D7(gs_MNIBeamDimensions[i][D7]);
-      beam->put_T1(gs_MNIBeamDimensions[i][T1]);
-      beam->put_T2(gs_MNIBeamDimensions[i][T2]);
-      beam->put_W1(gs_MNIBeamDimensions[i][W1]);
-      beam->put_W2(gs_MNIBeamDimensions[i][W2]);
-      beam->put_W3(gs_MNIBeamDimensions[i][W3]);
-      beam->put_W4(gs_MNIBeamDimensions[i][W4]);
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D6], CComBSTR(_T("in")), &d6);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][D7], CComBSTR(_T("in")), &d7);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][T1], CComBSTR(_T("in")), &t1);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][T2], CComBSTR(_T("in")), &t2);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][W3], CComBSTR(_T("in")), &w3);
+      pConvert->ConvertToBaseUnits(gs_MNIBeamDimensions[i][W4], CComBSTR(_T("in")), &w4);
+
+      beam->put_C1(c1);
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_D6(d6);
+      beam->put_D7(d7);
+      beam->put_T1(t1);
+      beam->put_T2(t2);
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_W3(w3);
+      beam->put_W4(w4);
 
       beam.QueryInterface(ppShape);
    }
@@ -56,19 +72,34 @@ void MNBeamFactory::CreateBeam(MNBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_NUBeam);
       using namespace _NUBeam;
 
-      beam->put_D1(gs_MNNUBeamDimensions[i][D1]);
-      beam->put_D2(gs_MNNUBeamDimensions[i][D2]);
-      beam->put_D3(gs_MNNUBeamDimensions[i][D3]);
-      beam->put_D4(gs_MNNUBeamDimensions[i][D4]);
-      beam->put_D5(gs_MNNUBeamDimensions[i][D5]);
-      beam->put_R1(gs_MNNUBeamDimensions[i][R1]);
-      beam->put_R2(gs_MNNUBeamDimensions[i][R2]);
-      beam->put_R3(gs_MNNUBeamDimensions[i][R3]);
-      beam->put_R4(gs_MNNUBeamDimensions[i][R4]);
-      beam->put_T(gs_MNNUBeamDimensions[i][T]);
-      beam->put_W1(gs_MNNUBeamDimensions[i][W1]);
-      beam->put_W2(gs_MNNUBeamDimensions[i][W2]);
-      beam->put_C1(gs_MNNUBeamDimensions[i][C1]);
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][R1], CComBSTR(_T("in")), &r1);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][R2], CComBSTR(_T("in")), &r2);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][R3], CComBSTR(_T("in")), &r3);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][R4], CComBSTR(_T("in")), &r4);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][T], CComBSTR(_T("in")),  &t);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_MNNUBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_R1(r1);
+      beam->put_R2(r2);
+      beam->put_R3(r3);
+      beam->put_R4(r4);
+      beam->put_T( t );
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_C1(c1);
 
       beam.QueryInterface(ppShape);
    }
@@ -102,17 +133,17 @@ int MNBeamFactory::GetApproxMethods(MNBeamType type)
    return AM_J1 | AM_J2;
 }
 
-Float64 MNBeamFactory::GetJApprox1(MNBeamType type)
+Float64 MNBeamFactory::GetJApprox1(MNBeamType type, IUnitConvert* pConvert)
 {
    if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
    {
       int i = (int)type - (int)MNBeamType::M27;
-      return ComputeJApprox_IBeam(i, gs_MNIBeamDimensions);
+      return ComputeJApprox_IBeam(i, pConvert, gs_MNIBeamDimensions);
    }
    else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
    {
       int i = (int)type - (int)MNBeamType::MH30;
-      return ComputeJApprox_NU(i, gs_MNNUBeamDimensions);
+      return ComputeJApprox_NU(i, pConvert, gs_MNNUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

@@ -1,0 +1,25 @@
+HKCR
+{
+	BEToolbox.RCCapacity.1 = s 'RCCapacity'
+	{
+		CLSID = s '{DB437766-BF3D-4E62-8FBD-5D9D4F2FF875}'
+	}
+	BEToolbox.RCCapacity = s 'RCCapacity'
+	{
+		CLSID = s '{DB437766-BF3D-4E62-8FBD-5D9D4F2FF875}'
+		CurVer = s 'BEToolbox.RCCapacity.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DB437766-BF3D-4E62-8FBD-5D9D4F2FF875} = s 'RCCapacity'
+		{
+			ProgID = s 'BEToolbox.RCCapacity.1'
+			VersionIndependentProgID = s 'BEToolbox.RCCapacity'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{}'
+		}
+	}
+}

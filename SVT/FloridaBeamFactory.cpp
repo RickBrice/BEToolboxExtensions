@@ -26,7 +26,7 @@ static Float64 gs_FUBeamDimensions[][14] = {
 };
 
 
-void FloridaBeamFactory::CreateBeam(FloridaBeamType type, IShape** ppShape)
+void FloridaBeamFactory::CreateBeam(FloridaBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if ((int)FloridaBeamType::FIB36 <= (int)type && (int)type <= (int)FloridaBeamType::FIB102)
    {
@@ -34,18 +34,19 @@ void FloridaBeamFactory::CreateBeam(FloridaBeamType type, IShape** ppShape)
 
       using namespace _FIBBeam;
 
-      Float64 d1 = gs_FIBeamDimensions[i][D1];
-      Float64 d2 = gs_FIBeamDimensions[i][D2];
-      Float64 d3 = gs_FIBeamDimensions[i][D3];
-      Float64 d4 = gs_FIBeamDimensions[i][D4];
-      Float64 d5 = gs_FIBeamDimensions[i][D5];
-      Float64 h  = gs_FIBeamDimensions[i][H];
-      Float64 t  = gs_FIBeamDimensions[i][T];
-      Float64 r  = gs_FIBeamDimensions[i][R];
-      Float64 w1 = gs_FIBeamDimensions[i][W1];
-      Float64 w2 = gs_FIBeamDimensions[i][W2];
-      Float64 w3 = gs_FIBeamDimensions[i][W3];
-      Float64 c1 = gs_FIBeamDimensions[i][C1];
+      Float64 d1, d2, d3, d4, d5, h, t, r, w1, w2, w3, c1;
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][H], CComBSTR(_T("in")), &h);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][T], CComBSTR(_T("in")), &t);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][R], CComBSTR(_T("in")), &r);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][W3], CComBSTR(_T("in")), &w3);
+      pConvert->ConvertToBaseUnits(gs_FIBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
 
       CComPtr<IPolyShape> poly_shape;
       poly_shape.CoCreateInstance(CLSID_PolyShape);
@@ -130,20 +131,36 @@ void FloridaBeamFactory::CreateBeam(FloridaBeamType type, IShape** ppShape)
       beam.CoCreateInstance(CLSID_UBeam2);
       using namespace _UBeam2; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
 
-      beam->put_C1(gs_FUBeamDimensions[i][C1]);
-      beam->put_D1(gs_FUBeamDimensions[i][D1]);
-      beam->put_D2(gs_FUBeamDimensions[i][D2]);
-      beam->put_D3(gs_FUBeamDimensions[i][D3]);
-      beam->put_D4(gs_FUBeamDimensions[i][D4]);
-      beam->put_D5(gs_FUBeamDimensions[i][D5]);
-      beam->put_D6(gs_FUBeamDimensions[i][D6]);
-      beam->put_W1(gs_FUBeamDimensions[i][W1]);
-      beam->put_W2(gs_FUBeamDimensions[i][W2]);
-      beam->put_W3(gs_FUBeamDimensions[i][W3]);
-      beam->put_W4(gs_FUBeamDimensions[i][W4]);
-      beam->put_W5(gs_FUBeamDimensions[i][W5]);
-      beam->put_W6(gs_FUBeamDimensions[i][W6]);
-      beam->put_W7(gs_FUBeamDimensions[i][W7]);
+      Float64 c1, d1, d2, d3, d4, d5, d6, w1, w2, w3, w4, w5, w6, w7;
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][D6], CComBSTR(_T("in")), &d6);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W3], CComBSTR(_T("in")), &w3);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W4], CComBSTR(_T("in")), &w4);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W5], CComBSTR(_T("in")), &w5);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W6], CComBSTR(_T("in")), &w6);
+      pConvert->ConvertToBaseUnits(gs_FUBeamDimensions[i][W7], CComBSTR(_T("in")), &w7);
+
+      beam->put_C1(c1);
+      beam->put_D1(d1);
+      beam->put_D2(d2);
+      beam->put_D3(d3);
+      beam->put_D4(d4);
+      beam->put_D5(d5);
+      beam->put_D6(d6);
+      beam->put_W1(w1);
+      beam->put_W2(w2);
+      beam->put_W3(w3);
+      beam->put_W4(w4);
+      beam->put_W5(w5);
+      beam->put_W6(w6);
+      beam->put_W7(w7);
 
 
       beam->QueryInterface(ppShape);
@@ -211,7 +228,7 @@ int FloridaBeamFactory::GetApproxMethods(FloridaBeamType type)
    return AM_NONE;
 }
 
-Float64 FloridaBeamFactory::GetJApprox1(FloridaBeamType type)
+Float64 FloridaBeamFactory::GetJApprox1(FloridaBeamType type,IUnitConvert* pConvert)
 {
    if ((int)FloridaBeamType::FIB36 <= (int)type && (int)type <= (int)FloridaBeamType::FIB102)
    {
@@ -246,12 +263,14 @@ Float64 FloridaBeamFactory::GetJApprox1(FloridaBeamType type)
 
       J *= 1. / 3.;
 
+      pConvert->ConvertToBaseUnits(J, CComBSTR("in^4"), &J);
+
       return J;
    }
    else if ((int)FloridaBeamType::FUB48 <= (int)type && (int)type < (int)FloridaBeamType::nSections)
    {
       int i = (int)type - (int)FloridaBeamType::FUB48;
-      return ComputeJApprox_UBeam2(i, gs_FUBeamDimensions);
+      return ComputeJApprox_UBeam2(i, pConvert, gs_FUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

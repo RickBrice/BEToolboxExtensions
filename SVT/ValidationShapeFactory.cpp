@@ -5,7 +5,7 @@
 
 static Float64 side = 10;
 
-void ValidationShapeFactory::CreateBeam(ValidationShapeType type, IShape** ppShape)
+void ValidationShapeFactory::CreateBeam(ValidationShapeType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if (type == ValidationShapeType::Square)
    {
@@ -77,7 +77,7 @@ int ValidationShapeFactory::GetApproxMethods(ValidationShapeType type)
    return AM_NONE;
 }
 
-Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type)
+Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type,IUnitConvert* pConvert)
 {
    // the approximate equation doesn't really fit with this type
    return 0;

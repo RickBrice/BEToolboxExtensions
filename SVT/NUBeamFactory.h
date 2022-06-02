@@ -11,10 +11,10 @@ enum class NUBeamType
 class NUBeamFactory
 {
 public:
-   static void CreateBeam(NUBeamType type, IShape** ppShape);
+   static void CreateBeam(NUBeamType type, IUnitConvert* pConvert, IShape** ppShape);
    static LPCTSTR GetName(NUBeamType type);
    static int GetApproxMethods(NUBeamType type);
-   static Float64 GetJApprox1(NUBeamType type);
+   static Float64 GetJApprox1(NUBeamType type, IUnitConvert* pConvert);
 };
 
 class CNUBeamFactory : public CAbstractBeamFactory
@@ -22,7 +22,7 @@ class CNUBeamFactory : public CAbstractBeamFactory
 public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<NUBeamType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<NUBeamType, NUBeamFactory>(beamIdx); }
-   virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<NUBeamType, NUBeamFactory>(beamIdx, ppShape); }
+   virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<NUBeamType, NUBeamFactory>(beamIdx, pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<NUBeamType, NUBeamFactory>(beamIdx); }
-   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<NUBeamType, NUBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<NUBeamType, NUBeamFactory>(beamIdx,pConvert); }
 };

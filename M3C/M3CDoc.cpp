@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -352,9 +352,22 @@ void CM3CDoc::BuildRebarModel(IStressStrain** ppSteel) const
    rebar.QueryInterface(ppSteel);
 }
 
+StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
+{
+   StrandGradeType grade_type;
+   switch (grade)
+   {
+   case matPsStrand::Gr1725: grade_type = sgtGrade250; break;
+   case matPsStrand::Gr1860: grade_type = sgtGrade270; break;
+   case matPsStrand::Gr2070: grade_type = sgtGrade300; break;
+   default: ATLASSERT(false); // is there a new strand grade?
+   }
+   return grade_type;
+}
+
 void CM3CDoc::BuildStrandModel(IStressStrain** ppStrand) const
 {
-   StrandGradeType grade = m_ProblemParams.pStrand->GetGrade() == matPsStrand::Gr1725 ? sgtGrade250 : sgtGrade270;
+   StrandGradeType grade = GetStrandGradeType(m_ProblemParams.pStrand->GetGrade());
    ProductionMethodType type = m_ProblemParams.pStrand->GetType() == matPsStrand::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
 
    CComPtr<IPowerFormula> powerFormula;
@@ -381,9 +394,8 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
    column.CoCreateInstance(CLSID_Circle);
    column->put_Radius(m_ProblemParams.D / 2);
    CComQIPtr<IShape> column_shape(column);
-   Float64 ei = 0.0; // initial strain
    Float64 Le = 1.0; // elongation length
-   column_section->AddShape(column_shape, m_Concrete, nullptr, ei, Le);
+   column_section->AddShape(CComBSTR("Column"),column_shape, m_Concrete, nullptr, nullptr, Le, VARIANT_TRUE);
 
    CComPtr<IGeomUtil2d> geom_util;
    geom_util.CoCreateInstance(CLSID_GeomUtil);
@@ -409,10 +421,9 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
 
       CComQIPtr<IShape> bar_shape(bar);
 
-      Float64 ei = 0.0; // initial strain
       Float64 Le = 1.0; // elongation length
 
-      column_section->AddShape(bar_shape, m_Rebar, nullptr, ei, Le);
+      column_section->AddShape(CComBSTR("Rebar"), bar_shape, m_Rebar, nullptr, nullptr, Le, VARIANT_FALSE);
    }
 
    points.Release();
@@ -433,10 +444,9 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
 
       CComQIPtr<IShape> bar_shape(bar);
 
-      Float64 ei = 0.0; // initial strain
       Float64 Le = m_ProblemParams.Unbonded_Rebar_Lu; // elongation length
 
-      column_section->AddShape(bar_shape, m_Rebar, nullptr, ei, Le);
+      column_section->AddShape(CComBSTR("Unbonded Rebar"), bar_shape, m_Rebar, nullptr, nullptr, Le, VARIANT_FALSE);
    }
 
 
@@ -463,7 +473,11 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
       Float64 ei = m_ProblemParams.Tendon_fpe/Eps; // initial strain
       Float64 Le = m_ProblemParams.Tendon_Lu; // elongation length
 
-      column_section->AddShape(strand_shape, m_Strand, nullptr, ei, Le);
+      CComPtr<IPlane3d> initial_strain;
+      initial_strain.CoCreateInstance(CLSID_Plane3d);
+      initial_strain->ThroughAltitude(ei);
+
+      column_section->AddShape(CComBSTR("Unbonded Strand"), strand_shape, m_Strand, nullptr, initial_strain, Le, VARIANT_FALSE);
    }
 
    column_section.CopyTo(ppSection);

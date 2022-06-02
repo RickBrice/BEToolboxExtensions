@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -82,6 +82,10 @@ CSVTToolDoc::CSVTToolDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Washington"), std::make_unique<CWSDOTBeamFactory>()));
 
    EnableUIHints(FALSE); // not using UIHints feature
+
+   m_UnitServer.CoCreateInstance(CLSID_UnitServer);
+   m_UnitServer->SetBaseUnits(CComBSTR("12kslug"), CComBSTR("in"), CComBSTR("sec"), CComBSTR("F"), CComBSTR("deg"));
+   m_UnitServer->get_UnitConvert(&m_UnitConvert);
 
    m_pValues = nullptr;
    m_bComputed = false;
@@ -259,7 +263,7 @@ void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
    m_TypeIdx = typeIdx;
    m_BeamIdx = beamIdx;
    m_pShape.Release();
-   m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, &m_pShape);
+   m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, m_UnitConvert, &m_pShape);
    Update();
 }
 
@@ -299,7 +303,7 @@ Results CSVTToolDoc::GetTorsionalConstant()
    r.Japprox2 = 0;
    if (r.ApproxMethods & AM_J1)
    {
-      r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx);
+      r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx, m_UnitConvert);
    }
 
    if (r.ApproxMethods & AM_J2)

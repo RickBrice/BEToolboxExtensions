@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -219,7 +219,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
       yMin = Min(yMin, m);
       yMax = Max(yMax, m);
 
-      graph.AddPoint(series1,gpPoint2d(k,m));      
+      graph.AddPoint(series1, GraphPoint(k,m));
    }
 
    graph.SetMinimumSize(xMin, xMax, yMin, yMax);

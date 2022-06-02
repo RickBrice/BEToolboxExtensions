@@ -41,6 +41,18 @@
     <Filter Include="SVT\Source Files">
       <UniqueIdentifier>{be2c05a7-cc62-4d67-9c01-e7bd25211236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RCCapacity">
+      <UniqueIdentifier>{c7a3a3b4-dbda-4085-ae83-c766d8c0579b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RCCapacity\Header Files">
+      <UniqueIdentifier>{c5e23cfd-7309-491f-8626-32a122449af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RCCapacity\Resource Files">
+      <UniqueIdentifier>{a41c61ad-14ea-4c69-9205-14e46ab7d06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RCCapacity\Source Files">
+      <UniqueIdentifier>{0104c960-fdb9-490b-bea4-555d29f88e51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -187,6 +199,54 @@
     <ClCompile Include="SVT\SVTToolViewer3D.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityChildFrame.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityDoc.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityDocTemplate.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityResultsView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityTabView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityInputView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityMainView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacitySectionView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RebarGrid.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\StrandGrid.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityMaterialView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityChapterBuilder.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityReportSpecification.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityReportSpecificationBuilder.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\RCCapacityReportView.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCCapacity\GirderDimensionsDlg.cpp">
+      <Filter>RCCapacity\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -258,7 +318,7 @@
     <ClInclude Include="M3C\M3CView.h">
       <Filter>M3C\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="M3C\MC3Tools.h">
+    <ClInclude Include="M3C\M3CTools.h">
       <Filter>M3C\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\SVTToolChildFrame.h">
@@ -292,9 +352,6 @@
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\SVT.h">
-      <Filter>SVT\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVT\SVT.hh">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\UniformFDMesh.h">
@@ -357,6 +414,60 @@
     <ClInclude Include="SVT\SVTToolViewer3D.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityTool.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacity.hh">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityChildFrame.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityDoc.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityDocTemplate.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityResultsView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityTabView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityInputView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityMainView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacitySectionView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RebarGrid.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\StrandGrid.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityMaterialView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityChapterBuilder.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityReportSpecification.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityReportSpecificationBuilder.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\RCCapacityReportView.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\GirderDimensionsDlg.h">
+      <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BEToolboxToolExtensions.rc">
@@ -382,6 +493,15 @@
     <None Include="SVT\SVT.rgs">
       <Filter>SVT\Resource Files</Filter>
     </None>
+    <None Include="RCCapacity\RCCapacityTool.rgs">
+      <Filter>RCCapacity\Resource Files</Filter>
+    </None>
+    <None Include="res\IBeam.emf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NUbeam.emf">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\M3C.ico">
@@ -394,6 +514,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\SVTToolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\RCCapacity.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\RCCapacityToolbar.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

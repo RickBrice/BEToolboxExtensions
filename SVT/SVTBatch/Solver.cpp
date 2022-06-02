@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include <MathEx.h>
+#include <WBFLUnitServer.h>
 
 #include "..\Helpers.h"
 
@@ -33,6 +34,8 @@
 
 #include <initguid.h>
 #include <WBFLGeometry_i.c>
+#include <WBFLUnitServer_i.c>
+
 ///////////////////////////
 
 
@@ -50,8 +53,14 @@ static char THIS_FILE[] = __FILE__;
 template < typename T, class FACTORY >
 Results ComputeJ(T type)
 {
+   CComPtr<IUnitServer> unitServer;
+   unitServer.CoCreateInstance(CLSID_UnitServer);
+   unitServer->SetBaseUnits(CComBSTR("12kslug"), CComBSTR("in"), CComBSTR("sec"), CComBSTR("F"), CComBSTR("deg")); // base units of kip and ksi
+   CComPtr<IUnitConvert> unit_convert;
+   unitServer->get_UnitConvert(&unit_convert);
+
    CComPtr<IShape> shape;
-   FACTORY::CreateBeam(type, &shape);
+   FACTORY::CreateBeam(type, unit_convert, &shape);
 
    Float64 d_min = D_MIN;
    FDMeshGenerator mesh_generator(d_min, d_min);
@@ -79,7 +88,7 @@ Results ComputeJ(T type)
 
    if (r.ApproxMethods & AM_J1)
    {
-      r.Japprox1 = FACTORY::GetJApprox1(type);
+      r.Japprox1 = FACTORY::GetJApprox1(type, unit_convert);
    }
 
    if (r.ApproxMethods & AM_J2)

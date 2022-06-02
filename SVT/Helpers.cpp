@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,7 @@ Float64 GetJApprox2(IShapeProperties* pProps)
    return J;
 }
 
-Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14])
+Float64 ComputeJApprox_IBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][14])
 {
    using namespace IBeam;
 
@@ -101,10 +101,12 @@ Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14])
 
    J *= 1. / 3.;
 
+   pConvert->ConvertToBaseUnits(J, CComBSTR(_T("in4")), &J);
+
    return J;
 }
 
-Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15])
+Float64 ComputeJApprox_IBeam2(int i, IUnitConvert* pConvert, const Float64 dimensions[][15])
 {
    using namespace IBeam2;
 
@@ -139,10 +141,12 @@ Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15])
 
    J *= 1. / 3.;
 
+   pConvert->ConvertToBaseUnits(J, CComBSTR(_T("in4")), &J);
+
    return J;
 }
 
-Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13])
+Float64 ComputeJApprox_NU(int i, IUnitConvert* pConvert, const Float64 dimensions[][13])
 {
    using namespace _NUBeam;
 
@@ -170,10 +174,12 @@ Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13])
 
    J *= 1. / 3.;
 
+   pConvert->ConvertToBaseUnits(J, CComBSTR(_T("in4")), &J);
+
    return J;
 }
 
-Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13])
+Float64 ComputeJApprox_UBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][13])
 {
    using namespace _UBeam;
 
@@ -200,10 +206,12 @@ Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13])
 
    Float64 J = (2 * Jweb + Jflg)/3.;
 
+   pConvert->ConvertToBaseUnits(J, CComBSTR(_T("in4")), &J);
+
    return J;
 }
 
-Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14])
+Float64 ComputeJApprox_UBeam2(int i, IUnitConvert* pConvert, const Float64 dimensions[][14])
 {
    CComPtr<IUBeam2> beam;
    beam.CoCreateInstance(CLSID_UBeam2);
@@ -238,6 +246,8 @@ Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14])
    Float64 Jflg = w1*d2*d2*d2;
 
    Float64 J = (2 * Jweb + Jflg) / 3.;
+
+   pConvert->ConvertToBaseUnits(J, CComBSTR(_T("in^4")), &J);
 
    return J;
 }

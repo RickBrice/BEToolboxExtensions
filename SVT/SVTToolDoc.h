@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -101,6 +101,9 @@ private:
    std::unique_ptr<UniformFDMesh> m_pMesh;
    Float64* m_pValues;
    bool m_bComputed;
+
+   CComPtr<IUnitServer> m_UnitServer;
+   CComPtr<IUnitConvert> m_UnitConvert;
 
    IndexType m_TypeIdx, m_BeamIdx;
 

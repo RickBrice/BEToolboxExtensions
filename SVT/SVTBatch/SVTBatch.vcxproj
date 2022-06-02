@@ -22,20 +22,20 @@
     <ProjectGuid>{BB4B7055-D441-4E32-AE1B-FED5786BF720}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SVTBatch</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -43,14 +43,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -103,10 +103,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -129,10 +129,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -159,10 +159,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>
@@ -189,10 +189,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(WBFLDIR)\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>$(ARPDIR)\WBFL\RegFreeCOM\WBFL.manifest</AdditionalManifestFiles>
     </Manifest>
     <CustomBuildStep>
-      <Command>$(WBFLDIR)\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
+      <Command>$(ARPDIR)\WBFL\InstallWBFL.bat $(PlatformName) $(ConfigurationName) $(OutDir)</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Installing WBFL</Message>

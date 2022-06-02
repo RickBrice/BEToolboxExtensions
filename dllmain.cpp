@@ -24,10 +24,12 @@ CBEToolboxExtensionsApp theApp;
 
 BOOL CBEToolboxExtensionsApp::InitInstance()
 {
+	GXInit();
 	return CWinApp::InitInstance();
 }
 
 int CBEToolboxExtensionsApp::ExitInstance()
 {
+	GXTerminate();
 	return CWinApp::ExitInstance();
 }

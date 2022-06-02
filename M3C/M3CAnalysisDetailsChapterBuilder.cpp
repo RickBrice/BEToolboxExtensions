@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -161,7 +161,7 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
       pntCG->get_Y(&cgY);
 
       Float64 strain;
-      slice->get_Strain(&strain);
+      slice->get_TotalStrain(&strain);
 
       Float64 fgStress, bgStress, netStress;
       slice->get_ForegroundStress(&fgStress);

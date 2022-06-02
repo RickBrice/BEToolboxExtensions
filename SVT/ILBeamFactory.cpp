@@ -18,21 +18,21 @@ static Float64 gs_ILBeamDimensions[][11] = {
    {      5,    7.5, 37.5, 15, 7, 6, 12, 7, 38, 38, 0.75 }, //IL72_3838
 };
 
-void ILBeamFactory::GetNUDimensions(int i, Float64& d1, Float64& d2, Float64& d3, Float64& d4, Float64& d5, Float64& r1, Float64& r2, Float64& r3, Float64& r4, Float64& t, Float64& w1, Float64& w2, Float64& c1)
+void ILBeamFactory::GetNUDimensions(int i, IUnitConvert* pConvert, Float64& d1, Float64& d2, Float64& d3, Float64& d4, Float64& d5, Float64& r1, Float64& r2, Float64& r3, Float64& r4, Float64& t, Float64& w1, Float64& w2, Float64& c1)
 {
    // convert IL dimensions to NU dimensions
    using namespace _ILBeam;
-   d1 = gs_ILBeamDimensions[i][D1];
-   d2 = gs_ILBeamDimensions[i][D2];
-   d3 = gs_ILBeamDimensions[i][D3];
-   d4 = gs_ILBeamDimensions[i][D4];
-   d5 = gs_ILBeamDimensions[i][D5];
-   r1 = gs_ILBeamDimensions[i][R1];
-   r2 = gs_ILBeamDimensions[i][R2];
-   t = gs_ILBeamDimensions[i][T];
-   w1 = gs_ILBeamDimensions[i][W1];
-   w2 = gs_ILBeamDimensions[i][W2];
-   c1 = gs_ILBeamDimensions[i][C1];
+   d1 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][D1], CComBSTR(_T("in")), &d1);
+   d2 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][D2], CComBSTR(_T("in")), &d2);
+   d3 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][D3], CComBSTR(_T("in")), &d3);
+   d4 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][D4], CComBSTR(_T("in")), &d4);
+   d5 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][D5], CComBSTR(_T("in")), &d5);
+   r1 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][R1], CComBSTR(_T("in")), &r1);
+   r2 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][R2], CComBSTR(_T("in")), &r2);
+   t = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][T], CComBSTR(_T("in")),   &t);
+   w1 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][W1], CComBSTR(_T("in")), &w1);
+   w2 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][W2], CComBSTR(_T("in")), &w2);
+   c1 = pConvert->ConvertToBaseUnits(gs_ILBeamDimensions[i][C1], CComBSTR(_T("in")), &c1);
 
    r3 = 0;
    r4 = 0;
@@ -64,7 +64,7 @@ void ILBeamFactory::GetNUDimensions(int i, Float64& d1, Float64& d2, Float64& d3
    d4 = D4;
 }
 
-void ILBeamFactory::CreateBeam(ILBeamType type, IShape** ppShape)
+void ILBeamFactory::CreateBeam(ILBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
    if ((int)ILBeamType::IL27_1830 <= (int)type && (int)type <= (int)ILBeamType::IL72_3838)
    {
@@ -74,7 +74,7 @@ void ILBeamFactory::CreateBeam(ILBeamType type, IShape** ppShape)
       using namespace _ILBeam;
 
       Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
-      GetNUDimensions(i, d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1);
+      GetNUDimensions(i, pConvert, d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1);
 
       // set the dimensions on the NU Girder
       beam->put_W1(w1);
@@ -124,12 +124,12 @@ int ILBeamFactory::GetApproxMethods(ILBeamType type)
    return AM_J1 | AM_J2;
 }
 
-Float64 ILBeamFactory::GetJApprox1(ILBeamType type)
+Float64 ILBeamFactory::GetJApprox1(ILBeamType type,IUnitConvert* pConvert)
 {
    int i = (int)type - (int)ILBeamType::IL27_1830;
 
    Float64 D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1;
-   GetNUDimensions(i, D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1);
+   GetNUDimensions(i, pConvert, D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1);
 
    Float64 b = W1;
    Float64 t = 0.5*(D1 + (D1 + D2));
@@ -145,6 +145,8 @@ Float64 ILBeamFactory::GetJApprox1(ILBeamType type)
    J += H*T*T*T; // web, full depth
 
    J *= 1. / 3.;
+
+   pConvert->ConvertToBaseUnits(J, CComBSTR("in^4"), &J);
 
    return J;
 }

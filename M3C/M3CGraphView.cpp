@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2021  Washington State Department of Transportation
+// Copyright © 1999-2022  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -124,7 +124,7 @@ void CM3CGraphView::OnDraw(CDC* pDC)
       Float64 stress;
       ss->ComputeStress(strain, &stress);
       stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
-      gpPoint2d point(signX*strain*1000, signY*stress);
+      GraphPoint point(signX*strain*1000, signY*stress);
       graph.AddPoint(idx, point);
    }
 

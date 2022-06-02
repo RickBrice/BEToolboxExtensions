@@ -11,10 +11,10 @@ enum class ValidationShapeType
 class ValidationShapeFactory
 {
 public:
-   static void CreateBeam(ValidationShapeType type, IShape** ppShape);
+   static void CreateBeam(ValidationShapeType type, IUnitConvert* pConvert, IShape** ppShape);
    static LPCTSTR GetName(ValidationShapeType type);
    static int GetApproxMethods(ValidationShapeType type);
-   static Float64 GetJApprox1(ValidationShapeType type);
+   static Float64 GetJApprox1(ValidationShapeType type,IUnitConvert* pConvert);
 };
 
 class CValidationShapeFactory : public CAbstractBeamFactory
@@ -22,7 +22,7 @@ class CValidationShapeFactory : public CAbstractBeamFactory
 public:
    virtual IndexType GetBeamCount() const override { return _GetBeamCount<ValidationShapeType>(); }
    virtual LPCTSTR GetBeamName(IndexType beamIdx) const override { return _GetBeamName<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
-   virtual bool CreateBeam(IndexType beamIdx, IShape** ppShape) const override { return _CreateBeam<ValidationShapeType, ValidationShapeFactory>(beamIdx, ppShape); }
+   virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<ValidationShapeType, ValidationShapeFactory>(beamIdx, pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
-   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx,IUnitConvert* pConvert) const override { return _GetJApprox1<ValidationShapeType, ValidationShapeFactory>(beamIdx,pConvert); }
 };
