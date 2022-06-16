@@ -23,8 +23,11 @@
 #pragma once
 #include <ReportManager\ChapterBuilder.h>
 #include <Graphing/PointMapper.h>
+#include <atlimage.h>
 
 class CRCCapacityDoc;
+class rptRcImage;
+struct IMomentCapacitySolution;
 
 class CRCCapacityChapterBuilder :
    public CChapterBuilder
@@ -41,4 +44,12 @@ public:
 
 private:
    CRCCapacityDoc* m_pDoc;
+
+   rptRcImage* CreateImage(IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
+   void DrawSection(CImage& image, IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
+   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
+
+   // This is a list of temporary files that were created on the fly
+   // Delete them in the destructor
+   std::vector<std::_tstring> m_TemporaryImageFiles;
 };
