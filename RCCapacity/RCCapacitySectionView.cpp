@@ -172,7 +172,7 @@ void CRCCapacitySectionView::Update()
          CComPtr<ICircle> circle;
          circle.CoCreateInstance(CLSID_Circle);
 
-         const matRebar* pBar = lrfdRebarPool::GetInstance()->GetRebar(modelData.RebarType, modelData.RebarGrade, rebar.size);
+         const auto* pBar = lrfdRebarPool::GetInstance()->GetRebar(modelData.RebarType, modelData.RebarGrade, rebar.size);
          circle->put_Radius(pBar->GetNominalDimension() / 2);
          CComPtr<IPoint2d> center;
          circle->get_Center(&center);

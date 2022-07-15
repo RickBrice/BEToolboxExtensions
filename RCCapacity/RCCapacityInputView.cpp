@@ -143,7 +143,7 @@ void CRCCapacityInputView::OnActivateView(BOOL bActivate, CView* pActivateView, 
    __super::OnActivateView(bActivate, pActivateView, pDeactivateView);
 }
 
-void CRCCapacityInputView::GetRebarType(matRebar::Type& type, matRebar::Grade& grade)
+void CRCCapacityInputView::GetRebarType(WBFL::Materials::Rebar::Type& type, WBFL::Materials::Rebar::Grade& grade)
 {
    CDataExchange dx(this, TRUE);
    DDX_RebarMaterial(&dx, IDC_REBAR_TYPE, type, grade);

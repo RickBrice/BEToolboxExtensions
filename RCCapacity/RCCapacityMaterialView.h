@@ -106,8 +106,8 @@ public:
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
       const auto& modelData = pDoc->GetModelData();
 
-      Float64 fy = matRebar::GetYieldStrength(modelData.RebarType, modelData.RebarGrade);
-      Float64 Es = matRebar::GetE(modelData.RebarType, modelData.RebarGrade);
+      Float64 fy = WBFL::Materials::Rebar::GetYieldStrength(modelData.RebarType, modelData.RebarGrade);
+      Float64 Es = WBFL::Materials::Rebar::GetE(modelData.RebarType, modelData.RebarGrade);
 
       std::vector<Float64> vPoints;
       vPoints.push_back(fy / Es);

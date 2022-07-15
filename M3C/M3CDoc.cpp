@@ -352,14 +352,14 @@ void CM3CDoc::BuildRebarModel(IStressStrain** ppSteel) const
    rebar.QueryInterface(ppSteel);
 }
 
-StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
+StrandGradeType GetStrandGradeType(WBFL::Materials::PsStrand::Grade grade)
 {
    StrandGradeType grade_type;
    switch (grade)
    {
-   case matPsStrand::Gr1725: grade_type = sgtGrade250; break;
-   case matPsStrand::Gr1860: grade_type = sgtGrade270; break;
-   case matPsStrand::Gr2070: grade_type = sgtGrade300; break;
+   case WBFL::Materials::PsStrand::Grade::Gr1725: grade_type = sgtGrade250; break;
+   case WBFL::Materials::PsStrand::Grade::Gr1860: grade_type = sgtGrade270; break;
+   case WBFL::Materials::PsStrand::Grade::Gr2070: grade_type = sgtGrade300; break;
    default: ATLASSERT(false); // is there a new strand grade?
    }
    return grade_type;
@@ -368,7 +368,7 @@ StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
 void CM3CDoc::BuildStrandModel(IStressStrain** ppStrand) const
 {
    StrandGradeType grade = GetStrandGradeType(m_ProblemParams.pStrand->GetGrade());
-   ProductionMethodType type = m_ProblemParams.pStrand->GetType() == matPsStrand::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
+   ProductionMethodType type = m_ProblemParams.pStrand->GetType() == WBFL::Materials::PsStrand::Type::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
 
    CComPtr<IPowerFormula> powerFormula;
    powerFormula.CoCreateInstance(CLSID_PSPowerFormula);

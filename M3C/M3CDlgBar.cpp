@@ -76,11 +76,11 @@ void CM3CDlgBar::FillStrandList()
 {
    CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_TENDON_TYPE);
 
-   lrfdStrandIter iter(matPsStrand::Gr1860, matPsStrand::LowRelaxation);
+   lrfdStrandIter iter(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation);
    lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
    for (iter.Begin(); iter; iter.Next())
    {
-      const matPsStrand* pStrand = iter.GetCurrentStrand();
+      const auto* pStrand = iter.GetCurrentStrand();
       int idx = pCB->AddString(pStrand->GetName().c_str());
 
       auto key = pPool->GetStrandKey(pStrand);

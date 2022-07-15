@@ -27,7 +27,7 @@
 #include <WBFLRCCapacity.h>
 #include "..\SVT\AbstractBeamFactory.h"
 
-#include <Material\Material.h>
+#include <Materials/Materials.h>
 #include <LRFD\Lrfd.h>
 #include <ReportManager\ReportManager.h>
 
@@ -50,7 +50,7 @@ typedef enum Measure
 
 struct RebarData
 {
-   matRebar::Size size;
+   WBFL::Materials::Rebar::Size size;
    IndexType nBars;
    Float64 spacing;
    Float64 location;
@@ -58,7 +58,7 @@ struct RebarData
 
    RebarData() 
    {
-      size = matRebar::bs3;
+      size = WBFL::Materials::Rebar::Size::bs3;
       nBars = 1;
       spacing = WBFL::Units::ConvertToSysUnits(2.0,WBFL::Units::Measure::Inch);
       location = WBFL::Units::ConvertToSysUnits(2.0,WBFL::Units::Measure::Inch);
@@ -137,8 +137,8 @@ struct ModelData
    Float64 ftDeck;
    Float64 fbDeck;
 
-   matRebar::Type RebarType;
-   matRebar::Grade RebarGrade;
+   WBFL::Materials::Rebar::Type RebarType;
+   WBFL::Materials::Rebar::Grade RebarGrade;
    std::vector<RebarData> Rebar;
 
    StrandSize StrandSize;
@@ -171,8 +171,8 @@ struct ModelData
       ftDeck = 0;
       fbDeck = 0;
 
-      RebarType = matRebar::A615;
-      RebarGrade = matRebar::Grade60;
+      RebarType = WBFL::Materials::Rebar::Type::A615;
+      RebarGrade = WBFL::Materials::Rebar::Grade::Grade60;
 
       StrandSize = Strand_060;
       StrandType = Grade270_LR;

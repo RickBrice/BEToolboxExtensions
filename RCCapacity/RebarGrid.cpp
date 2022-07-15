@@ -218,13 +218,13 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
          );
 
    CString strBarSizeChoiceList;
-   matRebar::Type type;
-   matRebar::Grade grade;
+   WBFL::Materials::Rebar::Type type;
+   WBFL::Materials::Rebar::Grade grade;
    pParent->GetRebarType(type, grade);
    lrfdRebarIter rebarIter(type, grade);
    for (rebarIter.Begin(); rebarIter; rebarIter.Next())
    {
-      const matRebar* pRebar = rebarIter.GetCurrentRebar();
+      const auto* pRebar = rebarIter.GetCurrentRebar();
       strBarSizeChoiceList += pRebar->GetName().c_str();
       strBarSizeChoiceList += _T("\n");
    }

@@ -90,7 +90,7 @@ protected:
 public:
 	void SetSectionView(CRCCapacitySectionView* pView) { m_pSectionView = pView; }
 	void GetGirder(IndexType& typeIdx, IndexType& beamIdx);
-	void GetRebarType(matRebar::Type& type, matRebar::Grade& grade);
+	void GetRebarType(WBFL::Materials::Rebar::Type& type, WBFL::Materials::Rebar::Grade& grade);
 	BOOL HasSlab();
 	const ModelData& GetModelData() { UpdateData(TRUE); return m_ModelData; };
 };
