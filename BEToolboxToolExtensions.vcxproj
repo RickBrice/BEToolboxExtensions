@@ -63,7 +63,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -103,7 +103,7 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
