@@ -24,7 +24,7 @@
 
 #include <BEToolboxDoc.h>
 #include <WBFLGeometry.h>
-#include "UniformFDMesh.h"
+#include <EngTools/UniformFDMesh.h>
 #include "AbstractBeamFactory.h"
 #include "Helpers.h"
 
@@ -40,6 +40,10 @@ public:
 
    std::vector<LPCTSTR> GetTypes() const;
    std::vector<LPCTSTR> GetBeams(LPCTSTR type) const;
+
+#if defined USE_COM_GEOMETRY
+   CComPtr<IUnitConvert>& GetUnitConvert() { return m_UnitConvert; }
+#endif
 
 #ifdef _DEBUG
 	virtual void AssertValid() const override;
@@ -77,16 +81,25 @@ public:
    void SetMaxElementSize(Float64 dMax);
    Float64 GetMaxElementSize() const;
 
+#if defined USE_COM_GEOMETRY
    void GetShape(IShape** ppShape);
+#else
+   const std::unique_ptr<WBFL::Geometry::Shape>& GetShape() const;
+#endif
 
-   Results GetTorsionalConstant();
+#if defined USE_COM_GEOMETRY
+   const Results& GetTorsionalConstant() const;
+#else
+   const Results2& GetTorsionalConstant() const;
+#endif
 
-   std::vector<CComPtr<IRectangle>> GetMesh();
-   const UniformFDMesh* GetFDMesh();
+#if defined USE_COM_GEOMETRY
+   std::vector<CComPtr<IRectangle>> GetMesh() const;
+#else
+   std::vector<WBFL::Geometry::Rectangle> GetMesh() const;
+#endif
 
    bool IsComputed() const { return m_bComputed; }
-
-   Float64* GetNodeOrdinates() { return m_bComputed ? m_pValues : nullptr; }
 
    // over-ride default behavior by destroying column
    virtual void OnCloseDocument() override;
@@ -96,21 +109,27 @@ protected:
    virtual void LoadToolbarResource() override;
 
 private:
+#if defined USE_COM_GEOMETRY
    CComPtr<IShape> m_pShape;
-   CComPtr<IBeamShapeFactory> m_Factory;
-   std::unique_ptr<UniformFDMesh> m_pMesh;
-   Float64* m_pValues;
-   bool m_bComputed;
+#else
+   std::unique_ptr<WBFL::Geometry::Shape> m_Shape;
+#endif
+   mutable bool m_bComputed;
 
+#if defined USE_COM_GEOMETRY
    CComPtr<IUnitServer> m_UnitServer;
    CComPtr<IUnitConvert> m_UnitConvert;
+#endif
+
+#if defined USE_COM_GEOMETRY
+   mutable Results m_Results;
+#else
+   mutable Results2 m_Results;
+#endif
 
    IndexType m_TypeIdx, m_BeamIdx;
 
-   std::vector < std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
+   std::vector<std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
 
    Float64 m_Dmax;
-
-   void GenerateMesh(UniformFDMesh& mesh);
-   void Update();
 };

@@ -16,9 +16,11 @@ class CTBeamFactory
 {
 public:
    static void CreateBeam(CTBeamType type, IUnitConvert* pConvert, IShape** ppShape);
+   static std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(CTBeamType type);
    static LPCTSTR GetName(CTBeamType type);
    static int GetApproxMethods(CTBeamType type);
    static Float64 GetJApprox1(CTBeamType type, IUnitConvert* pConvert);
+   static Float64 GetJApprox1(CTBeamType type);
 };
 
 
@@ -30,4 +32,6 @@ public:
    virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<CTBeamType, CTBeamFactory>(beamIdx,pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<CTBeamType, CTBeamFactory>(beamIdx); }
    virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<CTBeamType, CTBeamFactory>(beamIdx,pConvert); }
+   virtual std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(IndexType beamIdx) const override { return _CreateBeam<CTBeamType, CTBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<CTBeamType, CTBeamFactory>(beamIdx); }
 };

@@ -36,9 +36,6 @@
     <ClInclude Include="..\CTBeamFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\FDMeshGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,16 +45,7 @@
     <ClInclude Include="..\NUBeamFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PrandtlMembrane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\TxDOTBeamFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\UniformFDMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\UnsymmetricBandedMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ValidationShapeFactory.h">
@@ -104,9 +92,6 @@
     <ClCompile Include="..\CTBeamFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\FDMeshGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -116,16 +101,7 @@
     <ClCompile Include="..\NUBeamFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PrandtlMembrane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\TxDOTBeamFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\UniformFDMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\UnsymmetricBandedMatrix..cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\ValidationShapeFactory.cpp">

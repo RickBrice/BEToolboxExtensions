@@ -110,6 +110,80 @@ void TxDOTBeamFactory::CreateBeam(TxDOTBeamType type, IUnitConvert* pConvert, IS
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> TxDOTBeamFactory::CreateBeam(TxDOTBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::Shape> beam;
+
+   if ((int)TxDOTBeamType::Tx28 <= (int)type && (int)type <= (int)TxDOTBeamType::Tx70)
+   {
+      int i = (int)type - (int)TxDOTBeamType::Tx28;
+
+      auto pbeam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam;
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_TxDOTBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(pbeam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+      beam = std::move(pbeam);
+   }
+   else if ((int)TxDOTBeamType::U40 <= (int)type && (int)type <= (int)TxDOTBeamType::U54)
+   {
+      int i = (int)type - (int)TxDOTBeamType::U40;
+      auto u_beam = std::make_unique<WBFL::Geometry::UBeam2>();
+
+      using namespace _UBeam2; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, w1, w2, w3, w4, w5, w6, w7;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+      w5 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W5], WBFL::Units::Measure::Inch);
+      w6 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W6], WBFL::Units::Measure::Inch);
+      w7 = WBFL::Units::ConvertToSysUnits(gs_TxUBeamDimensions[i][W7], WBFL::Units::Measure::Inch);
+
+      u_beam->SetC1(c1);
+      u_beam->SetD1(d1);
+      u_beam->SetD2(d2);
+      u_beam->SetD3(d3);
+      u_beam->SetD4(d4);
+      u_beam->SetD5(d5);
+      u_beam->SetD6(d6);
+      u_beam->SetW1(w1);
+      u_beam->SetW2(w2);
+      u_beam->SetW3(w3);
+      u_beam->SetW4(w4);
+      u_beam->SetW5(w5);
+      u_beam->SetW6(w6);
+      u_beam->SetW7(w7);
+
+      beam = std::move(u_beam);
+   }
+   return beam;
+}
+
 static std::_tstring gs_TxDOTnames[] = {
    _T("Tx28"),
    _T("Tx34"),
@@ -156,6 +230,24 @@ Float64 TxDOTBeamFactory::GetJApprox1(TxDOTBeamType type,IUnitConvert* pConvert)
    {
       int i = (int)type - (int)TxDOTBeamType::U40;
       return ComputeJApprox_UBeam2(i, pConvert, gs_TxUBeamDimensions);
+   }
+   else
+   {
+      return -1;
+   }
+}
+
+Float64 TxDOTBeamFactory::GetJApprox1(TxDOTBeamType type)
+{
+   if ((int)TxDOTBeamType::Tx28 <= (int)type && (int)type <= (int)TxDOTBeamType::Tx70)
+   {
+      int i = (int)type - (int)TxDOTBeamType::Tx28;
+      return ComputeJApprox_IBeam(i, gs_TxDOTBeamDimensions);
+   }
+   else if ((int)TxDOTBeamType::U40 <= (int)type && (int)type <= (int)TxDOTBeamType::U54)
+   {
+      int i = (int)type - (int)TxDOTBeamType::U40;
+      return ComputeJApprox_UBeam2(i, gs_TxUBeamDimensions);
    }
    else
    {

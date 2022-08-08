@@ -12,9 +12,11 @@ class OregonBeamFactory
 {
 public:
    static void CreateBeam(OregonBeamType type, IUnitConvert* pConvert, IShape** ppShape);
+   static std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(OregonBeamType type);
    static LPCTSTR GetName(OregonBeamType type);
    static int GetApproxMethods(OregonBeamType type);
    static Float64 GetJApprox1(OregonBeamType type, IUnitConvert* pConvert);
+   static Float64 GetJApprox1(OregonBeamType type);
 };
 
 class COregonBeamFactory : public CAbstractBeamFactory
@@ -25,4 +27,6 @@ public:
    virtual bool CreateBeam(IndexType beamIdx, IUnitConvert* pConvert, IShape** ppShape) const override { return _CreateBeam<OregonBeamType, OregonBeamFactory>(beamIdx, pConvert, ppShape); }
    virtual int GetApproxMethods(IndexType beamIdx) const override { return _ApproxMethods<OregonBeamType, OregonBeamFactory>(beamIdx); }
    virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<OregonBeamType, OregonBeamFactory>(beamIdx,pConvert); }
+   virtual std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(IndexType beamIdx) const override { return _CreateBeam<OregonBeamType, OregonBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<OregonBeamType, OregonBeamFactory>(beamIdx); }
 };

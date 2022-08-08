@@ -61,7 +61,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -189,7 +189,6 @@
     <ClCompile Include="SVT\AASHTOBeamFactory.cpp" />
     <ClCompile Include="SVT\CDOTBeamFactory.cpp" />
     <ClCompile Include="SVT\CTBeamFactory.cpp" />
-    <ClCompile Include="SVT\FDMeshGenerator.cpp" />
     <ClCompile Include="SVT\FloridaBeamFactory.cpp" />
     <ClCompile Include="SVT\Helpers.cpp" />
     <ClCompile Include="SVT\ILBeamFactory.cpp" />
@@ -199,7 +198,6 @@
     <ClCompile Include="SVT\NUBeamFactory.cpp" />
     <ClCompile Include="SVT\OhioBeamFactory.cpp" />
     <ClCompile Include="SVT\OregonBeamFactory.cpp" />
-    <ClCompile Include="SVT\PrandtlMembrane.cpp" />
     <ClCompile Include="SVT\SVTDlgBar.cpp" />
     <ClCompile Include="SVT\SVTToolChildFrame.cpp" />
     <ClCompile Include="SVT\SVTToolDoc.cpp" />
@@ -208,8 +206,6 @@
     <ClCompile Include="SVT\SVTToolView3D.cpp" />
     <ClCompile Include="SVT\SVTToolViewer3D.cpp" />
     <ClCompile Include="SVT\TxDOTBeamFactory.cpp" />
-    <ClCompile Include="SVT\UniformFDMesh.cpp" />
-    <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp" />
     <ClCompile Include="SVT\ValidationShapeFactory.cpp" />
     <ClCompile Include="SVT\VirginiaBeamFactory.cpp" />
     <ClCompile Include="SVT\WSDOTBeamFactory.cpp" />
@@ -261,7 +257,6 @@
     <ClInclude Include="SVT\AbstractBeamFactory.h" />
     <ClInclude Include="SVT\CDOTBeamFactory.h" />
     <ClInclude Include="SVT\CTBeamFactory.h" />
-    <ClInclude Include="SVT\FDMeshGenerator.h" />
     <ClInclude Include="SVT\FloridaBeamFactory.h" />
     <ClInclude Include="SVT\Helpers.h" />
     <ClInclude Include="SVT\ILBeamFactory.h" />
@@ -271,7 +266,6 @@
     <ClInclude Include="SVT\NUBeamFactory.h" />
     <ClInclude Include="SVT\OhioBeamFactory.h" />
     <ClInclude Include="SVT\OregonBeamFactory.h" />
-    <ClInclude Include="SVT\PrandtlMembrane.h" />
     <ClInclude Include="SVT\SVT.h" />
     <ClInclude Include="SVT\SVTDlgBar.h" />
     <ClInclude Include="SVT\SVTTools.h" />
@@ -283,8 +277,6 @@
     <ClInclude Include="SVT\SVTToolView3D.h" />
     <ClInclude Include="SVT\SVTToolViewer3D.h" />
     <ClInclude Include="SVT\TxDOTBeamFactory.h" />
-    <ClInclude Include="SVT\UniformFDMesh.h" />
-    <ClInclude Include="SVT\UnsymmetricBandedMatrix.h" />
     <ClInclude Include="SVT\ValidationShapeFactory.h" />
     <ClInclude Include="SVT\VirginiaBeamFactory.h" />
     <ClInclude Include="SVT\WSDOTBeamFactory.h" />

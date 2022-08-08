@@ -92,6 +92,7 @@ void CSVTToolView::OnInitialUpdate()
    CDisplayView::OnInitialUpdate();
 }
 
+#if defined USE_COM_GEOMETRY
 void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
 {
    CDisplayView::OnUpdate(pSender, lHint, pHint);
@@ -138,8 +139,8 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
 
    if (pDoc->IsComputed())
    {
-      Float64* pNodeValues = pDoc->GetNodeOrdinates();
-      const auto* pFDMesh = pDoc->GetFDMesh();
+      const auto& pNodeValues = pDoc->GetNodeOrdinates();
+      const auto& pFDMesh = pDoc->GetFDMesh();
       IndexType nElements = pFDMesh->GetElementCount();
       ATLASSERT(vMesh.size() == nElements);
       Float64 min_value = 0;
@@ -192,6 +193,100 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
 
    ScaleToFit();
 }
+
+#else
+
+void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
+{
+   CDisplayView::OnUpdate(pSender, lHint, pHint);
+
+   CComPtr<iDisplayMgr> dispMgr;
+   GetDisplayMgr(&dispMgr);
+
+   CDManipClientDC dc(this);
+
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
+   const auto& shape = pDoc->GetShape();
+
+   dispMgr->ClearDisplayObjects();
+
+   CComPtr<iDisplayList> display_list;
+   dispMgr->FindDisplayList(DISPLAY_LIST_ID, &display_list);
+   display_list->Clear();
+
+   CComPtr<iPointDisplayObject> dispObj;
+   dispObj.CoCreateInstance(CLSID_PointDisplayObject);
+
+   CComPtr<iCompoundDrawPointStrategy> compound_strategy;
+   compound_strategy.CoCreateInstance(CLSID_CompoundDrawPointStrategy);
+
+
+   // the main girder shape
+   CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
+   shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+   shape_draw_strategy->SetShape(shape->CreateClone());
+   shape_draw_strategy->SetSolidLineColor(BLUE);
+   compound_strategy->AddStrategy(shape_draw_strategy);
+
+   // the finite difference grid
+   auto vMesh = pDoc->GetMesh();
+   for (auto& mesh_element : vMesh)
+   {
+      CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
+      shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+      shape_draw_strategy->SetShape(mesh_element.CreateClone());
+      compound_strategy->AddStrategy(shape_draw_strategy);
+   }
+
+   if (pDoc->IsComputed())
+   {
+      const auto& results = pDoc->GetTorsionalConstant();
+      const auto& pNodeValues = results.solution.GetFiniteDifferenceSolution();
+      const auto& pFDMesh = results.solution.GetFiniteDifferenceMesh();
+      IndexType nElements = pFDMesh->GetElementCount();
+      ATLASSERT(vMesh.size() == nElements);
+      Float64 min_value = 0;
+      Float64 max_value = 0;
+      IndexType nNodes = pFDMesh->GetInteriorNodeCount();
+      for (IndexType nodeIdx = 0; nodeIdx < nNodes; nodeIdx++)
+      {
+         max_value = Max(max_value, pNodeValues[nodeIdx]);
+      }
+
+      for (IndexType elementIdx = 0; elementIdx < nElements; elementIdx++)
+      {
+         vMesh[elementIdx].GetHookPoint()->X() = -vMesh[elementIdx].GetHookPoint()->X();
+
+         const auto* pElement = pFDMesh->GetElement(elementIdx);
+         Float64 value = 0;
+         for (IndexType i = 0; i < 4; i++)
+         {
+            if (pElement->Node[i] != INVALID_INDEX)
+            {
+               value += pNodeValues[pElement->Node[i]];
+            }
+         }
+         value /= 4;
+
+         auto color = GetColor(min_value, max_value, value);
+         CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
+         shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         shape_draw_strategy->SetShape(vMesh[elementIdx].CreateClone());
+         shape_draw_strategy->SetSolidLineStyle(lsNull);
+         shape_draw_strategy->DoFill(true);
+         shape_draw_strategy->SetSolidFillColor(RGB(255 * std::get<0>(color), 255 * std::get<1>(color), 255 * std::get<2>(color)));
+         compound_strategy->AddStrategy(shape_draw_strategy);
+      } // next mesh element
+   } // if results computed
+
+
+   dispObj->SetDrawingStrategy(compound_strategy);
+
+   display_list->AddDisplayObject(dispObj);
+
+   ScaleToFit();
+}
+#endif
 
 void CSVTToolView::OnSize(UINT nType, int cx, int cy)
 {

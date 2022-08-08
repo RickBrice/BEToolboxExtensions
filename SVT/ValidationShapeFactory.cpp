@@ -59,6 +59,49 @@ void ValidationShapeFactory::CreateBeam(ValidationShapeType type, IUnitConvert* 
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> ValidationShapeFactory::CreateBeam(ValidationShapeType type)
+{
+   std::unique_ptr<WBFL::Geometry::Shape> shape;
+   if (type == ValidationShapeType::Square)
+   {
+      auto square = std::make_unique<WBFL::Geometry::Rectangle>();
+      square->SetHeight(side);
+      square->SetWidth(side);
+      shape = std::move(square);
+   }
+   else if (type == ValidationShapeType::Rectangle101)
+   {
+      auto square = std::make_unique<WBFL::Geometry::Rectangle>();
+      square->SetHeight(5);
+      square->SetWidth(50);
+      shape = std::move(square);
+   }
+   else if (type == ValidationShapeType::Rectangle201)
+   {
+      auto square = std::make_unique<WBFL::Geometry::Rectangle>();
+      square->SetHeight(5);
+      square->SetWidth(100);
+      shape = std::move(square);
+   }
+   else if (type == ValidationShapeType::Circle)
+   {
+      auto circle = std::make_unique<WBFL::Geometry::Circle>();
+      circle->SetRadius(side / 2);
+      shape = std::move(circle);
+   }
+   else if (type == ValidationShapeType::Triangle)
+   {
+      auto polygon = std::make_unique<WBFL::Geometry::Polygon>();
+      polygon->AddPoint(0, 0);
+      polygon->AddPoint(-side / 2, -sqrt(3) * side / 2);
+      polygon->AddPoint(side / 2, -sqrt(3) * side / 2);
+      shape = std::move(polygon);
+   }
+
+   return shape;
+}
+
+
 static std::_tstring gs_ShapeNames[] = {
    _T("Square"),
    _T("Rectangle 10:1"),
@@ -77,7 +120,13 @@ int ValidationShapeFactory::GetApproxMethods(ValidationShapeType type)
    return AM_NONE;
 }
 
-Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type,IUnitConvert* pConvert)
+Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type, IUnitConvert* pConvert)
+{
+   // the approximate equation doesn't really fit with this type
+   return 0;
+}
+
+Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type)
 {
    // the approximate equation doesn't really fit with this type
    return 0;

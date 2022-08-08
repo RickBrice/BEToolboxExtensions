@@ -57,7 +57,11 @@ protected:
    void BuildGirderShape();
    void BuildGrid();
    void BuildMembrane();
+#if defined USE_COM_GEOMETRY
    SoGroup* BuildFacet(IPoint2dCollection* pPoints, const std::tuple<Float64, Float64, Float64>& color);
+#else
+   SoGroup* BuildFacet(const std::vector<WBFL::Geometry::Point2d>& points, const std::tuple<Float64, Float64, Float64>& color);
+#endif
 
 	DECLARE_MESSAGE_MAP()
 public:

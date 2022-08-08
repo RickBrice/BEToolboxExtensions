@@ -133,19 +133,7 @@
     <ClCompile Include="SVT\SVTDlgBar.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SVT\FDMeshGenerator.cpp">
-      <Filter>SVT\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SVT\Helpers.cpp">
-      <Filter>SVT\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVT\PrandtlMembrane.cpp">
-      <Filter>SVT\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVT\UniformFDMesh.cpp">
-      <Filter>SVT\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVT\UnsymmetricBandedMatrix..cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SVT\AASHTOBeamFactory.cpp">
@@ -342,22 +330,10 @@
     <ClInclude Include="SVT\SVTDlgBar.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVT\FDMeshGenerator.h">
-      <Filter>SVT\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SVT\Helpers.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVT\PrandtlMembrane.h">
-      <Filter>SVT\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SVT\SVT.h">
-      <Filter>SVT\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVT\UniformFDMesh.h">
-      <Filter>SVT\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVT\UnsymmetricBandedMatrix.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\AASHTOBeamFactory.h">

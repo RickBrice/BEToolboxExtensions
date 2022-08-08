@@ -50,8 +50,7 @@
 #include "VirginiaBeamFactory.h"
 #include "WSDOTBeamFactory.h"
 
-#include "FDMeshGenerator.h"
-#include "PrandtlMembrane.h"
+#include <EngTools/PrandtlMembraneSolver.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -83,17 +82,19 @@ CSVTToolDoc::CSVTToolDoc()
 
    EnableUIHints(FALSE); // not using UIHints feature
 
+#if defined USE_COM_GEOMETRY
    m_UnitServer.CoCreateInstance(CLSID_UnitServer);
    m_UnitServer->SetBaseUnits(CComBSTR("12kslug"), CComBSTR("in"), CComBSTR("sec"), CComBSTR("F"), CComBSTR("deg"));
    m_UnitServer->get_UnitConvert(&m_UnitConvert);
+#else
+   WBFL::Units::System::SetBaseUnits(WBFL::Units::Measure::_12KSlug, WBFL::Units::Measure::Inch, WBFL::Units::Measure::Second, WBFL::Units::Measure::Fahrenheit, WBFL::Units::Measure::Degree);
+#endif
 
-   m_pValues = nullptr;
    m_bComputed = false;
 }
 
 CSVTToolDoc::~CSVTToolDoc()
 {
-   delete[] m_pValues;
 }
 
 
@@ -262,21 +263,30 @@ void CSVTToolDoc::SetGirder(IndexType typeIdx,IndexType beamIdx)
    m_bComputed = false;
    m_TypeIdx = typeIdx;
    m_BeamIdx = beamIdx;
+#if defined USE_COM_GEOMETRY
    m_pShape.Release();
    m_BeamFactories[typeIdx].second->CreateBeam(beamIdx, m_UnitConvert, &m_pShape);
-   Update();
+#else
+   m_Shape = m_BeamFactories[typeIdx].second->CreateBeam(beamIdx);
+#endif
 }
 
+#if defined USE_COM_GEOMETRY
 void CSVTToolDoc::GetShape(IShape** ppShape)
 {
    m_pShape.CopyTo(ppShape);
 }
+#else
+const std::unique_ptr<WBFL::Geometry::Shape>& CSVTToolDoc::GetShape() const
+{
+   return m_Shape;
+}
+#endif
 
 void CSVTToolDoc::SetMaxElementSize(Float64 dMax)
 {
    m_bComputed = false;
    m_Dmax = dMax;
-   Update();
 }
 
 Float64 CSVTToolDoc::GetMaxElementSize() const
@@ -284,41 +294,72 @@ Float64 CSVTToolDoc::GetMaxElementSize() const
    return m_Dmax;
 }
 
-Results CSVTToolDoc::GetTorsionalConstant()
+#if defined USE_COM_GEOMETRY
+const Results& CSVTToolDoc::GetTorsionalConstant() const
 {
-   Results r;
-   PrandtlMembrane membrane;
-   delete[] m_pValues;
-   m_pValues = nullptr;
-   r.J = membrane.ComputeJ(*(m_pMesh.get()), &m_pValues);
-   r.nElements = m_pMesh->GetElementCount();
-   r.nInteriorNodes = m_pMesh->GetInteriorNodeCount();
+   if (m_bComputed)
+      return m_Results;
 
-   r.ApproxArea = (m_pMesh->HasSymmetry() ? 2 : 1)*r.nElements * m_pMesh->GetElementArea();
+   m_Results.solution = PrandtlMembraneSolver::Solve(m_Shape, m_Dmax, m_Dmax);
+   m_Results.J = m_Results.solution.GetJ();
+   m_Results.nElements = m_Results.solution.GetFiniteDifferenceMesh()->GetElementCount();
+   m_Results.nInteriorNodes = m_Results.solution.GetFiniteDifferenceMesh()->GetInteriorNodeCount();
+   m_Results.ApproxArea = m_Results.solution.GetApproximateArea();
 
    m_pShape->get_ShapeProperties(&r.Props);
 
-   r.ApproxMethods = m_BeamFactories[m_TypeIdx].second->GetApproxMethods(m_BeamIdx);
-   r.Japprox1 = 0;
-   r.Japprox2 = 0;
-   if (r.ApproxMethods & AM_J1)
+   m_Results.ApproxMethods = m_BeamFactories[m_TypeIdx].second->GetApproxMethods(m_BeamIdx);
+   m_Results.Japprox1 = 0;
+   m_Results.Japprox2 = 0;
+   if (m_Results.ApproxMethods & AM_J1)
    {
-      r.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx, m_UnitConvert);
+      m_Results.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx, m_UnitConvert);
    }
 
-   if (r.ApproxMethods & AM_J2)
+   if (m_Results.ApproxMethods & AM_J2)
    {
-      r.Japprox2 = GetJApprox2(r.Props);
+      m_Results.Japprox2 = GetJApprox2(m_Results.Props);
    }
 
    m_bComputed = true;
-   
-   UpdateAllViews(nullptr);
 
-   return r;
+   return m_Results;
 }
+#else
+const Results2& CSVTToolDoc::GetTorsionalConstant() const
+{
+   if (m_bComputed)
+      return m_Results;
 
-std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
+   m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape, m_Dmax, m_Dmax);
+   m_Results.J = m_Results.solution.GetJ();
+   m_Results.nElements = m_Results.solution.GetFiniteDifferenceMesh()->GetElementCount();
+   m_Results.nInteriorNodes = m_Results.solution.GetFiniteDifferenceMesh()->GetInteriorNodeCount();
+   m_Results.ApproxArea = m_Results.solution.GetFiniteDifferenceMesh()->GetMeshArea();
+
+   m_Results.Props = m_Shape->GetProperties();
+
+   m_Results.ApproxMethods = m_BeamFactories[m_TypeIdx].second->GetApproxMethods(m_BeamIdx);
+   m_Results.Japprox1 = 0;
+   m_Results.Japprox2 = 0;
+   if (m_Results.ApproxMethods & AM_J1)
+   {
+      m_Results.Japprox1 = m_BeamFactories[m_TypeIdx].second->GetJApprox1(m_BeamIdx);
+   }
+
+   if (m_Results.ApproxMethods & AM_J2)
+   {
+      m_Results.Japprox2 = GetJApprox2(m_Results.Props);
+   }
+
+   m_bComputed = true;
+
+   return m_Results;
+}
+#endif
+
+#if defined USE_COM_GEOMETRY
+std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh() const
 {
    CComPtr<IRect2d> bbox;
    m_pShape->get_BoundingBox(&bbox);
@@ -327,19 +368,22 @@ std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
    Float64 tlx, tly;
    pntTL->Location(&tlx, &tly);
 
+   const Results& results = GetTorsionalConstant();
+   auto& mesh = results.solution.GetFiniteDifferenceMesh();
+
    Float64 dx, dy;
-   m_pMesh->GetElementSize(&dx, &dy);
+   mesh->GetElementSize(&dx, &dy);
 
    std::vector<CComPtr<IRectangle>> mesh_shapes;
-   mesh_shapes.reserve(m_pMesh->GetElementCount());
+   mesh_shapes.reserve(mesh->GetElementCount());
 
-   auto nRows = m_pMesh->GetElementRowCount();
+   auto nRows = mesh->GetElementRowCount();
    for (auto row = 0; row < nRows; row++)
    {
       Float64 cy = tly - row*dy -  dy/2;
 
       IndexType gridStartIdx, firstElementIdx, lastElementIdx;
-      m_pMesh->GetElementRange(row, &gridStartIdx, &firstElementIdx, &lastElementIdx);
+      m_pmeshMesh->GetElementRange(row, &gridStartIdx, &firstElementIdx, &lastElementIdx);
       Float64 x = gridStartIdx * dx;
       for (auto elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
       {
@@ -359,20 +403,37 @@ std::vector<CComPtr<IRectangle>> CSVTToolDoc::GetMesh()
 
    return mesh_shapes;
 }
-
-const UniformFDMesh* CSVTToolDoc::GetFDMesh()
+#else
+std::vector<WBFL::Geometry::Rectangle> CSVTToolDoc::GetMesh() const
 {
-   return m_pMesh.get();
-}
+   auto bbox = m_Shape->GetBoundingBox();
+   Float64 tlx, tly;
+   bbox.TopLeft().GetLocation(&tlx, &tly);
 
-void CSVTToolDoc::GenerateMesh(UniformFDMesh& mesh)
-{
-   FDMeshGenerator mesh_generator(m_Dmax, m_Dmax);
-   mesh_generator.GenerateMesh(m_pShape, mesh);
-}
+   const Results2& results = GetTorsionalConstant();
+   auto& mesh = results.solution.GetFiniteDifferenceMesh();
+   Float64 dx, dy;
+   mesh->GetElementSize(&dx, &dy);
 
-void CSVTToolDoc::Update()
-{
-   m_pMesh = std::make_unique<UniformFDMesh>();
-   GenerateMesh(*(m_pMesh.get()));
+   std::vector<WBFL::Geometry::Rectangle> mesh_shapes;
+   mesh_shapes.reserve(mesh->GetElementCount());
+
+   auto nRows = mesh->GetElementRowCount();
+   for (auto row = 0; row < nRows; row++)
+   {
+      Float64 cy = tly - row * dy - dy / 2;
+
+      IndexType gridStartIdx, firstElementIdx, lastElementIdx;
+      mesh->GetElementRange(row, &gridStartIdx, &firstElementIdx, &lastElementIdx);
+      Float64 x = gridStartIdx * dx;
+      for (auto elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
+      {
+         Float64 cx = tlx + (gridStartIdx + elementIdx - firstElementIdx) * dx + dx / 2;
+
+         mesh_shapes.emplace_back(WBFL::Geometry::Point2d(cx, cy), dx, dy);
+      }
+   }
+
+   return mesh_shapes;
 }
+#endif

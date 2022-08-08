@@ -62,6 +62,50 @@ void NEBeamFactory::CreateBeam(NEBeamType type, IUnitConvert* pConvert, IShape**
    }
 }
 
+std::unique_ptr<WBFL::Geometry::Shape> NEBeamFactory::CreateBeam(NEBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::NUBeam> beam;
+
+   if ((int)NEBeamType::NEBT39 <= (int)type && (int)type < (int)NEBeamType::nSections)
+   {
+      int i = (int)type - (int)NEBeamType::NEBT39;
+
+      beam = std::make_unique<WBFL::Geometry::NUBeam>();
+
+      using namespace _NUBeam;
+
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      d1 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      r1 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][R1], WBFL::Units::Measure::Inch);
+      r2 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][R2], WBFL::Units::Measure::Inch);
+      r3 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][R3], WBFL::Units::Measure::Inch);
+      r4 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][R4], WBFL::Units::Measure::Inch);
+      t  = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][T],  WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      c1 = WBFL::Units::ConvertToSysUnits(gs_NEBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+
+      beam->SetD1(d1);
+      beam->SetD2(d2);
+      beam->SetD3(d3);
+      beam->SetD4(d4);
+      beam->SetD5(d5);
+      beam->SetR1(r1);
+      beam->SetR2(r2);
+      beam->SetR3(r3);
+      beam->SetR4(r4);
+      beam->SetT(t);
+      beam->SetW1(w1);
+      beam->SetW2(w2);
+      beam->SetC1(c1);
+   }
+   return beam;
+}
+
 
 static std::_tstring gs_NEnames[] = {
    _T("NEBT 39"),
@@ -88,4 +132,10 @@ Float64 NEBeamFactory::GetJApprox1(NEBeamType type,IUnitConvert* pConvert)
 {
    int i = (int)type - (int)NEBeamType::NEBT39;
    return ComputeJApprox_NU(i, pConvert, gs_NEBeamDimensions);
+}
+
+Float64 NEBeamFactory::GetJApprox1(NEBeamType type)
+{
+   int i = (int)type - (int)NEBeamType::NEBT39;
+   return ComputeJApprox_NU(i, gs_NEBeamDimensions);
 }

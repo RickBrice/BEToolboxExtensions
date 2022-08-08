@@ -24,6 +24,8 @@
 
 #include <WBFLGeometry.h>
 #include <WBFLUnitServer.h>
+#include <EngTools/PrandtlMembraneSolution.h>
+#include <GeomModel/GeomModel.h>
 
 
 namespace _NUBeam
@@ -63,6 +65,7 @@ namespace _FIBBeam
 
 using Results = struct
 {
+   WBFL::EngTools::PrandtlMembraneSolution solution;
    Float64 J;
    int ApproxMethods;
    Float64 Japprox1;
@@ -74,14 +77,25 @@ using Results = struct
    CComPtr<IShapeProperties> Props;
 };
 
-/// Gets parameters for sharing the processing of many items over multiple threads
-void GetThreadParameters(IndexType nItems, /**< [in] total number of items to be processed*/
-                         IndexType& nWorkerThreads, /**< [out] number of worker threads to spawn*/
-                         IndexType& nItemsPerThread /**< [out] number of items to process per thread*/);
+
+using Results2 = struct
+{
+   WBFL::EngTools::PrandtlMembraneSolution solution;
+   Float64 J;
+   int ApproxMethods;
+   Float64 Japprox1;
+   Float64 Japprox2;
+   IndexType nElements;
+   IndexType nInteriorNodes;
+   Float64 ApproxArea;
+   std::unique_ptr<WBFL::Geometry::Shape> Shape;
+   WBFL::Geometry::ShapeProperties Props;
+};
 
 std::tuple<Float64, Float64, Float64> GetColor(Float64 min, Float64 max, Float64 value);
 
 Float64 GetJApprox2(IShapeProperties* pProps);
+Float64 GetJApprox2(const WBFL::Geometry::ShapeProperties& props);
 
 
 Float64 ComputeJApprox_IBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][14]);
@@ -89,3 +103,13 @@ Float64 ComputeJApprox_IBeam2(int i, IUnitConvert* pConvert, const Float64 dimen
 Float64 ComputeJApprox_NU(int i, IUnitConvert* pConvert, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam(int i, IUnitConvert* pConvert, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam2(int i, IUnitConvert* pConvert, const Float64 dimensions[][14]);
+
+
+Float64 ComputeJApprox_IBeam(int i, const Float64 dimensions[][14]);
+Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15]);
+Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14]);
+
+// maps beam dimensions from the old WBFLGeometry::PrecastBeam dimensions to the new WBFL::Geometry::PrecastBeam dimensions (which are the same as WBFLGeometry::IPrecastBeam2)
+void MapPrecastBeamDimensions(std::unique_ptr<WBFL::Geometry::PrecastBeam>& beam, Float64 c1, Float64 d1, Float64 d2, Float64 d3, Float64 d4, Float64 d5, Float64 d6, Float64 d7, Float64 t1, Float64 t2, Float64 w1, Float64 w2, Float64 w3, Float64 w4);
