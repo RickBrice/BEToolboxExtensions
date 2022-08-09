@@ -70,6 +70,7 @@ using Results = struct
    int ApproxMethods;
    Float64 Japprox1;
    Float64 Japprox2;
+   //Float64 Japprox3;
    IndexType nElements;
    IndexType nInteriorNodes;
    Float64 ApproxArea;
@@ -85,6 +86,7 @@ using Results2 = struct
    int ApproxMethods;
    Float64 Japprox1;
    Float64 Japprox2;
+   Float64 Japprox3;
    IndexType nElements;
    IndexType nInteriorNodes;
    Float64 ApproxArea;
@@ -110,6 +112,13 @@ Float64 ComputeJApprox_IBeam2(int i, const Float64 dimensions[][15]);
 Float64 ComputeJApprox_NU(int i, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam(int i, const Float64 dimensions[][13]);
 Float64 ComputeJApprox_UBeam2(int i, const Float64 dimensions[][14]);
+
+
+Float64 ComputeJApprox3_IBeam(int i, const Float64 dimensions[][14]);
+Float64 ComputeJApprox3_IBeam2(int i, const Float64 dimensions[][15]);
+Float64 ComputeJApprox3_NU(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox3_UBeam(int i, const Float64 dimensions[][13]);
+Float64 ComputeJApprox3_UBeam2(int i, const Float64 dimensions[][14]);
 
 // maps beam dimensions from the old WBFLGeometry::PrecastBeam dimensions to the new WBFL::Geometry::PrecastBeam dimensions (which are the same as WBFLGeometry::IPrecastBeam2)
 void MapPrecastBeamDimensions(std::unique_ptr<WBFL::Geometry::PrecastBeam>& beam, Float64 c1, Float64 d1, Float64 d2, Float64 d3, Float64 d4, Float64 d5, Float64 d6, Float64 d7, Float64 t1, Float64 t2, Float64 w1, Float64 w2, Float64 w3, Float64 w4);

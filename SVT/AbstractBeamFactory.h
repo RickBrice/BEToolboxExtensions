@@ -10,6 +10,7 @@
 #define AM_NONE 0x0000
 #define AM_J1 0x0001
 #define AM_J2 0x0002
+#define AM_J3 0x0004
 
 /*!
 Abstract base class for all beam factories. A beam factory create a shape object for a beam as well as indicate which AASHTO approximate methods of computing J are supported.
@@ -33,6 +34,8 @@ public:
    /// Computes Approx J by AASHTO LRFD C4.6.2.2.1-1
    virtual Float64 GetJApprox1(IndexType beamIdx /**< [in] beam index*/, IUnitConvert* pConvert) const = 0;
    virtual Float64 GetJApprox1(IndexType beamIdx /**< [in] beam index*/) const = 0;
+
+   virtual Float64 GetJApprox3(IndexType beamIdx /**< [in] beam index*/) const = 0;
 };
 
 /// Template method that returns the number of beam types based on an enum T
@@ -77,4 +80,9 @@ template<typename T, class FACTORY>
 Float64 _GetJApprox1(IndexType beamIdx)
 {
    return FACTORY::GetJApprox1((T)beamIdx);
+}
+template<typename T, class FACTORY>
+Float64 _GetJApprox3(IndexType beamIdx)
+{
+   return FACTORY::GetJApprox3((T)beamIdx);
 }

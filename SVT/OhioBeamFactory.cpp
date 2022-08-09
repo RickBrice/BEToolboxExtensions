@@ -121,7 +121,7 @@ LPCTSTR OhioBeamFactory::GetName(OhioBeamType type)
 
 int OhioBeamFactory::GetApproxMethods(OhioBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type, IUnitConvert* pConvert)
@@ -134,4 +134,10 @@ Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type)
 {
    int i = (int)type - (int)OhioBeamType::WF36_49;
    return ComputeJApprox_IBeam(i, gs_OhioBeamDimensions);
+}
+
+Float64 OhioBeamFactory::GetJApprox3(OhioBeamType type)
+{
+   int i = (int)type - (int)OhioBeamType::WF36_49;
+   return ComputeJApprox3_IBeam(i, gs_OhioBeamDimensions);
 }

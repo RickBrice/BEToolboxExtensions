@@ -100,6 +100,11 @@ Results ComputeJ(T type)
       r.Japprox2 = GetJApprox2(r.Props);
    }
 
+   if (r.ApproxMethods & AM_J3)
+   {
+      r.Japprox3 = FACTORY::GetJApprox3(type,unit_convert);
+   }
+
    return r;
 }
 
@@ -138,6 +143,7 @@ Results2 ComputeJ2(T type)
    r.ApproxMethods = FACTORY::GetApproxMethods(type);
    r.Japprox1 = 0;
    r.Japprox2 = 0;
+   r.Japprox3 = 0;
 
    if (r.ApproxMethods & AM_J1)
    {
@@ -149,6 +155,11 @@ Results2 ComputeJ2(T type)
       r.Japprox2 = GetJApprox2(r.Props);
    }
 
+   if (r.ApproxMethods & AM_J3)
+   {
+      r.Japprox3 = FACTORY::GetJApprox3(type);
+   }
+
    return r;
 }
 
@@ -156,7 +167,7 @@ template<typename T,class FACTORY>
 void Beams(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Height (in), Width(in) ,Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Height (in), Width(in) ,Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,J3 (in4),J3/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -203,7 +214,16 @@ void Beams(TCHAR* strAgency)
       {
          _tprintf(_T(",-,-"));
       }
-      
+
+      if (results.ApproxMethods & AM_J3)
+      {
+         _tprintf(_T(",%f,%f"), results.Japprox3, results.Japprox3 / results.J);
+      }
+      else
+      {
+         _tprintf(_T(",-,-"));
+      }
+
       //_tprintf(_T(",%zd,%lld\n"), results.nInteriorNodes, duration.count());
       _tprintf(_T(",%zd\n"), results.nInteriorNodes);
    }
@@ -214,7 +234,7 @@ template<typename T, class FACTORY>
 void Beams2(TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
-   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Height (in), Width(in) ,Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,Number of Equations,Solution Time (ms)\n"));
+   _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),Height (in), Width(in) ,Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,J3 (in4),J3/J,Number of Equations,Solution Time (ms)\n"));
    for (int i = 0; i < (int)T::nSections; i++)
    {
       T type = (T)i;
@@ -256,6 +276,15 @@ void Beams2(TCHAR* strAgency)
       if (results.ApproxMethods & AM_J2)
       {
          _tprintf(_T(",%f,%f"), results.Japprox2, results.Japprox2 / results.J);
+      }
+      else
+      {
+         _tprintf(_T(",-,-"));
+      }
+
+      if (results.ApproxMethods & AM_J3)
+      {
+         _tprintf(_T(",%f,%f"), results.Japprox3, results.Japprox3 / results.J);
       }
       else
       {

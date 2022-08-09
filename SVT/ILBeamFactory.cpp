@@ -202,7 +202,7 @@ LPCTSTR ILBeamFactory::GetName(ILBeamType type)
 
 int ILBeamFactory::GetApproxMethods(ILBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 ILBeamFactory::GetJApprox1(ILBeamType type,IUnitConvert* pConvert)
@@ -251,6 +251,33 @@ Float64 ILBeamFactory::GetJApprox1(ILBeamType type)
 
    Float64 H = D1 + D2 + D3 + D4 + D5 - t_top - t_bot;
    J += H * T * T * T; // web, full depth
+
+   J *= 1. / 3.;
+
+   J = WBFL::Units::ConvertToSysUnits(J, WBFL::Units::Measure::Inch4);
+
+   return J;
+}
+
+Float64 ILBeamFactory::GetJApprox3(ILBeamType type)
+{
+   int i = (int)type - (int)ILBeamType::IL27_1830;
+
+   Float64 D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1;
+   GetNUDimensions(i, D1, D2, D3, D4, D5, R1, R2, R3, R4, T, W1, W2, C1);
+
+   Float64 b = W1;
+   Float64 t = 0.5 * (D1 + (D1 + D2));
+   Float64 t_top = t;
+   Float64 J = b * t * t * t; // top flange
+
+   b = W2;
+   t = 0.5 * (D4 + (D4 + D5));
+   Float64 t_bot = t;
+   J += b * t * t * t * (1.0 - 0.63 * (t / b) + 0.052 * pow(t / b, 2)); // bottom flange
+
+   Float64 H = D1 + D2 + D3 + D4 + D5 - t_top - t_bot;
+   J += H * T * T * T * (1.0 - 0.63 * (T / H) + 0.052 * pow(T / H, 2)); // web, full depth
 
    J *= 1. / 3.;
 

@@ -17,6 +17,7 @@ public:
    static int GetApproxMethods(CDOTBeamType type);
    static Float64 GetJApprox1(CDOTBeamType type, IUnitConvert* pConvert);
    static Float64 GetJApprox1(CDOTBeamType type);
+   static Float64 GetJApprox3(CDOTBeamType type);
 };
 
 class CCDOTBeamFactory : public CAbstractBeamFactory
@@ -29,4 +30,5 @@ public:
    virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<CDOTBeamType, CDOTBeamFactory>(beamIdx,pConvert); }
    virtual std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(IndexType beamIdx) const override { return _CreateBeam<CDOTBeamType, CDOTBeamFactory>(beamIdx); }
    virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<CDOTBeamType, CDOTBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox3(IndexType beamIdx) const override { return _GetJApprox3<CDOTBeamType, CDOTBeamFactory>(beamIdx); }
 };

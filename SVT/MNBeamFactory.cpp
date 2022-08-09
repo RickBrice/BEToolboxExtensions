@@ -204,7 +204,7 @@ LPCTSTR MNBeamFactory::GetName(MNBeamType type)
 
 int MNBeamFactory::GetApproxMethods(MNBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 MNBeamFactory::GetJApprox1(MNBeamType type, IUnitConvert* pConvert)
@@ -235,6 +235,23 @@ Float64 MNBeamFactory::GetJApprox1(MNBeamType type)
    {
       int i = (int)type - (int)MNBeamType::MH30;
       return ComputeJApprox_NU(i, gs_MNNUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 MNBeamFactory::GetJApprox3(MNBeamType type)
+{
+   if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
+   {
+      int i = (int)type - (int)MNBeamType::M27;
+      return ComputeJApprox3_IBeam(i, gs_MNIBeamDimensions);
+   }
+   else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
+   {
+      int i = (int)type - (int)MNBeamType::MH30;
+      return ComputeJApprox3_NU(i, gs_MNNUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

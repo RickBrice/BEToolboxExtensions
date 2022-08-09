@@ -254,3 +254,21 @@ Float64 TxDOTBeamFactory::GetJApprox1(TxDOTBeamType type)
       return -1;
    }
 }
+
+Float64 TxDOTBeamFactory::GetJApprox3(TxDOTBeamType type)
+{
+   if ((int)TxDOTBeamType::Tx28 <= (int)type && (int)type <= (int)TxDOTBeamType::Tx70)
+   {
+      int i = (int)type - (int)TxDOTBeamType::Tx28;
+      return ComputeJApprox3_IBeam(i, gs_TxDOTBeamDimensions);
+   }
+   else if ((int)TxDOTBeamType::U40 <= (int)type && (int)type <= (int)TxDOTBeamType::U54)
+   {
+      int i = (int)type - (int)TxDOTBeamType::U40;
+      return ComputeJApprox3_UBeam2(i, gs_TxUBeamDimensions);
+   }
+   else
+   {
+      return -1;
+   }
+}

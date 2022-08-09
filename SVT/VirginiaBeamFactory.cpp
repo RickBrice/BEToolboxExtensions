@@ -130,3 +130,9 @@ Float64 VirginiaBeamFactory::GetJApprox1(VirginiaBeamType type)
    int i = (int)type - (int)VirginiaBeamType::PCBT_29;
    return ComputeJApprox_IBeam(i, gs_VirginiaBeamDimensions);
 }
+
+Float64 VirginiaBeamFactory::GetJApprox3(VirginiaBeamType type)
+{
+   int i = (int)type - (int)VirginiaBeamType::PCBT_29;
+   return ComputeJApprox3_IBeam(i, gs_VirginiaBeamDimensions);
+}

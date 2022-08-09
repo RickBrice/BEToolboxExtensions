@@ -19,6 +19,7 @@ public:
    static int GetApproxMethods(MNBeamType type);
    static Float64 GetJApprox1(MNBeamType type, IUnitConvert* pConvert);
    static Float64 GetJApprox1(MNBeamType type);
+   static Float64 GetJApprox3(MNBeamType type);
 };
 
 
@@ -32,4 +33,5 @@ public:
    virtual Float64 GetJApprox1(IndexType beamIdx, IUnitConvert* pConvert) const override { return _GetJApprox1<MNBeamType, MNBeamFactory>(beamIdx,pConvert); }
    virtual std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(IndexType beamIdx) const override { return _CreateBeam<MNBeamType, MNBeamFactory>(beamIdx); }
    virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<MNBeamType, MNBeamFactory>(beamIdx); }
+   virtual Float64 GetJApprox3(IndexType beamIdx) const override { return _GetJApprox3<MNBeamType, MNBeamFactory>(beamIdx); }
 };

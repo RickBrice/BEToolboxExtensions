@@ -107,7 +107,7 @@ LPCTSTR NCBeamFactory::GetName(NCBeamType type)
 
 int NCBeamFactory::GetApproxMethods(NCBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 NCBeamFactory::GetJApprox1(NCBeamType type,IUnitConvert* pConvert)
@@ -120,4 +120,10 @@ Float64 NCBeamFactory::GetJApprox1(NCBeamType type)
 {
    int i = (int)type - (int)NCBeamType::BT63;
    return ComputeJApprox_IBeam(i, gs_NCBeamDimensions);
+}
+
+Float64 NCBeamFactory::GetJApprox3(NCBeamType type)
+{
+   int i = (int)type - (int)NCBeamType::BT63;
+   return ComputeJApprox3_IBeam(i, gs_NCBeamDimensions);
 }

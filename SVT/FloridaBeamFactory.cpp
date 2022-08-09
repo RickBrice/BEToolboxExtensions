@@ -371,7 +371,7 @@ int FloridaBeamFactory::GetApproxMethods(FloridaBeamType type)
 {
    if ((int)FloridaBeamType::FIB36 <= (int)type && (int)type <= (int)FloridaBeamType::FIB102)
    {
-      return AM_J1 | AM_J2;
+      return AM_J1 | AM_J2 | AM_J3;
    }
    else if ((int)FloridaBeamType::FUB48 <= (int)type && (int)type < (int)FloridaBeamType::nSections)
    {
@@ -474,6 +474,57 @@ Float64 FloridaBeamFactory::GetJApprox1(FloridaBeamType type)
    {
       int i = (int)type - (int)FloridaBeamType::FUB48;
       return ComputeJApprox_UBeam2(i, gs_FUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+
+}
+
+Float64 FloridaBeamFactory::GetJApprox3(FloridaBeamType type)
+{
+   if ((int)FloridaBeamType::FIB36 <= (int)type && (int)type <= (int)FloridaBeamType::FIB102)
+   {
+      int i = (int)type - (int)FloridaBeamType::FIB36;
+
+      using namespace _FIBBeam;
+
+      Float64 d1 = gs_FIBeamDimensions[i][D1];
+      Float64 d2 = gs_FIBeamDimensions[i][D2];
+      Float64 d3 = gs_FIBeamDimensions[i][D3];
+      Float64 d4 = gs_FIBeamDimensions[i][D4];
+      Float64 d5 = gs_FIBeamDimensions[i][D5];
+      Float64 h = gs_FIBeamDimensions[i][H];
+      Float64 tw = gs_FIBeamDimensions[i][T];
+      Float64 r = gs_FIBeamDimensions[i][R];
+      Float64 w1 = gs_FIBeamDimensions[i][W1];
+      Float64 w2 = gs_FIBeamDimensions[i][W2];
+      Float64 w3 = gs_FIBeamDimensions[i][W3];
+      Float64 c1 = gs_FIBeamDimensions[i][C1];
+
+      Float64 b = 2 * (w1 + w2) + tw;
+      Float64 t = 0.5 * (d1 + (d1 + d2));
+      Float64 t_top = t;
+      Float64 J = b * t * t * t; // top flange
+
+      b = w3;
+      t = 0.5 * (d4 + (d4 + d5));
+      Float64 t_bot = t;
+      J += b * t * t * t * (1.0 - 0.63 * (t / b) + 0.052 * pow(t / b, 2)); // bottom flange
+
+      b = (h - t_top - t_bot);
+      J += b * tw * tw * tw * (1.0 - 0.63 * (t / b) + 0.052 * pow(t / b, 2)); // web, full depth
+
+      J *= 1. / 3.;
+
+      J = WBFL::Units::ConvertToSysUnits(J, WBFL::Units::Measure::Inch4);
+
+      return J;
+   }
+   else if ((int)FloridaBeamType::FUB48 <= (int)type && (int)type < (int)FloridaBeamType::nSections)
+   {
+      int i = (int)type - (int)FloridaBeamType::FUB48;
+      return ComputeJApprox3_UBeam2(i, gs_FUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

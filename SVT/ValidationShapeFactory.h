@@ -17,6 +17,7 @@ public:
    static int GetApproxMethods(ValidationShapeType type);
    static Float64 GetJApprox1(ValidationShapeType type, IUnitConvert* pConvert);
    static Float64 GetJApprox1(ValidationShapeType type);
+   static Float64 GetJApprox3(ValidationShapeType type);
 };
 
 class CValidationShapeFactory : public CAbstractBeamFactory
@@ -29,4 +30,5 @@ public:
    virtual Float64 GetJApprox1(IndexType beamIdx,IUnitConvert* pConvert) const override { return _GetJApprox1<ValidationShapeType, ValidationShapeFactory>(beamIdx,pConvert); }
    virtual std::unique_ptr<WBFL::Geometry::Shape> CreateBeam(IndexType beamIdx) const override { return _CreateBeam<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
    virtual Float64 GetJApprox1(IndexType beamIdx) const override { return _GetJApprox1<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
+   virtual Float64 GetJApprox3(IndexType beamIdx) const override { return _GetJApprox3<ValidationShapeType, ValidationShapeFactory>(beamIdx); }
 };

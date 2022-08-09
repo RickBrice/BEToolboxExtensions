@@ -120,7 +120,7 @@ LPCTSTR OregonBeamFactory::GetName(OregonBeamType type)
 
 int OregonBeamFactory::GetApproxMethods(OregonBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 OregonBeamFactory::GetJApprox1(OregonBeamType type,IUnitConvert* pConvert)
@@ -133,4 +133,10 @@ Float64 OregonBeamFactory::GetJApprox1(OregonBeamType type)
 {
    int i = (int)type - (int)OregonBeamType::BI51;
    return ComputeJApprox_IBeam(i, gs_OregonBeamDimensions);
+}
+
+Float64 OregonBeamFactory::GetJApprox3(OregonBeamType type)
+{
+   int i = (int)type - (int)OregonBeamType::BI51;
+   return ComputeJApprox3_IBeam(i, gs_OregonBeamDimensions);
 }

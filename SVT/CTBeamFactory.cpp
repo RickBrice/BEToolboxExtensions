@@ -330,11 +330,11 @@ int CTBeamFactory::GetApproxMethods(CTBeamType type)
 {
    if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
    {
-      return AM_J1 | AM_J2;
+      return AM_J1 | AM_J2 | AM_J3;
    }
    else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
    {
-      return AM_J1 | AM_J2;
+      return AM_J1 | AM_J2 | AM_J3;
    }
    else
    {
@@ -380,6 +380,28 @@ Float64 CTBeamFactory::GetJApprox1(CTBeamType type)
    {
       int i = (int)type - (int)CTBeamType::Tub55;
       return ComputeJApprox_UBeam(i, gs_CTUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 CTBeamFactory::GetJApprox3(CTBeamType type)
+{
+   if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
+   {
+      int i = (int)type - (int)CTBeamType::BT49;
+      return ComputeJApprox3_NU(i, gs_CTNUBeamDimensions);
+   }
+   else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
+   {
+      int i = (int)type - (int)CTBeamType::I36;
+      return ComputeJApprox3_IBeam(i, gs_CTIBeamDimensions);
+   }
+   else
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
+      return ComputeJApprox3_UBeam(i, gs_CTUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

@@ -132,3 +132,9 @@ Float64 AASHTOBeamFactory::GetJApprox1(AASHTOBeamType type)
    int i = (int)type - (int)AASHTOBeamType::TypeI;
    return ComputeJApprox_IBeam(i, gs_AASHTOBeamDimensions);
 }
+
+Float64 AASHTOBeamFactory::GetJApprox3(AASHTOBeamType type)
+{
+   int i = (int)type - (int)AASHTOBeamType::TypeI;
+   return ComputeJApprox3_IBeam(i, gs_AASHTOBeamDimensions);
+}

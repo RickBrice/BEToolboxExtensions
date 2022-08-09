@@ -133,3 +133,9 @@ Float64 CDOTBeamFactory::GetJApprox1(CDOTBeamType type)
    int i = (int)type - (int)CDOTBeamType::CBT_30;
    return ComputeJApprox_IBeam(i, gs_CDOTBeamDimensions);
 }
+
+Float64 CDOTBeamFactory::GetJApprox3(CDOTBeamType type)
+{
+   int i = (int)type - (int)CDOTBeamType::CBT_30;
+   return ComputeJApprox3_IBeam(i, gs_CDOTBeamDimensions);
+}

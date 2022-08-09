@@ -393,3 +393,23 @@ Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type)
    }
    return -1;
 }
+
+Float64 WSDOTBeamFactory::GetJApprox3(WSDOTBeamType type)
+{
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   {
+      int i = (int)type - (int)WSDOTBeamType::W42G;
+      return ComputeJApprox3_IBeam(i, gs_WSDOTBeamDimensions);
+   }
+   else if (type == WSDOTBeamType::WF100G_Modified)
+   {
+      int i = (int)type - (int)WSDOTBeamType::WF100G_Modified;
+      return ComputeJApprox3_IBeam2(i, gs_WSDOTModifiedBeamDimensions);
+   }
+   else if ((int)WSDOTBeamType::U54G4 <= (int)type && (int)type < (int)WSDOTBeamType::nSections)
+   {
+      int i = (int)type - (int)WSDOTBeamType::U54G4;
+      return ComputeJApprox3_UBeam(i, gs_WSDOTUBeamDimensions);
+   }
+   return -1;
+}

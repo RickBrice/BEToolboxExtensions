@@ -119,7 +119,7 @@ LPCTSTR NUBeamFactory::GetName(NUBeamType type)
 
 int NUBeamFactory::GetApproxMethods(NUBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 NUBeamFactory::GetJApprox1(NUBeamType type, IUnitConvert* pConvert)
@@ -132,4 +132,10 @@ Float64 NUBeamFactory::GetJApprox1(NUBeamType type)
 {
    int i = (int)type - (int)NUBeamType::NU900;
    return ComputeJApprox_NU(i, gs_NUBeamDimensions);
+}
+
+Float64 NUBeamFactory::GetJApprox3(NUBeamType type)
+{
+   int i = (int)type - (int)NUBeamType::NU900;
+   return ComputeJApprox3_NU(i, gs_NUBeamDimensions);
 }

@@ -125,7 +125,7 @@ LPCTSTR NEBeamFactory::GetName(NEBeamType type)
 
 int NEBeamFactory::GetApproxMethods(NEBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 NEBeamFactory::GetJApprox1(NEBeamType type,IUnitConvert* pConvert)
@@ -138,4 +138,10 @@ Float64 NEBeamFactory::GetJApprox1(NEBeamType type)
 {
    int i = (int)type - (int)NEBeamType::NEBT39;
    return ComputeJApprox_NU(i, gs_NEBeamDimensions);
+}
+
+Float64 NEBeamFactory::GetJApprox3(NEBeamType type)
+{
+   int i = (int)type - (int)NEBeamType::NEBT39;
+   return ComputeJApprox3_NU(i, gs_NEBeamDimensions);
 }

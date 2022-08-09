@@ -131,3 +131,9 @@ Float64 ValidationShapeFactory::GetJApprox1(ValidationShapeType type)
    // the approximate equation doesn't really fit with this type
    return 0;
 }
+
+Float64 ValidationShapeFactory::GetJApprox3(ValidationShapeType type)
+{
+   // the approximate equation doesn't really fit with this type
+   return 0;
+}
