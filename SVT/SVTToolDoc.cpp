@@ -84,10 +84,10 @@ CSVTToolDoc::CSVTToolDoc()
 
 #if defined USE_COM_GEOMETRY
    m_UnitServer.CoCreateInstance(CLSID_UnitServer);
-   m_UnitServer->SetBaseUnits(CComBSTR("12kslug"), CComBSTR("in"), CComBSTR("sec"), CComBSTR("F"), CComBSTR("deg"));
+   m_UnitServer->SetSystemUnits(CComBSTR("12kslug"), CComBSTR("in"), CComBSTR("sec"), CComBSTR("F"), CComBSTR("deg"));
    m_UnitServer->get_UnitConvert(&m_UnitConvert);
 #else
-   WBFL::Units::System::SetBaseUnits(WBFL::Units::Measure::_12KSlug, WBFL::Units::Measure::Inch, WBFL::Units::Measure::Second, WBFL::Units::Measure::Fahrenheit, WBFL::Units::Measure::Degree);
+   WBFL::Units::System::SetSystemUnits(WBFL::Units::Measure::_12KSlug, WBFL::Units::Measure::Inch, WBFL::Units::Measure::Second, WBFL::Units::Measure::Fahrenheit, WBFL::Units::Measure::Degree);
 #endif
 
    m_bComputed = false;
