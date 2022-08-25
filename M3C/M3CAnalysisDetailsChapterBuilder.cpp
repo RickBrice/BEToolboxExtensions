@@ -449,7 +449,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    CPoint p;
 
    CComPtr<IPlane3d> strain_plane;
-   pSolution->get_StrainPlane(&strain_plane);
+   pSolution->get_IncrementalStrainPlane(&strain_plane);
 
    Float64 eTop, eBottom; // strain top and bottom
    strain_plane->GetZ(0, top, &eTop);

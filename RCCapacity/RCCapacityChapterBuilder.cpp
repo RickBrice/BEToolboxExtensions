@@ -150,7 +150,7 @@ rptChapter* CRCCapacityChapterBuilder::Build(CReportSpecification* pRptSpec, Uin
    y = 0;
    z = 0;
    CComPtr<IPlane3d> strain_plane;
-   solution->get_StrainPlane(&strain_plane);
+   solution->get_IncrementalStrainPlane(&strain_plane);
    strain_plane->GetY(x, z, &y);
 
    Float64 c = sqrt((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y));
@@ -567,7 +567,7 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
    //pDC->LineTo(p);
 
    CComPtr<IPlane3d> strain_plane;
-   pSolution->get_StrainPlane(&strain_plane);
+   pSolution->get_IncrementalStrainPlane(&strain_plane);
 
    Float64 eTop, eBottom; // strain top and bottom
    strain_plane->GetZ(0, mirror_factor * top, &eTop);
