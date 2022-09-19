@@ -62,7 +62,7 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CSVTToolDoc, CBEToolboxDoc)
 
-CSVTToolDoc::CSVTToolDoc()
+CSVTToolDoc::CSVTToolDoc() : CBEToolboxDoc()
 {
    m_BeamFactories.push_back(std::make_pair(_T("Validation Shapes"), std::make_unique<CValidationShapeFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("AASHTO"), std::make_unique<CAASHTOBeamFactory>()));

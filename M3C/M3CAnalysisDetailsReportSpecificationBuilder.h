@@ -27,11 +27,11 @@
 class CM3CDoc;
 
 class CM3CAnalysisDetailsReportSpecificationBuilder :
-   public CReportSpecificationBuilder
+   public WBFL::Reporting::ReportSpecificationBuilder
 {
 public:
    CM3CAnalysisDetailsReportSpecificationBuilder();
    ~CM3CAnalysisDetailsReportSpecificationBuilder(void);
-   virtual std::shared_ptr<CReportSpecification> CreateReportSpec(const CReportDescription& rptDesc, std::shared_ptr<CReportSpecification>& pRptSpec) override;
-   virtual std::shared_ptr<CReportSpecification> CreateDefaultReportSpec(const CReportDescription& rptDesc) override;
+   virtual std::shared_ptr<WBFL::Reporting::ReportSpecification> CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification>& pRptSpec) const override;
+   virtual std::shared_ptr<WBFL::Reporting::ReportSpecification> CreateDefaultReportSpec(const WBFL::Reporting::ReportDescription& rptDesc) const override;
 };

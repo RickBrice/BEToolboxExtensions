@@ -196,8 +196,6 @@ public:
 
    virtual CString GetToolbarSectionName() override;
 
-   CReportBuilderManager& GetReportManager() { return m_RptMgr; }
-
    IndexType GetTypeCount() const;
    LPCTSTR GetTypeName(IndexType typeIdx) const;
    IndexType GetBeamCount(IndexType typeIdx) const;
@@ -285,8 +283,6 @@ private:
 
    CComPtr<IUnitServer> m_UnitServer;
    CComPtr<IUnitConvert> m_UnitConvert;
-
-   CReportBuilderManager m_RptMgr;
 
    void Update();
 

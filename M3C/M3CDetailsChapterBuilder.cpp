@@ -53,7 +53,7 @@ Uint16 CM3CMaterialDetailsChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CMaterialDetailsChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CMaterialDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    rptChapter* pChapter = new rptChapter;
    BuildConcreteModel(pChapter);
@@ -62,9 +62,9 @@ rptChapter* CM3CMaterialDetailsChapterBuilder::Build(CReportSpecification* pRptS
    return pChapter;
 }
 
-CChapterBuilder* CM3CMaterialDetailsChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CMaterialDetailsChapterBuilder::Clone() const
 {
-   return new CM3CMaterialDetailsChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CMaterialDetailsChapterBuilder>(m_pDoc);
 }
 
 void CM3CMaterialDetailsChapterBuilder::BuildConcreteModel(rptChapter* pChapter) const

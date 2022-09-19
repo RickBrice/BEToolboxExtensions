@@ -120,7 +120,7 @@ void DumpSolution(IGeneralSection* section, IMomentCapacitySolution* solution)
 
 IMPLEMENT_DYNCREATE(CRCCapacityDoc, CBEToolboxDoc)
 
-CRCCapacityDoc::CRCCapacityDoc()
+CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
 {
    m_BeamFactories.push_back(std::make_pair(_T("AASHTO"), std::make_unique<CAASHTOBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
@@ -152,11 +152,11 @@ CRCCapacityDoc::CRCCapacityDoc()
 
 
    // when report printing is implemented, we'll need a title page... this commented out code shows how to do it
-   //std::shared_ptr<CTitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
-   std::unique_ptr<CReportBuilder> pRptBuilder(std::make_unique<CReportBuilder>(_T("Analysis Results")));
+   //std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
+   std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("Analysis Results")));
    //pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<CChapterBuilder>(new CRCCapacityChapterBuilder(this)));
-   m_RptMgr.AddReportBuilder(pRptBuilder.release());
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(new CRCCapacityChapterBuilder(this)));
+   GetReportManager()->AddReportBuilder(pRptBuilder);
 }
 
 CRCCapacityDoc::~CRCCapacityDoc()

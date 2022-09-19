@@ -25,7 +25,7 @@
 #include "RCCapacityReportSpecification.h"
 
 CRCCapacityReportSpecificationBuilder::CRCCapacityReportSpecificationBuilder() :
-   CReportSpecificationBuilder()
+   WBFL::Reporting::ReportSpecificationBuilder()
 {
 }
 
@@ -34,16 +34,16 @@ CRCCapacityReportSpecificationBuilder::~CRCCapacityReportSpecificationBuilder(vo
 
 }
 
-std::shared_ptr<CReportSpecification> CRCCapacityReportSpecificationBuilder::CreateReportSpec(const CReportDescription& rptDesc, std::shared_ptr<CReportSpecification>& pOldRptSpec)
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CRCCapacityReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification>& pOldRptSpec) const
 {
    return CreateDefaultReportSpec(rptDesc);
 }
 
-std::shared_ptr<CReportSpecification> CRCCapacityReportSpecificationBuilder::CreateDefaultReportSpec(const CReportDescription& rptDesc)
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CRCCapacityReportSpecificationBuilder::CreateDefaultReportSpec(const WBFL::Reporting::ReportDescription& rptDesc) const
 {
    std::shared_ptr<CRCCapacityReportSpecification> pMyRptSpec(std::make_shared<CRCCapacityReportSpecification>(rptDesc.GetReportName()));
    auto vChInfo = rptDesc.GetChapterInfo();
-   std::shared_ptr<CReportSpecification> pRptSpec(pMyRptSpec);
+   std::shared_ptr<WBFL::Reporting::ReportSpecification> pRptSpec(pMyRptSpec);
    rptDesc.ConfigureReportSpecification(vChInfo, pRptSpec);
    return pMyRptSpec;
 }

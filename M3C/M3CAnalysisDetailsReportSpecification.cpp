@@ -23,8 +23,8 @@
 #include "StdAfx.h"
 #include "M3CAnalysisDetailsReportSpecification.h"
 
-CM3CAnalysisDetailsReportSpecification::CM3CAnalysisDetailsReportSpecification(LPCTSTR strReportName) :
-CReportSpecification(strReportName)
+CM3CAnalysisDetailsReportSpecification::CM3CAnalysisDetailsReportSpecification(const std::_tstring& strReportName) :
+WBFL::Reporting::ReportSpecification(strReportName)
 {
    m_Index = 1;
 }

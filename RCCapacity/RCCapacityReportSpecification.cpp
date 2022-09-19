@@ -23,8 +23,8 @@
 #include "StdAfx.h"
 #include "RCCapacityReportSpecification.h"
 
-CRCCapacityReportSpecification::CRCCapacityReportSpecification(LPCTSTR strReportName) :
-CReportSpecification(strReportName)
+CRCCapacityReportSpecification::CRCCapacityReportSpecification(const std::_tstring& strReportName) :
+WBFL::Reporting::ReportSpecification(strReportName)
 {
 }
    

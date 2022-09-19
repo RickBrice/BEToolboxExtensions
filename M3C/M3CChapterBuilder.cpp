@@ -62,7 +62,7 @@ Uint16 CM3CChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    rptChapter* pChapter = new rptChapter;
    rptParagraph* pPara;
@@ -147,9 +147,9 @@ rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 lev
    return pChapter;
 }
 
-CChapterBuilder* CM3CChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CChapterBuilder::Clone() const
 {
-   return new CM3CChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution) const

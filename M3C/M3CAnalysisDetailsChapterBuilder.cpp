@@ -67,9 +67,9 @@ Uint16 CM3CAnalysisDetailsChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
-   CM3CAnalysisDetailsReportSpecification* pMySpec = dynamic_cast<CM3CAnalysisDetailsReportSpecification*>(pRptSpec);
+   auto pMySpec = std::dynamic_pointer_cast<const CM3CAnalysisDetailsReportSpecification>(pRptSpec);
    IndexType idx = pMySpec->GetResultsIndex();
    rptChapter* pChapter = new rptChapter;
    BuildAnalysisModel(pChapter, idx);
@@ -198,9 +198,9 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    //(*pPara) << _T("Depth to Tension Resultant, ") << Sub2(_T("d"), _T("e")) << _T(" = ") << dist.SetValue(pmcd->de) << rptNewLine;
 }
 
-CChapterBuilder* CM3CAnalysisDetailsChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CAnalysisDetailsChapterBuilder::Clone() const
 {
-   return new CM3CAnalysisDetailsChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CAnalysisDetailsChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CAnalysisDetailsChapterBuilder::CreateImage(IMomentCapacitySolution* pSolution) const

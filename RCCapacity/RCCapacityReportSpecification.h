@@ -25,9 +25,9 @@
 #include <ReportManager\ReportSpecification.h>
 
 class CRCCapacityReportSpecification :
-   public CReportSpecification
+   public WBFL::Reporting::ReportSpecification
 {
 public:
-   CRCCapacityReportSpecification(LPCTSTR strReportName);
+   CRCCapacityReportSpecification(const std::_tstring& strReportName);
    ~CRCCapacityReportSpecification(void);
 };

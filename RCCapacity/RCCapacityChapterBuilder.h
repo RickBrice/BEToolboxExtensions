@@ -30,7 +30,7 @@ class rptRcImage;
 struct IMomentCapacitySolution;
 
 class CRCCapacityChapterBuilder :
-   public CChapterBuilder
+   public WBFL::Reporting::ChapterBuilder
 {
 public:
    CRCCapacityChapterBuilder(CRCCapacityDoc* pDoc);
@@ -38,9 +38,9 @@ public:
 
    virtual LPCTSTR GetName() const override;
    virtual Uint16 GetMaxLevel() const override;
-   virtual rptChapter* Build(CReportSpecification* pRptSpec,Uint16 level) const override;
+   virtual rptChapter* Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec,Uint16 level) const override;
    virtual bool Select() const override { return true; }
-   virtual CChapterBuilder* Clone() const override;
+   virtual std::unique_ptr<WBFL::Reporting::ChapterBuilder> Clone() const override;
 
 private:
    CRCCapacityDoc* m_pDoc;

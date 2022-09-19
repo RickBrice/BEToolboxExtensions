@@ -66,7 +66,7 @@ Uint16 CRCCapacityChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CRCCapacityChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CRCCapacityChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    USES_CONVERSION;
 
@@ -287,9 +287,9 @@ rptChapter* CRCCapacityChapterBuilder::Build(CReportSpecification* pRptSpec, Uin
    return pChapter;
 }
 
-CChapterBuilder* CRCCapacityChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CRCCapacityChapterBuilder::Clone() const
 {
-   return new CRCCapacityChapterBuilder(m_pDoc);
+   return std::make_unique<CRCCapacityChapterBuilder>(m_pDoc);
 }
 
 
