@@ -262,12 +262,12 @@ HRESULT CRCCapacityDoc::WriteTheDocument(IStructuredSave* pStrSave)
    }
 
    pStrSave->BeginUnit(_T("Rebar"), 1.0);
-   pStrSave->put_Property(_T("RebarType"), CComVariant(std::underlying_type<WBFL::Materials::Rebar::Type>::type(m_ModelData.RebarType)));
-   pStrSave->put_Property(_T("RebarGrade"), CComVariant(std::underlying_type<WBFL::Materials::Rebar::Grade>::type(m_ModelData.RebarGrade)));
+   pStrSave->put_Property(_T("RebarType"), CComVariant(+m_ModelData.RebarType));
+   pStrSave->put_Property(_T("RebarGrade"), CComVariant(+m_ModelData.RebarGrade));
    for (auto& rebar : m_ModelData.Rebar)
    {
       pStrSave->BeginUnit(_T("RebarData"), 1.0);
-      pStrSave->put_Property(_T("Size"), CComVariant(std::underlying_type<WBFL::Materials::Rebar::Size>::type(rebar.size)));
+      pStrSave->put_Property(_T("Size"), CComVariant(+rebar.size));
       pStrSave->put_Property(_T("nBars"), CComVariant(rebar.nBars));
       pStrSave->put_Property(_T("Spacing"), CComVariant(rebar.spacing));
       pStrSave->put_Property(_T("Location"), CComVariant(rebar.location));
