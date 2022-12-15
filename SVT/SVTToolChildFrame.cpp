@@ -276,13 +276,14 @@ void CSVTToolChildFrame::OnCompute()
 
    CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
    const Results2& r = pDoc->GetTorsionalConstant();
-   Float64 A, Yt, Yb, Ix, Iy, J;
+   Float64 A, Yt, Yb, Ix, Iy, J, Tmax_per_T;
    A = r.Props.GetArea();
    Yb = r.Props.GetYbottom();
    Yt = r.Props.GetYtop();
    Ix = r.Props.GetIxx();
    Iy = r.Props.GetIyy();
    J = r.J;
+   Tmax_per_T = r.Tmax_per_T;
 
    A = WBFL::Units::ConvertFromSysUnits(A, WBFL::Units::Measure::Inch2);
    Yb = WBFL::Units::ConvertFromSysUnits(Yb, WBFL::Units::Measure::Inch);
@@ -291,8 +292,14 @@ void CSVTToolChildFrame::OnCompute()
    Iy = WBFL::Units::ConvertFromSysUnits(Iy, WBFL::Units::Measure::Inch4);
    J = WBFL::Units::ConvertFromSysUnits(J, WBFL::Units::Measure::Inch4);
 
+   // Tmax_per_T is max shear stress per unit torque.
+   // The unit of measure is (Force/Length^2)(1/Force*Length) = 1/Length^3
+   // There isn't a predefined 1/Length^3 unit type so invert Tmax_per_T to get Length^3 units
+   // do the unit conversion, then invert again
+   Tmax_per_T = 1 / WBFL::Units::ConvertFromSysUnits(1 / Tmax_per_T, WBFL::Units::Measure::Inch3);
+
    CString str;
-   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\nTmax/T %f\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope, Tmax_per_T);
 
    if (r.ApproxMethods & AM_J1)
    {

@@ -69,7 +69,7 @@ CSVTToolDoc::CSVTToolDoc() : CBEToolboxDoc()
    m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Colorado"), std::make_unique<CCDOTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Florida"), std::make_unique<CFloridaBeamFactory>()));
-   m_BeamFactories.push_back(std::make_pair(_T("Illinios"), std::make_unique<CILBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Illinois"), std::make_unique<CILBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Minnesota"), std::make_unique<CMNBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Nebraska"), std::make_unique<CNUBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("New England"), std::make_unique<CNEBeamFactory>()));
@@ -206,7 +206,7 @@ CString CSVTToolDoc::GetDocumentationSetName()
 
 CString CSVTToolDoc::GetDocumentationURL()
 {
-   // Return the URL for documation for the application
+   // Return the URL for documentation for the application
    // Called by GetDocumenentLocation to form the complete
    // documentation URL. The typical format for documentation URLs is:
    // For an Online source
@@ -334,6 +334,7 @@ const Results2& CSVTToolDoc::GetTorsionalConstant() const
    m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape, m_Dmax, m_Dmax);
    m_Results.J = m_Results.solution.GetJ();
    m_Results.solution.GetMaxSlope(&m_Results.MaxSlope, &m_Results.MaxSlopeElementIdx);
+   m_Results.Tmax_per_T = m_Results.solution.GetTmaxPerUnitTorque();
    m_Results.nElements = m_Results.solution.GetFiniteDifferenceMesh()->GetElementCount();
    m_Results.nInteriorNodes = m_Results.solution.GetFiniteDifferenceMesh()->GetInteriorNodeCount();
    m_Results.ApproxArea = m_Results.solution.GetFiniteDifferenceMesh()->GetMeshArea();

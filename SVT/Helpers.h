@@ -85,6 +85,7 @@ using Results2 = struct
    Float64 J;
    Float64 MaxSlope;
    IndexType MaxSlopeElementIdx;
+   Float64 Tmax_per_T;
    int ApproxMethods;
    Float64 Japprox1;
    Float64 Japprox2;
