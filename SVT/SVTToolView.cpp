@@ -275,6 +275,12 @@ void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
          shape_draw_strategy->SetSolidLineStyle(lsNull);
          shape_draw_strategy->DoFill(true);
          shape_draw_strategy->SetSolidFillColor(RGB(255 * std::get<0>(color), 255 * std::get<1>(color), 255 * std::get<2>(color)));
+
+         if (elementIdx == results.MaxSlopeElementIdx)
+         {
+            shape_draw_strategy->SetSolidFillColor(WHITE);
+         }
+
          compound_strategy->AddStrategy(shape_draw_strategy);
       } // next mesh element
    } // if results computed

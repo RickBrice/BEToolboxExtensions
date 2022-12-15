@@ -292,7 +292,7 @@ void CSVTToolChildFrame::OnCompute()
    J = WBFL::Units::ConvertFromSysUnits(J, WBFL::Units::Measure::Inch4);
 
    CString str;
-   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\n"), A, Yt, Yb, Ix, Iy, J);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope);
 
    if (r.ApproxMethods & AM_J1)
    {

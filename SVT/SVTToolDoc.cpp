@@ -333,6 +333,7 @@ const Results2& CSVTToolDoc::GetTorsionalConstant() const
 
    m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape, m_Dmax, m_Dmax);
    m_Results.J = m_Results.solution.GetJ();
+   m_Results.solution.GetMaxSlope(&m_Results.MaxSlope, &m_Results.MaxSlopeElementIdx);
    m_Results.nElements = m_Results.solution.GetFiniteDifferenceMesh()->GetElementCount();
    m_Results.nInteriorNodes = m_Results.solution.GetFiniteDifferenceMesh()->GetInteriorNodeCount();
    m_Results.ApproxArea = m_Results.solution.GetFiniteDifferenceMesh()->GetMeshArea();
