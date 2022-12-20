@@ -414,8 +414,6 @@ std::vector<WBFL::Geometry::Rectangle> CSVTToolDoc::GetMesh() const
 
    const Results2& results = GetTorsionalConstant();
    auto& mesh = results.solution.GetFiniteDifferenceMesh();
-   Float64 dx, dy;
-   mesh->GetElementSize(&dx, &dy);
 
    std::vector<WBFL::Geometry::Rectangle> mesh_shapes;
    mesh_shapes.reserve(mesh->GetElementCount());
@@ -423,16 +421,13 @@ std::vector<WBFL::Geometry::Rectangle> CSVTToolDoc::GetMesh() const
    auto nRows = mesh->GetElementRowCount();
    for (auto row = 0; row < nRows; row++)
    {
-      Float64 cy = tly - row * dy - dy / 2;
-
       IndexType gridStartIdx, firstElementIdx, lastElementIdx;
       mesh->GetElementRange(row, &gridStartIdx, &firstElementIdx, &lastElementIdx);
-      Float64 x = gridStartIdx * dx;
       for (auto elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
       {
-         Float64 cx = tlx + (gridStartIdx + elementIdx - firstElementIdx) * dx + dx / 2;
-
-         mesh_shapes.emplace_back(WBFL::Geometry::Point2d(cx, cy), dx, dy);
+         auto shape = results.solution.GetMeshElement(elementIdx);
+         shape.GetHookPoint()->Offset(tlx, tly);
+         mesh_shapes.emplace_back(shape);
       }
    }
 

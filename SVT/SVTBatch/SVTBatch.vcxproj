@@ -109,9 +109,6 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\AASHTOBeamFactory.h" />
     <ClInclude Include="..\AbstractBeamFactory.h" />
     <ClInclude Include="..\CDOTBeamFactory.h" />

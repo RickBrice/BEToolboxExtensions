@@ -358,21 +358,10 @@ void SingleBeam(T type)
    _tprintf(_T(",%zd,%lld\n"), results.nInteriorNodes, duration.count());
    //_tprintf(_T(",%zd\n"), results.nInteriorNodes);
 
-   //_tprintf(_T("Mesh Elements (Node order = Bottom Left, Bottom Right, Top Right, Top Left)\n"));
-   //_tprintf(_T("Element, Node 1, Node 2, Node 3, Node 4\n"));
+   // Report shear stresses around the perimeter of the shape.
+   // Report the outer 2 mesh elements on all sides.
    const auto& mesh = results.solution.GetFiniteDifferenceMesh();
    const auto& meshValues = results.solution.GetFiniteDifferenceSolution();
-   //IndexType nElements = mesh->GetElementCount();
-   //for (IndexType elementIdx = 0; elementIdx < nElements; elementIdx++)
-   //{
-   //   const auto* pElement = mesh->GetElement(elementIdx);
-   //   _tprintf(_T("%lld,%lld,%lld,%lld,%lld\n"), elementIdx,
-   //      pElement->Node[+WBFL::EngTools::FDMeshElement::Corner::BottomLeft],
-   //      pElement->Node[+WBFL::EngTools::FDMeshElement::Corner::BottomRight], 
-   //      pElement->Node[+WBFL::EngTools::FDMeshElement::Corner::TopRight], 
-   //      pElement->Node[+WBFL::EngTools::FDMeshElement::Corner::TopLeft]
-   //   );
-   //}
 
    Float64 dx, dy;
    mesh->GetElementSize(&dx, &dy);
@@ -382,20 +371,29 @@ void SingleBeam(T type)
    Float64 J = results.solution.GetJ();
    Float64 J2 = J * 2;
 
+   _tprintf(_T("Row, Element, cx (in), cy (in), t.max/T (1/in3), d.x, d.y\n"));
    auto nRows = mesh->GetElementRowCount();
    for (IndexType rowIdx = 0; rowIdx < nRows; rowIdx++)
    {
-      _tprintf(_T("Row: %zd\n"), rowIdx);
       IndexType gridRowStartIdx, firstElementIdx, lastElementIdx;
       mesh->GetElementRange(rowIdx, &gridRowStartIdx, &firstElementIdx, &lastElementIdx);
+
+      if (1 < rowIdx && rowIdx < nRows - 2)
+      {
+         lastElementIdx = firstElementIdx + 2;
+      }
+
       for (IndexType elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
       {
          auto element_result = WBFL::EngTools::PrandtlMembraneSolver::GetElementVolumeAndMaxSlope(elementIdx, mesh, meshValues);
          Float64 max_slope = std::get<1>(element_result);
          Float64 tmax_per_T = max_slope / J2;
-         auto direction = std::get<2>(element_result);
+         const auto& direction = std::get<2>(element_result);
 
-         _tprintf(_T("Element: %zd,t.max/T = %f, (%f,%f)\n"),elementIdx,tmax_per_T,direction.X(),direction.Y());
+         auto rect = results.solution.GetMeshElement(elementIdx);
+         const auto& center = rect.GetHookPoint();
+
+         _tprintf(_T("%zd, %zd, %f, %f, %f, %f, %f\n"), rowIdx, elementIdx, center->X(), center->Y(), tmax_per_T, direction.X(), direction.Y());
       }
    }
 }
