@@ -282,8 +282,12 @@ void CSVTToolChildFrame::OnCompute()
    Yt = r.Props.GetYtop();
    Ix = r.Props.GetIxx();
    Iy = r.Props.GetIyy();
-   J = r.J;
-   Tmax_per_T = r.Tmax_per_T;
+
+   J = r.solution.GetJ();
+   Tmax_per_T = r.solution.GetTmaxPerUnitTorque();
+
+   auto element = r.solution.GetMeshElement(r.MaxSlopeElementIdx);
+   auto center = element.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::CenterCenter);
 
    A = WBFL::Units::ConvertFromSysUnits(A, WBFL::Units::Measure::Inch2);
    Yb = WBFL::Units::ConvertFromSysUnits(Yb, WBFL::Units::Measure::Inch);
@@ -291,6 +295,8 @@ void CSVTToolChildFrame::OnCompute()
    Ix = WBFL::Units::ConvertFromSysUnits(Ix, WBFL::Units::Measure::Inch4);
    Iy = WBFL::Units::ConvertFromSysUnits(Iy, WBFL::Units::Measure::Inch4);
    J = WBFL::Units::ConvertFromSysUnits(J, WBFL::Units::Measure::Inch4);
+   center.X() = WBFL::Units::ConvertFromSysUnits(center.X(), WBFL::Units::Measure::Inch);
+   center.Y() = WBFL::Units::ConvertFromSysUnits(center.Y(), WBFL::Units::Measure::Inch);
 
    // Tmax_per_T is max shear stress per unit torque.
    // The unit of measure is (Force/Length^2)(1/Force*Length) = 1/Length^3
@@ -299,7 +305,7 @@ void CSVTToolChildFrame::OnCompute()
    Tmax_per_T = 1 / WBFL::Units::ConvertFromSysUnits(1 / Tmax_per_T, WBFL::Units::Measure::Inch3);
 
    CString str;
-   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\nTmax/T %f\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope, Tmax_per_T);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\nTmax/T %f\n(%f, %f)\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope, Tmax_per_T, center.X(), center.Y());
 
    if (r.ApproxMethods & AM_J1)
    {

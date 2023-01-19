@@ -4,6 +4,7 @@
 #include "Helpers.h"
 
 static Float64 gs_WSDOTBeamDimensions[][14] = {
+   //C1,    D1,     D2,    D3,   D4, D5,  D6,  D7,  T1,  T2,   W1,   W2,    W3,   W4
    { 1,     3.5,     1.5,   0,   5,   2,   0,   30,   6,   6,   4.5,   0,     7,   0 }, // W42G
    { 1,       5,       2,   0,   6,   3,   0,   34,   6,   6,     7,   0,   9.5,   0 }, // W50G
    { 1,       5,       2,   0,   6,   3,   0,   42,   6,   6,   9.5,   0,   9.5,   0 }, // W58G
@@ -17,6 +18,7 @@ static Float64 gs_WSDOTBeamDimensions[][14] = {
    { 1,3,3,3,5.125,4.5,3,61.000,6.125,6.125,18.4375,3,13.125,3 }, // WF83G
    { 1,3,3,3,5.125,4.5,3,72.875,6.125,6.125,18.4375,3,13.125,3 }, // WF95G
    { 1,3,3,3,5.125,4.5,3,78.375,6.125,6.125,18.4375,3,13.125,3 }, // WF100G
+   { 1,3,3,3,5.125,4.5,3,78.375,6.125,6.125,0,0,13.125,3 }, // WF100G_NoTopFlange
 };
 
 static Float64 gs_WSDOTModifiedBeamDimensions[][15] = {
@@ -50,7 +52,7 @@ static Float64 gs_WSDOTUBeamDimensions[][13] =
 
 void WSDOTBeamFactory::CreateBeam(WSDOTBeamType type, IUnitConvert* pConvert, IShape** ppShape)
 {
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       CComPtr<IPrecastBeam> beam;
@@ -182,7 +184,7 @@ void WSDOTBeamFactory::CreateBeam(WSDOTBeamType type, IUnitConvert* pConvert, IS
 std::unique_ptr<WBFL::Geometry::Shape> WSDOTBeamFactory::CreateBeam(WSDOTBeamType type)
 {
    std::unique_ptr<WBFL::Geometry::Shape> beam;
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
 
@@ -308,6 +310,7 @@ static std::_tstring gs_WSDOTnames[] = {
    _T("WF83G"),
    _T("WF95G"),
    _T("WF100G"),
+   _T("WF100G_NoTopFlange"),
    _T("WF100G_modified"),
    _T("U54G4"),
    _T("U54G5"),
@@ -336,7 +339,7 @@ LPCTSTR WSDOTBeamFactory::GetName(WSDOTBeamType type)
 
 int WSDOTBeamFactory::GetApproxMethods(WSDOTBeamType type)
 {
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return AM_J1 | AM_J2;
@@ -356,7 +359,7 @@ int WSDOTBeamFactory::GetApproxMethods(WSDOTBeamType type)
 
 Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type,IUnitConvert* pConvert)
 {
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return ComputeJApprox_IBeam(i, pConvert, gs_WSDOTBeamDimensions);
@@ -376,7 +379,7 @@ Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type,IUnitConvert* pConvert)
 
 Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type)
 {
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return ComputeJApprox_IBeam(i, gs_WSDOTBeamDimensions);
@@ -396,7 +399,7 @@ Float64 WSDOTBeamFactory::GetJApprox1(WSDOTBeamType type)
 
 Float64 WSDOTBeamFactory::GetJApprox3(WSDOTBeamType type)
 {
-   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G)
+   if ((int)WSDOTBeamType::W42G <= (int)type && (int)type <= (int)WSDOTBeamType::WF100G_NoTopFlange)
    {
       int i = (int)type - (int)WSDOTBeamType::W42G;
       return ComputeJApprox3_IBeam(i, gs_WSDOTBeamDimensions);

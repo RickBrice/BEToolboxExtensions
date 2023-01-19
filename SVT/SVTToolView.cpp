@@ -52,6 +52,7 @@ CSVTToolView::~CSVTToolView()
 BEGIN_MESSAGE_MAP(CSVTToolView, CDisplayView)
    //ON_COMMAND(ID_FILE_PRINT_DIRECT,&CSVTToolView::OnFilePrint)
    ON_WM_SIZE()
+   ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CSVTToolView diagnostics
@@ -317,4 +318,14 @@ void CSVTToolView::OnSize(UINT nType, int cx, int cy)
 void CSVTToolView::OnDraw(CDC* pDC)
 {
    __super::OnDraw(pDC);
+}
+
+
+void CSVTToolView::OnRButtonDown(UINT nFlags, CPoint point)
+{
+   // TODO: Add your message handler code here and/or call default
+
+   CDisplayView::OnRButtonDown(nFlags, point);
+
+   DoZoom();
 }

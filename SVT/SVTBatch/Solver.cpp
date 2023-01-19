@@ -42,7 +42,7 @@
 
 #include <future>
 
-constexpr Float64 D_MIN = 0.125; // inch
+constexpr Float64 D_MIN = 0.125/2; // inch
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -371,29 +371,52 @@ void SingleBeam(T type)
    Float64 J = results.solution.GetJ();
    Float64 J2 = J * 2;
 
-   _tprintf(_T("Row, Element, cx (in), cy (in), t.max/T (1/in3), d.x, d.y\n"));
+   _tprintf(_T(" , , ,             Bottom Left, , ,         Bottom Right, , ,        Top Right, , ,           Top Left, , , , , \n"));
+   _tprintf(_T("Row, Col, Element, x (in), y (in), z (in2), x (in), y (in), z (in2), x (in), y (in), z (in2), x (in), y (in), z (in2), t.max/T (1/in3), d.x, d.y\n"));
    auto nRows = mesh->GetElementRowCount();
    for (IndexType rowIdx = 0; rowIdx < nRows; rowIdx++)
    {
       IndexType gridRowStartIdx, firstElementIdx, lastElementIdx;
       mesh->GetElementRange(rowIdx, &gridRowStartIdx, &firstElementIdx, &lastElementIdx);
 
-      if (1 < rowIdx && rowIdx < nRows - 2)
-      {
-         lastElementIdx = firstElementIdx + 2;
-      }
+      // the max shear stress is going to be on the perimeter of the section.
+      // limit the number of elements reported in a row to just the first few
+      // except for the top 2 and bottom 2 rows.
+      //if (1 < rowIdx && rowIdx < nRows - 2)
+      //{
+      //   lastElementIdx = Min(firstElementIdx + 4,lastElementIdx);
+      //}
 
       for (IndexType elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
       {
+         IndexType gridRowIdx, colIdx;
+         mesh->GetElementPosition(elementIdx, &gridRowIdx, &colIdx);
+         ATLASSERT(rowIdx == gridRowIdx);
+
+         auto element_shape = results.solution.GetMeshElement(elementIdx);
+
+         auto tl = mesh->GetElement(elementIdx)->Node[+WBFL::EngTools::FDMeshElement::Corner::TopLeft];
+         auto tr = mesh->GetElement(elementIdx)->Node[+WBFL::EngTools::FDMeshElement::Corner::TopRight];
+         auto bl = mesh->GetElement(elementIdx)->Node[+WBFL::EngTools::FDMeshElement::Corner::BottomLeft];
+         auto br = mesh->GetElement(elementIdx)->Node[+WBFL::EngTools::FDMeshElement::Corner::BottomRight];
+
+         auto tl_z = tl == INVALID_INDEX ? 0 : meshValues[tl];
+         auto tr_z = tr == INVALID_INDEX ? 0 : meshValues[tr];
+         auto bl_z = bl == INVALID_INDEX ? 0 : meshValues[bl];
+         auto br_z = br == INVALID_INDEX ? 0 : meshValues[br];
+
+         auto pntTL = element_shape.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopLeft);
+         auto pntTR = element_shape.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopRight);
+         auto pntBL = element_shape.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomLeft);
+         auto pntBR = element_shape.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomRight);
+
+
          auto element_result = WBFL::EngTools::PrandtlMembraneSolver::GetElementVolumeAndMaxSlope(elementIdx, mesh, meshValues);
          Float64 max_slope = std::get<1>(element_result);
          Float64 tmax_per_T = max_slope / J2;
          const auto& direction = std::get<2>(element_result);
 
-         auto rect = results.solution.GetMeshElement(elementIdx);
-         const auto& center = rect.GetHookPoint();
-
-         _tprintf(_T("%zd, %zd, %f, %f, %f, %f, %f\n"), rowIdx, elementIdx, center->X(), center->Y(), tmax_per_T, direction.X(), direction.Y());
+         _tprintf(_T("%zd, %zd, %zd, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n"), rowIdx, colIdx, elementIdx, pntBL.X(), pntBL.Y(), bl_z, pntBR.X(), pntBR.Y(), br_z, pntTR.X(), pntTR.Y(), tr_z, pntTL.X(), pntTL.Y(), tl_z, tmax_per_T, direction.X(), direction.Y());
       }
    }
 }
@@ -481,6 +504,7 @@ long main()
    //Beams2<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
 
    SingleBeam<WSDOTBeamType, WSDOTBeamFactory>(WSDOTBeamType::WF100G);
+   //SingleBeam<WSDOTBeamType, WSDOTBeamFactory>(WSDOTBeamType::WF100G_NoTopFlange);
 
    // Lists values for WSDOT BDM girder properties table
    //BDMTable<WSDOTBeamType, WSDOTBeamFactory>(_T("Washington"));
