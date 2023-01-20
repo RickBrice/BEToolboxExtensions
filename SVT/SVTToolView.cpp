@@ -229,13 +229,17 @@ void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
    shape_draw_strategy->SetSolidLineColor(BLUE);
    compound_strategy->AddStrategy(shape_draw_strategy);
 
+   WBFL::Geometry::Line2d y_axis(0.0, WBFL::Geometry::Vector2d(-1.0, 0.0));
+
    // the finite difference grid
    auto vMesh = pDoc->GetMesh();
    for (auto& mesh_element : vMesh)
    {
       CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
       shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
-      shape_draw_strategy->SetShape(mesh_element.CreateClone());
+      auto element_shape = mesh_element.CreateClone();
+      element_shape->Reflect(y_axis);
+      shape_draw_strategy->SetShape(std::move(element_shape));
       compound_strategy->AddStrategy(shape_draw_strategy);
    }
 
@@ -256,7 +260,8 @@ void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
       for (IndexType elementIdx = 0; elementIdx < nElements; elementIdx++)
       {
-         vMesh[elementIdx].GetHookPoint()->X() = -vMesh[elementIdx].GetHookPoint()->X();
+         // Mirror shape about X = 0 (Y-axis)
+         //vMesh[elementIdx].GetHookPoint()->X() = -vMesh[elementIdx].GetHookPoint()->X();
 
          const auto* pElement = pFDMesh->GetElement(elementIdx);
          Float64 value = 0;

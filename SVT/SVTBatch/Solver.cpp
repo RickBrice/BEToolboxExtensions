@@ -42,7 +42,7 @@
 
 #include <future>
 
-constexpr Float64 D_MIN = 0.125/2; // inch
+constexpr Float64 D_MIN = 1./32.; // inch
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
