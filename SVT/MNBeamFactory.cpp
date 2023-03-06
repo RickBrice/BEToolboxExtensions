@@ -20,6 +20,7 @@ static Float64 gs_MNNUBeamDimensions[][13] = {
    { 3.8125, 1.6875,    44.5,    5.5, 7.5,  8,  8,    0, 2, 6.5, 34, 30, 0.75 }, // MN63
    {    3.5, 2.5625, 62.8125,  7.625, 5.5,  8,  8, 0.75, 2, 6.5, 34, 30, 0.75 }, // 82MW
    {    3.5, 2.5625, 76.8125,  7.625, 5.5,  8,  8, 0.75, 2, 6.5, 34, 30, 0.75 }, // 96MW
+   {4.426136, 1.073864,    35.5,    5.5, 7.5,  8,  8,    0, 2, 3.5, 21, 27, 0 }, // MN54 - FHWA UHPC
 };
 
 void MNBeamFactory::CreateBeam(MNBeamType type, IUnitConvert* pConvert, IShape** ppShape)
@@ -195,6 +196,7 @@ static std::_tstring gs_MNnames[] = {
    _T("MN63"),
    _T("MW82"),
    _T("MW96"),
+   _T("MN54-UHPC")
 };
 
 LPCTSTR MNBeamFactory::GetName(MNBeamType type)

@@ -6,7 +6,7 @@
 enum class MNBeamType
 {
    M27, M36, // regular I-Beams
-   MH30, MH35, MH40, MN45, MN54, MN63, MW82, MW96, // NU Beams
+   MH30, MH35, MH40, MN45, MN54, MN63, MW82, MW96, MN54Modified, // NU Beams
    nSections
 };
 

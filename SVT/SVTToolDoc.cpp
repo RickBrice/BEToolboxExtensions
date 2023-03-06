@@ -49,6 +49,7 @@
 #include "TxDOTBeamFactory.h"
 #include "VirginiaBeamFactory.h"
 #include "WSDOTBeamFactory.h"
+#include "PCIUHPCBeamFactory.h"
 
 #include <EngTools/PrandtlMembraneSolver.h>
 
@@ -79,6 +80,7 @@ CSVTToolDoc::CSVTToolDoc() : CBEToolboxDoc()
    m_BeamFactories.push_back(std::make_pair(_T("Texas"), std::make_unique<CTxDOTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Virginia"), std::make_unique<CVirginiaBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Washington"), std::make_unique<CWSDOTBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("PCI"), std::make_unique<CPCIUHPCBeamFactory>()));
 
    EnableUIHints(FALSE); // not using UIHints feature
 

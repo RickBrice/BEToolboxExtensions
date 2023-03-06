@@ -206,6 +206,7 @@
     <ClCompile Include="SVT\NUBeamFactory.cpp" />
     <ClCompile Include="SVT\OhioBeamFactory.cpp" />
     <ClCompile Include="SVT\OregonBeamFactory.cpp" />
+    <ClCompile Include="SVT\PCIUHPCBeamFactory.cpp" />
     <ClCompile Include="SVT\SVTDlgBar.cpp" />
     <ClCompile Include="SVT\SVTToolChildFrame.cpp" />
     <ClCompile Include="SVT\SVTToolDoc.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="SVT\NUBeamFactory.h" />
     <ClInclude Include="SVT\OhioBeamFactory.h" />
     <ClInclude Include="SVT\OregonBeamFactory.h" />
+    <ClInclude Include="SVT\PCIUHPCBeamFactory.h" />
     <ClInclude Include="SVT\SVT.h" />
     <ClInclude Include="SVT\SVTDlgBar.h" />
     <ClInclude Include="SVT\SVTTools.h" />

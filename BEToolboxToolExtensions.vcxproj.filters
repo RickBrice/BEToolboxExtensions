@@ -235,6 +235,9 @@
     <ClCompile Include="RCCapacity\GirderDimensionsDlg.cpp">
       <Filter>RCCapacity\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVT\PCIUHPCBeamFactory.cpp">
+      <Filter>SVT\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -443,6 +446,9 @@
     </ClInclude>
     <ClInclude Include="RCCapacity\GirderDimensionsDlg.h">
       <Filter>RCCapacity\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVT\PCIUHPCBeamFactory.h">
+      <Filter>SVT\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
