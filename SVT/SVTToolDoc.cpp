@@ -412,7 +412,7 @@ std::vector<WBFL::Geometry::Rectangle> CSVTToolDoc::GetMesh() const
 {
    auto bbox = m_Shape->GetBoundingBox();
    Float64 tlx, tly;
-   bbox.TopLeft().GetLocation(&tlx, &tly);
+   std::tie(tlx,tly) = bbox.TopLeft().GetLocation();
 
    const Results2& results = GetTorsionalConstant();
    auto& mesh = results.solution.GetFiniteDifferenceMesh();

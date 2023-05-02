@@ -416,7 +416,7 @@ void CSVTToolView3D::BuildMembrane()
             const auto& pnt = points[i];
 
             Float64 x, y;
-            pnt.GetLocation(&x, &y);
+            std::tie(x,y) = pnt.GetLocation();
 
             Float64 z = pElement->Node[i] == INVALID_INDEX ? 0 : pNodeValues[pElement->Node[i]];
             avg_value += z;
@@ -482,7 +482,7 @@ SoGroup* CSVTToolView3D::BuildFacet(const std::vector<WBFL::Geometry::Point2d>& 
    for (IndexType i = 0; i < nPoints; i++)
    {
       Float64 x, y;
-      points[i].GetLocation(&x, &y);
+      std::tie(x,y) = points[i].GetLocation();
       pVerticies[i].setValue((float)x, (float)y, 0.0);
    }
 
