@@ -193,7 +193,8 @@ CString CSVTToolDoc::GetDocumentationRootLocation()
    // clearly a dummy URL, but you get the idea... this is the
    // URL where your documentation is located
    // be sure to include the last '/'
-   return _T("http://www.somewhere.com/Documentation/");
+   //return _T("http://www.somewhere.com/Documentation/");
+   return _T("");
 
    //CEAFApp* pApp = EAFGetApp();
    //return pApp->GetDocumentationRootLocation();
