@@ -171,7 +171,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
 
    WBFL::Units::MomentTool momentTool(pDispUnits->SmallMoment);
    WBFL::Units::CurvatureTool  curvatureTool(pDispUnits->Curvature);
-   WBFL::Graphing::GraphXY graph(curvatureTool,momentTool);
+   WBFL::Graphing::GraphXY graph(&curvatureTool,&momentTool);
 
    graph.SetOutputRect(rect);
    graph.SetClientAreaColor(GRAPH_BACKGROUND);

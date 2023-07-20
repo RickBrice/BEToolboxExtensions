@@ -51,7 +51,7 @@ CM3CProblemParameters::CM3CProblemParameters()
    Unbonded_Rebar_nBars = 0;
    Unbonded_Rebar_Lu = WBFL::Units::ConvertToSysUnits(5.0, WBFL::Units::Measure::Feet);
 
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
    pStrand = pPool->GetStrand(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation, WBFL::Materials::PsStrand::Coating::None, WBFL::Materials::PsStrand::Size::D1524);
    Tendon_Ring_Diameter = WBFL::Units::ConvertToSysUnits(12, WBFL::Units::Measure::Inch);
    Tendon_nStrands = 0;

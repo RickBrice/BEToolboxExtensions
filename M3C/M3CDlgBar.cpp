@@ -76,8 +76,8 @@ void CM3CDlgBar::FillStrandList()
 {
    CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_TENDON_TYPE);
 
-   lrfdStrandIter iter(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation);
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
+   WBFL::LRFD::StrandIter iter(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation);
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
    for (iter.Begin(); iter; iter.Next())
    {
       const auto* pStrand = iter.GetCurrentStrand();
@@ -132,7 +132,7 @@ void CM3CDlgBar::DoDataExchange(CDataExchange* pDX)
    DDX_UnitValueAndTag(pDX, IDC_UNBONDED_BAR_LU, IDC_UNBONDED_BAR_LU_UNIT, m_ProblemParams.Unbonded_Rebar_Lu, pDispUnits->XSectionDim);
 
    // Unbonded Tendons
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
    auto strandKey = pPool->GetStrandKey(m_ProblemParams.pStrand);
    DDX_CBItemData(pDX, IDC_TENDON_TYPE, strandKey);
    if (pDX->m_bSaveAndValidate)

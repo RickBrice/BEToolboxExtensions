@@ -87,9 +87,9 @@ void CM3CGraphView::OnDraw(CDC* pDC)
    CEAFApp* pApp = EAFGetApp();
    const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   std::unique_ptr<WBFL::Units::PhysicalConverter> pStrainFormat = std::make_unique<WBFL::Units::ScalarTool>(m_Scalar);
-   std::unique_ptr<WBFL::Units::PhysicalConverter> pStressFormat = std::make_unique<WBFL::Units::StressTool>(pDispUnits->Stress);
-   WBFL::Graphing::GraphXY graph(*pStrainFormat, *pStressFormat);
+   WBFL::Units::ScalarTool strain_format(m_Scalar);
+   WBFL::Units::StressTool stress_format(pDispUnits->Stress);
+   WBFL::Graphing::GraphXY graph(&strain_format,&stress_format);
 
    graph.SetTitle(GetGraphTitle());
    graph.SetSubtitle(GetGraphSubtitle());

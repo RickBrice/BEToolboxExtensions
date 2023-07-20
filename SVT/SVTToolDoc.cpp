@@ -334,7 +334,7 @@ const Results2& CSVTToolDoc::GetTorsionalConstant() const
    if (m_bComputed)
       return m_Results;
 
-   m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape, m_Dmax, m_Dmax);
+   m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape.get(), m_Dmax, m_Dmax);
    m_Results.J = m_Results.solution.GetJ();
    m_Results.solution.GetMaxSlope(&m_Results.MaxSlope, &m_Results.MaxSlopeElementIdx);
    m_Results.Tmax_per_T = m_Results.solution.GetTmaxPerUnitTorque();

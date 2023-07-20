@@ -143,9 +143,9 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    RowIndexType row = pTable->GetNumberOfHeaderRows();
    Float64 sum_force = 0;
    Float64 sum_moment = 0;
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -273,12 +273,12 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
 {
    CComPtr<IGeneralSectionSolution> general_solution;
    pSolution->get_GeneralSectionSolution(&general_solution);
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
 
    // determine the bounding box
    CComPtr<IRect2d> bbox;
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -359,7 +359,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    std::vector<std::pair<CComPtr<IGeneralSectionSlice>, int>> vPieces;
    vPieces.reserve(nSlices);
 
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -531,7 +531,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);
 
-   CollectionIndexType nPoints;
+   IndexType nPoints;
    objPoints->get_Count(&nPoints);
 
    if (nPoints < 3)
@@ -556,7 +556,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL
    else
    {
       CPoint* points = new CPoint[nPoints];
-      for (CollectionIndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
+      for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
          CComPtr<IPoint2d> point;
          objPoints->get_Item(pntIdx, &point);

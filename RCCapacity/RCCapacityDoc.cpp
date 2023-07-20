@@ -806,7 +806,7 @@ void CRCCapacityDoc::Update()
    // rebar
    CComPtr<IRebarModel> rebar;
    rebar.CoCreateInstance(CLSID_RebarModel);
-   const auto* pRebar = lrfdRebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, WBFL::Materials::Rebar::Size::bs3); // use any size, we just want the material properties
+   const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, WBFL::Materials::Rebar::Size::bs3); // use any size, we just want the material properties
    Float64 fy = pRebar->GetYieldStrength();
    Float64 Es = pRebar->GetE();
    Float64 e = pRebar->GetElongation();
@@ -884,7 +884,7 @@ void CRCCapacityDoc::Update()
    int i = 1;
    for (const auto& rebar_data : m_ModelData.Rebar)
    {
-      const auto* pRebar = lrfdRebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, rebar_data.size);
+      const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, rebar_data.size);
       Float64 area = pRebar->GetNominalArea();
       area *= rebar_data.nBars;
       CComPtr<IGenericShape> bar_shape;
@@ -961,7 +961,7 @@ void CRCCapacityDoc::Update()
    {
       // get the nominal strand area - it doesn't matter what the grade and production type are, we just want the nominal area
       WBFL::Materials::PsStrand::Size strand_size = strandSizeMap.find(m_ModelData.StrandSize)->second;
-      const auto* pStrand = lrfdStrandPool::GetInstance()->GetStrand(
+      const auto* pStrand = WBFL::LRFD::StrandPool::GetInstance()->GetStrand(
          WBFL::Materials::PsStrand::Grade::Gr1860, 
          WBFL::Materials::PsStrand::Type::LowRelaxation, 
          WBFL::Materials::PsStrand::Coating::None, 

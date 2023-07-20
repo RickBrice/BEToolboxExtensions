@@ -190,9 +190,9 @@ rptChapter* CRCCapacityChapterBuilder::Build(const std::shared_ptr<const WBFL::R
    Float64 sum_force = 0;
    Float64 sum_moment = 0;
 #endif
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -363,12 +363,12 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
 {
    CComPtr<IGeneralSectionSolution> general_solution;
    pSolution->get_GeneralSectionSolution(&general_solution);
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
 
    // determine the bounding box
    CComPtr<IRect2d> bbox;
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -445,12 +445,12 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
 
    pOldPen = pDC->SelectObject(&girderPen);
 
-   std::vector<CollectionIndexType> voidIndices;        // contains slice index for void slices
-   std::vector<CollectionIndexType> neutralIndices;     // contains slice index for neutral slices
-   std::vector<CollectionIndexType> tensionIndices;     // contains slice index for tension slices
-   std::vector<CollectionIndexType> compressionIndices; // contains slice index for compression slices
+   std::vector<IndexType> voidIndices;        // contains slice index for void slices
+   std::vector<IndexType> neutralIndices;     // contains slice index for neutral slices
+   std::vector<IndexType> tensionIndices;     // contains slice index for tension slices
+   std::vector<IndexType> compressionIndices; // contains slice index for compression slices
 
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -487,12 +487,12 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
       }
    }
 
-   std::vector<CollectionIndexType>::iterator iter;
+   std::vector<IndexType>::iterator iter;
    // draw neutral slices first
    pOldBrush = pDC->SelectObject(&girderBrush);
    for (iter = neutralIndices.begin(); iter != neutralIndices.end(); iter++)
    {
-      CollectionIndexType sliceIdx = *iter;
+      IndexType sliceIdx = *iter;
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
 
@@ -506,7 +506,7 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
    pDC->SelectObject(&compressionBrush);
    for (iter = compressionIndices.begin(); iter != compressionIndices.end(); iter++)
    {
-      CollectionIndexType sliceIdx = *iter;
+      IndexType sliceIdx = *iter;
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
 
@@ -520,7 +520,7 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
    pDC->SelectObject(&voidBrush);
    for (iter = voidIndices.begin(); iter != voidIndices.end(); iter++)
    {
-      CollectionIndexType sliceIdx = *iter;
+      IndexType sliceIdx = *iter;
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
 
@@ -536,7 +536,7 @@ void CRCCapacityChapterBuilder::DrawSection(CImage& image, IMomentCapacitySoluti
    pDC->SelectObject(&tensionPen);
    for (iter = tensionIndices.begin(); iter != tensionIndices.end(); iter++)
    {
-      CollectionIndexType sliceIdx = *iter;
+      IndexType sliceIdx = *iter;
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
 
@@ -663,7 +663,7 @@ void CRCCapacityChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphi
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);
 
-   CollectionIndexType nPoints;
+   IndexType nPoints;
    objPoints->get_Count(&nPoints);
    if (nPoints < 3)
    {
@@ -687,7 +687,7 @@ void CRCCapacityChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphi
    else
    {
       CPoint* points = new CPoint[nPoints];
-      for (CollectionIndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
+      for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
          CComPtr<IPoint2d> point;
          objPoints->get_Item(pntIdx, &point);

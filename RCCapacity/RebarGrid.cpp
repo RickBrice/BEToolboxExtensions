@@ -169,7 +169,7 @@ void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
    CString strValue;
    Float64 value;
    strValue = GetCellValue(row,col++);
-   rebar.size = lrfdRebarPool::GetBarSize(strValue);
+   rebar.size = WBFL::LRFD::RebarPool::GetBarSize(strValue);
 
    strValue = GetCellValue(row, col++);
    long iValue;
@@ -221,7 +221,7 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
    WBFL::Materials::Rebar::Type type;
    WBFL::Materials::Rebar::Grade grade;
    pParent->GetRebarType(type, grade);
-   lrfdRebarIter rebarIter(type, grade);
+   WBFL::LRFD::RebarIter rebarIter(type, grade);
    for (rebarIter.Begin(); rebarIter; rebarIter.Next())
    {
       const auto* pRebar = rebarIter.GetCurrentRebar();
@@ -235,7 +235,7 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
       .SetControl(GX_IDS_CTRL_CBS_DROPDOWNLIST)
       .SetChoiceList(strBarSizeChoiceList)
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(lrfdRebarPool::GetBarSize(rebar.size).c_str())
+      .SetValue(WBFL::LRFD::RebarPool::GetBarSize(rebar.size).c_str())
    );
 
    SetStyleRange(CGXRange(nRow,col++), CGXStyle()

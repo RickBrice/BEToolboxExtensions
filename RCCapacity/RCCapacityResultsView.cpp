@@ -123,12 +123,12 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CEAFApp* pApp = EAFGetApp();
    const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
 
    // determine the bounding box
    CComPtr<IRect2d> bbox;
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -220,7 +220,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    std::vector<std::pair<CComPtr<IGeneralSectionSlice>, int>> vPieces;
    vPieces.reserve(nSlices);
 
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -532,7 +532,7 @@ void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing:
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);
 
-   CollectionIndexType nPoints;
+   IndexType nPoints;
    objPoints->get_Count(&nPoints);
 
    if (nPoints < 3)
@@ -559,7 +559,7 @@ void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing:
    else
    {
       CPoint* points = new CPoint[nPoints];
-      for (CollectionIndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
+      for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
          CComPtr<IPoint2d> point;
          objPoints->get_Item(pntIdx, &point);
