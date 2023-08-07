@@ -34,7 +34,7 @@ CRCCapacityReportSpecificationBuilder::~CRCCapacityReportSpecificationBuilder(vo
 
 }
 
-std::shared_ptr<WBFL::Reporting::ReportSpecification> CRCCapacityReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification>& pOldRptSpec) const
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CRCCapacityReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification> pOldRptSpec) const
 {
    return CreateDefaultReportSpec(rptDesc);
 }

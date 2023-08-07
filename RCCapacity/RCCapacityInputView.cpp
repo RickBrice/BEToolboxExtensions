@@ -221,7 +221,7 @@ void CRCCapacityInputView::FillTypeList()
       LPCTSTR name = pDoc->GetTypeName(typeIdx);
       pCB->AddString(name);
    }
-   pCB->SetCurSel(m_ModelData.typeIdx);
+   pCB->SetCurSel((int)m_ModelData.typeIdx);
 }
 
 void CRCCapacityInputView::FillStrandSizeList()
@@ -262,7 +262,7 @@ void CRCCapacityInputView::UpdateGirderList()
       LPCTSTR beam = pDoc->GetBeamName(typeIdx, beamIdx);
       pcbGirders->AddString(beam);
    }
-   pcbGirders->SetCurSel(m_ModelData.beamIdx);
+   pcbGirders->SetCurSel((int)m_ModelData.beamIdx);
 }
 
 void CRCCapacityInputView::GetGirder(IndexType& typeIdx, IndexType& beamIdx)

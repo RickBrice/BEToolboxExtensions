@@ -34,7 +34,7 @@ CM3CAnalysisDetailsReportSpecificationBuilder::~CM3CAnalysisDetailsReportSpecifi
 
 }
 
-std::shared_ptr<WBFL::Reporting::ReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification>& pOldRptSpec) const
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification> pOldRptSpec) const
 {
    return CreateDefaultReportSpec(rptDesc);
 }

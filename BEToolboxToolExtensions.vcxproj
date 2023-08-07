@@ -65,6 +65,9 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -110,6 +113,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
