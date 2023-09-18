@@ -336,7 +336,7 @@ const Results2& CSVTToolDoc::GetTorsionalConstant() const
 
    m_Results.solution = WBFL::EngTools::PrandtlMembraneSolver::Solve(m_Shape.get(), m_Dmax, m_Dmax);
    m_Results.J = m_Results.solution.GetJ();
-   m_Results.solution.GetMaxSlope(&m_Results.MaxSlope, &m_Results.MaxSlopeElementIdx);
+   std::tie(m_Results.MaxSlope,m_Results.MaxSlopeElementIdx) = m_Results.solution.GetMaxSlope();
    m_Results.Tmax_per_T = m_Results.solution.GetTmaxPerUnitTorque();
    m_Results.nElements = m_Results.solution.GetFiniteDifferenceMesh()->GetElementCount();
    m_Results.nInteriorNodes = m_Results.solution.GetFiniteDifferenceMesh()->GetInteriorNodeCount();
@@ -423,8 +423,7 @@ std::vector<WBFL::Geometry::Rectangle> CSVTToolDoc::GetMesh() const
    auto nRows = mesh->GetElementRowCount();
    for (auto row = 0; row < nRows; row++)
    {
-      IndexType gridStartIdx, firstElementIdx, lastElementIdx;
-      mesh->GetElementRange(row, &gridStartIdx, &firstElementIdx, &lastElementIdx);
+      auto [gridStartIdx, firstElementIdx, lastElementIdx] = mesh->GetElementRange(row);
       for (auto elementIdx = firstElementIdx; elementIdx <= lastElementIdx; elementIdx++)
       {
          auto shape = results.solution.GetMeshElement(elementIdx);
