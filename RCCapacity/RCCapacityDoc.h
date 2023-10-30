@@ -27,7 +27,7 @@
 #include <WBFLRCCapacity.h>
 #include "..\SVT\AbstractBeamFactory.h"
 
-#include <Material\Material.h>
+#include <Materials/Materials.h>
 #include <LRFD\Lrfd.h>
 #include <ReportManager\ReportManager.h>
 
@@ -50,7 +50,7 @@ typedef enum Measure
 
 struct RebarData
 {
-   matRebar::Size size;
+   WBFL::Materials::Rebar::Size size;
    IndexType nBars;
    Float64 spacing;
    Float64 location;
@@ -58,10 +58,10 @@ struct RebarData
 
    RebarData() 
    {
-      size = matRebar::bs3;
+      size = WBFL::Materials::Rebar::Size::bs3;
       nBars = 1;
-      spacing = ::ConvertToSysUnits(2.0,unitMeasure::Inch);
-      location = ::ConvertToSysUnits(2.0,unitMeasure::Inch);
+      spacing = WBFL::Units::ConvertToSysUnits(2.0,WBFL::Units::Measure::Inch);
+      location = WBFL::Units::ConvertToSysUnits(2.0,WBFL::Units::Measure::Inch);
       measure = BottomGirder;
    }
 };
@@ -77,8 +77,8 @@ struct StrandData
    StrandData()
    {
       nStrands = 1;
-      spacing = ::ConvertToSysUnits(2.0, unitMeasure::Inch);
-      location = ::ConvertToSysUnits(2.0, unitMeasure::Inch);
+      spacing = WBFL::Units::ConvertToSysUnits(2.0, WBFL::Units::Measure::Inch);
+      location = WBFL::Units::ConvertToSysUnits(2.0, WBFL::Units::Measure::Inch);
       measure = BottomGirder;
       fpe = 0.0;
    }
@@ -137,8 +137,8 @@ struct ModelData
    Float64 ftDeck;
    Float64 fbDeck;
 
-   matRebar::Type RebarType;
-   matRebar::Grade RebarGrade;
+   WBFL::Materials::Rebar::Type RebarType;
+   WBFL::Materials::Rebar::Grade RebarGrade;
    std::vector<RebarData> Rebar;
 
    StrandSize StrandSize;
@@ -154,25 +154,25 @@ struct ModelData
       beamIdx = 0;
       dimensions.fill(0.0);
       concreteType = Conventional;
-      fcBeam = ::ConvertToSysUnits(5.0, unitMeasure::KSI);
-      EcBeam = ::ConvertToSysUnits(2500 * pow(5.0, 0.33), unitMeasure::KSI);
+      fcBeam = WBFL::Units::ConvertToSysUnits(5.0, WBFL::Units::Measure::KSI);
+      EcBeam = WBFL::Units::ConvertToSysUnits(2500 * pow(5.0, 0.33), WBFL::Units::Measure::KSI);
       ecu = -0.0035;
-      ftcr = ::ConvertToSysUnits(1.2, unitMeasure::KSI);
-      ftloc = ::ConvertToSysUnits(1.2, unitMeasure::KSI);
+      ftcr = WBFL::Units::ConvertToSysUnits(1.2, WBFL::Units::Measure::KSI);
+      ftloc = WBFL::Units::ConvertToSysUnits(1.2, WBFL::Units::Measure::KSI);
       etloc = 0.0045;
       ftBeam = 0;
       fbBeam = 0;
 
       bHasDeck = TRUE;
-      DeckWidth = ::ConvertToSysUnits(72.0,unitMeasure::Inch);
-      DeckThickness = ::ConvertToSysUnits(8.0,unitMeasure::Inch);
-      fcDeck = ::ConvertToSysUnits(4.0, unitMeasure::KSI);
-      EcDeck = ::ConvertToSysUnits(2500 * pow(4.0, 0.33), unitMeasure::KSI);
+      DeckWidth = WBFL::Units::ConvertToSysUnits(72.0,WBFL::Units::Measure::Inch);
+      DeckThickness = WBFL::Units::ConvertToSysUnits(8.0,WBFL::Units::Measure::Inch);
+      fcDeck = WBFL::Units::ConvertToSysUnits(4.0, WBFL::Units::Measure::KSI);
+      EcDeck = WBFL::Units::ConvertToSysUnits(2500 * pow(4.0, 0.33), WBFL::Units::Measure::KSI);
       ftDeck = 0;
       fbDeck = 0;
 
-      RebarType = matRebar::A615;
-      RebarGrade = matRebar::Grade60;
+      RebarType = WBFL::Materials::Rebar::Type::A615;
+      RebarGrade = WBFL::Materials::Rebar::Grade::Grade60;
 
       StrandSize = Strand_060;
       StrandType = Grade270_LR;
@@ -180,8 +180,8 @@ struct ModelData
       A = 887 / Eps;
       B = 112.4;
       C = 7.36;
-      Eps = ::ConvertToSysUnits(Eps, unitMeasure::KSI);
-      fpu = ::ConvertToSysUnits(270.0, unitMeasure::KSI);
+      Eps = WBFL::Units::ConvertToSysUnits(Eps, WBFL::Units::Measure::KSI);
+      fpu = WBFL::Units::ConvertToSysUnits(270.0, WBFL::Units::Measure::KSI);
       esu = 0.035;
    }
 };
@@ -195,8 +195,6 @@ public:
 	virtual ~CRCCapacityDoc();
 
    virtual CString GetToolbarSectionName() override;
-
-   CReportBuilderManager& GetReportManager() { return m_RptMgr; }
 
    IndexType GetTypeCount() const;
    LPCTSTR GetTypeName(IndexType typeIdx) const;
@@ -285,8 +283,6 @@ private:
 
    CComPtr<IUnitServer> m_UnitServer;
    CComPtr<IUnitConvert> m_UnitConvert;
-
-   CReportBuilderManager m_RptMgr;
 
    void Update();
 

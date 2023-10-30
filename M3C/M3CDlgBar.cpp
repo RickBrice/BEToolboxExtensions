@@ -76,11 +76,11 @@ void CM3CDlgBar::FillStrandList()
 {
    CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_TENDON_TYPE);
 
-   lrfdStrandIter iter(matPsStrand::Gr1860, matPsStrand::LowRelaxation);
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
+   WBFL::LRFD::StrandIter iter(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation);
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
    for (iter.Begin(); iter; iter.Next())
    {
-      const matPsStrand* pStrand = iter.GetCurrentStrand();
+      const auto* pStrand = iter.GetCurrentStrand();
       int idx = pCB->AddString(pStrand->GetName().c_str());
 
       auto key = pPool->GetStrandKey(pStrand);
@@ -93,7 +93,7 @@ void CM3CDlgBar::DoDataExchange(CDataExchange* pDX)
    CDialogBar::DoDataExchange(pDX);
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    // Column Section
    DDX_UnitValueAndTag(pDX,IDC_DIAMETER,IDC_DIAMETER_UNIT,m_ProblemParams.D,pDispUnits->ComponentDim);
@@ -132,7 +132,7 @@ void CM3CDlgBar::DoDataExchange(CDataExchange* pDX)
    DDX_UnitValueAndTag(pDX, IDC_UNBONDED_BAR_LU, IDC_UNBONDED_BAR_LU_UNIT, m_ProblemParams.Unbonded_Rebar_Lu, pDispUnits->XSectionDim);
 
    // Unbonded Tendons
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
    auto strandKey = pPool->GetStrandKey(m_ProblemParams.pStrand);
    DDX_CBItemData(pDX, IDC_TENDON_TYPE, strandKey);
    if (pDX->m_bSaveAndValidate)

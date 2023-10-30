@@ -53,7 +53,7 @@ Uint16 CM3CMaterialDetailsChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CMaterialDetailsChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CMaterialDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    rptChapter* pChapter = new rptChapter;
    BuildConcreteModel(pChapter);
@@ -62,9 +62,9 @@ rptChapter* CM3CMaterialDetailsChapterBuilder::Build(CReportSpecification* pRptS
    return pChapter;
 }
 
-CChapterBuilder* CM3CMaterialDetailsChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CMaterialDetailsChapterBuilder::Clone() const
 {
-   return new CM3CMaterialDetailsChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CMaterialDetailsChapterBuilder>(m_pDoc);
 }
 
 void CM3CMaterialDetailsChapterBuilder::BuildConcreteModel(rptChapter* pChapter) const
@@ -82,7 +82,7 @@ void CM3CMaterialDetailsChapterBuilder::BuildConcreteModel(rptChapter* pChapter)
    (*pLayoutTable)(0,0) << rptRcImage(std::_tstring(rptStyleManager::GetImagePath()) + _T("MandersModel.png"));
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    INIT_UV_PROTOTYPE(rptStressUnitValue, stress, pDisplayUnits->Stress, true);
    INIT_UV_PROTOTYPE(rptStressUnitValue, mod_e, pDisplayUnits->ModE, true);
@@ -162,7 +162,7 @@ void CM3CMaterialDetailsChapterBuilder::BuildRebarModel(rptChapter* pChapter) co
    (*pLayoutTable)(0,0) << rptRcImage(std::_tstring(rptStyleManager::GetImagePath()) + _T("StrainHardenedRebarModel.png")) << rptNewLine;
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    INIT_UV_PROTOTYPE(rptStressUnitValue, stress, pDisplayUnits->Stress, true);
    INIT_UV_PROTOTYPE(rptStressUnitValue, mod_e, pDisplayUnits->ModE, true);
@@ -206,7 +206,7 @@ void CM3CMaterialDetailsChapterBuilder::BuildStrandModel(rptChapter* pChapter) c
    (*pLayoutTable)(0, 0) << rptRcImage(std::_tstring(rptStyleManager::GetImagePath()) + _T("PowerFormula.png")) << rptNewLine;
 
    //CEAFApp* pApp = EAFGetApp();
-   //const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   //const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    //INIT_UV_PROTOTYPE(rptStressUnitValue, stress, pDisplayUnits->Stress, true);
    //INIT_UV_PROTOTYPE(rptStressUnitValue, mod_e, pDisplayUnits->ModE, true);

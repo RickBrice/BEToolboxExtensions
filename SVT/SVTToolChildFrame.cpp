@@ -205,38 +205,53 @@ void CSVTToolChildFrame::OnSizeChanged()
    pDoc->UpdateAllViews(nullptr);
 }
 
+#if defined USE_COM_GEOMETRY
 void CSVTToolChildFrame::OnCompute()
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CWaitCursor cursor;
 
    CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
-   Results r = pDoc->GetTorsionalConstant();
-   Float64 A, Yt, Yb, Ix, Iy;
+   const Results& r = pDoc->GetTorsionalConstant();
+   Float64 A, Yt, Yb, Ix, Iy, J;
    r.Props->get_Area(&A);
    r.Props->get_Ytop(&Yt);
    r.Props->get_Ybottom(&Yb);
    r.Props->get_Ixx(&Ix);
    r.Props->get_Iyy(&Iy);
+   J = r.J;
+
+   auto& convert = pDoc->GetUnitConvert();
+
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(A, CComBSTR("in^2"), &A)));
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(Yt, CComBSTR("in"), &Yt)));
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(Yb, CComBSTR("in"), &Yb)));
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(Ix, CComBSTR("in^4"), &Ix)));
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(Iy, CComBSTR("in^4"), &Iy)));
+   VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(J, CComBSTR("in^4"), &J)));
 
    CString str;
-   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\n"), A, Yt, Yb, Ix, Iy, r.J);
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\n"), A, Yt, Yb, Ix, Iy, J);
 
    if (r.ApproxMethods & AM_J1)
    {
+      VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(r.Japprox1, CComBSTR("in^4"), &J)));
+
       CString s;
-      s.Format(_T("Japprox1 = %f\n"), r.Japprox1);
+      s.Format(_T("Japprox1 = %f\n"), J);
       str += s;
    }
    else
    {
       str += _T("Japprox1 = -\n");
    }
-   
+
    if (r.ApproxMethods & AM_J2)
    {
+      VERIFY(SUCCEEDED(convert->ConvertFromBaseUnits(r.Japprox2, CComBSTR("in^4"), &J)));
+
       CString s;
-      s.Format(_T("Japprox2 = %f\n"), r.Japprox2);
+      s.Format(_T("Japprox2 = %f\n"), J);
       str += s;
    }
    else
@@ -249,5 +264,78 @@ void CSVTToolChildFrame::OnCompute()
 
    str += s;
 
+   pDoc->UpdateAllViews(nullptr);
+
    AfxMessageBox(str);
 }
+#else
+void CSVTToolChildFrame::OnCompute()
+{
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());
+   CWaitCursor cursor;
+
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)EAFGetDocument();
+   const Results2& r = pDoc->GetTorsionalConstant();
+   Float64 A, Yt, Yb, Ix, Iy, J, Tmax_per_T;
+   A = r.Props.GetArea();
+   Yb = r.Props.GetYbottom();
+   Yt = r.Props.GetYtop();
+   Ix = r.Props.GetIxx();
+   Iy = r.Props.GetIyy();
+
+   J = r.solution.GetJ();
+   Tmax_per_T = r.solution.GetTmaxPerUnitTorque();
+
+   auto element = r.solution.GetMeshElement(r.MaxSlopeElementIdx);
+   auto center = element.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::CenterCenter);
+
+   A = WBFL::Units::ConvertFromSysUnits(A, WBFL::Units::Measure::Inch2);
+   Yb = WBFL::Units::ConvertFromSysUnits(Yb, WBFL::Units::Measure::Inch);
+   Yt = WBFL::Units::ConvertFromSysUnits(Yt, WBFL::Units::Measure::Inch);
+   Ix = WBFL::Units::ConvertFromSysUnits(Ix, WBFL::Units::Measure::Inch4);
+   Iy = WBFL::Units::ConvertFromSysUnits(Iy, WBFL::Units::Measure::Inch4);
+   J = WBFL::Units::ConvertFromSysUnits(J, WBFL::Units::Measure::Inch4);
+   center.X() = WBFL::Units::ConvertFromSysUnits(center.X(), WBFL::Units::Measure::Inch);
+   center.Y() = WBFL::Units::ConvertFromSysUnits(center.Y(), WBFL::Units::Measure::Inch);
+
+   // Tmax_per_T is max shear stress per unit torque.
+   // The unit of measure is (Force/Length^2)(1/Force*Length) = 1/Length^3
+   // There isn't a predefined 1/Length^3 unit type so invert Tmax_per_T to get Length^3 units
+   // do the unit conversion, then invert again
+   Tmax_per_T = 1 / WBFL::Units::ConvertFromSysUnits(1 / Tmax_per_T, WBFL::Units::Measure::Inch3);
+
+   CString str;
+   str.Format(_T("A = %f\nYt = %f\nYb = %f\nIx = %f\nIy = %f\nJ = %f\nMaxSlope = %f\nTmax/T %f\n(%f, %f)\n"), A, Yt, Yb, Ix, Iy, J, r.MaxSlope, Tmax_per_T, center.X(), center.Y());
+
+   if (r.ApproxMethods & AM_J1)
+   {
+      CString s;
+      s.Format(_T("Japprox1 = %f\n"), WBFL::Units::ConvertFromSysUnits(r.Japprox1,WBFL::Units::Measure::Inch4));
+      str += s;
+   }
+   else
+   {
+      str += _T("Japprox1 = -\n");
+   }
+
+   if (r.ApproxMethods & AM_J2)
+   {
+      CString s;
+      s.Format(_T("Japprox2 = %f\n"), WBFL::Units::ConvertFromSysUnits(r.Japprox2,WBFL::Units::Measure::Inch4));
+      str += s;
+   }
+   else
+   {
+      str += _T("Japprox2 = -\n");
+   }
+
+   CString s;
+   s.Format(_T("#Elements = %d\n#Points = %d"), r.nElements, r.nInteriorNodes);
+
+   str += s;
+
+   pDoc->UpdateAllViews(nullptr);
+
+   AfxMessageBox(str);
+}
+#endif

@@ -83,7 +83,6 @@ public:
    // over-ride default behavior by destroying column
    virtual void OnCloseDocument();
 
-   CReportBuilderManager m_RptMgr;
 protected:
    virtual UINT GetToolbarID() override;
    virtual void LoadToolbarResource() override;

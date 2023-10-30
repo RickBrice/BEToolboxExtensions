@@ -26,11 +26,11 @@
 #include "M3CGraphView.h"
 
 #include <EAF\EAFApp.h>
-#include <GraphicsLib\GraphicsLib.h>
 #include <algorithm>
 #include "M3CDoc.h"
 
 #include "BEToolboxColors.h"
+#include <Graphing/GraphXY.h>
 
 // CM3CView
 
@@ -42,7 +42,7 @@ CM3CGraphView::CM3CGraphView()
 
    m_Scalar.Width = 8;
    m_Scalar.Precision = 0;
-   m_Scalar.Format = sysNumericFormatTool::Fixed;
+   m_Scalar.Format = WBFL::System::NumericFormatTool::Format::Fixed;
 }
 
 CM3CGraphView::~CM3CGraphView()
@@ -85,11 +85,11 @@ void CM3CGraphView::OnDraw(CDC* pDC)
 	// TODO: add draw code here
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   std::unique_ptr<arvPhysicalConverter> pStrainFormat = std::make_unique<ScalarTool>(m_Scalar);
-   std::unique_ptr<arvPhysicalConverter> pStressFormat = std::make_unique<StressTool>(pDispUnits->Stress);
-   grGraphXY graph(*pStrainFormat, *pStressFormat);
+   WBFL::Units::ScalarTool strain_format(m_Scalar);
+   WBFL::Units::StressTool stress_format(pDispUnits->Stress);
+   WBFL::Graphing::GraphXY graph(&strain_format,&stress_format);
 
    graph.SetTitle(GetGraphTitle());
    graph.SetSubtitle(GetGraphSubtitle());
@@ -123,8 +123,8 @@ void CM3CGraphView::OnDraw(CDC* pDC)
    {
       Float64 stress;
       ss->ComputeStress(strain, &stress);
-      stress = ::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
-      GraphPoint point(signX*strain*1000, signY*stress);
+      stress = WBFL::Units::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
+      WBFL::Graphing::Point point(signX*strain*1000, signY*stress);
       graph.AddPoint(idx, point);
    }
 

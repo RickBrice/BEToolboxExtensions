@@ -25,7 +25,6 @@
 #include "M3CAnalysisDetailsReportSpecification.h"
 #include "BEToolboxColors.h"
 #include <Reporter\Reporter.h>
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <algorithm>
 #include <cctype>
@@ -68,9 +67,9 @@ Uint16 CM3CAnalysisDetailsChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
-   CM3CAnalysisDetailsReportSpecification* pMySpec = dynamic_cast<CM3CAnalysisDetailsReportSpecification*>(pRptSpec);
+   auto pMySpec = std::dynamic_pointer_cast<const CM3CAnalysisDetailsReportSpecification>(pRptSpec);
    IndexType idx = pMySpec->GetResultsIndex();
    rptChapter* pChapter = new rptChapter;
    BuildAnalysisModel(pChapter, idx);
@@ -88,7 +87,7 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    }
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    CComPtr<IMomentCurvatureSolution> curvature_solution;
    m_pDoc->GetMomentCurvature(&curvature_solution);
@@ -144,9 +143,9 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    RowIndexType row = pTable->GetNumberOfHeaderRows();
    Float64 sum_force = 0;
    Float64 sum_moment = 0;
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -199,9 +198,9 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    //(*pPara) << _T("Depth to Tension Resultant, ") << Sub2(_T("d"), _T("e")) << _T(" = ") << dist.SetValue(pmcd->de) << rptNewLine;
 }
 
-CChapterBuilder* CM3CAnalysisDetailsChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CAnalysisDetailsChapterBuilder::Clone() const
 {
-   return new CM3CAnalysisDetailsChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CAnalysisDetailsChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CAnalysisDetailsChapterBuilder::CreateImage(IMomentCapacitySolution* pSolution) const
@@ -274,12 +273,12 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
 {
    CComPtr<IGeneralSectionSolution> general_solution;
    pSolution->get_GeneralSectionSolution(&general_solution);
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
 
    // determine the bounding box
    CComPtr<IRect2d> bbox;
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -320,8 +319,8 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
 
 
    // set up coordinate mapping
-   grlibPointMapper mapper;
-   mapper.SetMappingMode(grlibPointMapper::Isotropic);
+   WBFL::Graphing::PointMapper mapper;
+   mapper.SetMappingMode(WBFL::Graphing::PointMapper::MapMode::Isotropic);
    mapper.SetWorldExt(width_scale*wx, wy);
 
    Float64 orgY;
@@ -360,7 +359,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    std::vector<std::pair<CComPtr<IGeneralSectionSlice>, int>> vPieces;
    vPieces.reserve(nSlices);
 
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -450,7 +449,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    CPoint p;
 
    CComPtr<IPlane3d> strain_plane;
-   pSolution->get_StrainPlane(&strain_plane);
+   pSolution->get_IncrementalStrainPlane(&strain_plane);
 
    Float64 eTop, eBottom; // strain top and bottom
    strain_plane->GetZ(0, top, &eTop);
@@ -527,12 +526,12 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSection(CImage& image, IMomentCapaci
    image.ReleaseDC();
 }
 
-void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const
+void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
 {
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);
 
-   CollectionIndexType nPoints;
+   IndexType nPoints;
    objPoints->get_Count(&nPoints);
 
    if (nPoints < 3)
@@ -557,7 +556,7 @@ void CM3CAnalysisDetailsChapterBuilder::DrawSlice(IShape* pShape, CDC* pDC, grli
    else
    {
       CPoint* points = new CPoint[nPoints];
-      for (CollectionIndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
+      for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
          CComPtr<IPoint2d> point;
          objPoints->get_Item(pntIdx, &point);

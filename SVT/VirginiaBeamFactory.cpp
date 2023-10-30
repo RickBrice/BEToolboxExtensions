@@ -66,6 +66,37 @@ void VirginiaBeamFactory::CreateBeam(VirginiaBeamType type, IUnitConvert* pConve
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> VirginiaBeamFactory::CreateBeam(VirginiaBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::PrecastBeam> beam;
+   if ((int)VirginiaBeamType::PCBT_29 <= (int)type && (int)type < (int)VirginiaBeamType::nSections)
+   {
+      int i = (int)type - (int)VirginiaBeamType::PCBT_29;
+      beam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam;
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_VirginiaBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(beam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+   }
+   return beam;
+}
+
 static std::_tstring gs_Virginianames[] = {
    _T("PCBT-29"),
    _T("PCBT-37"),
@@ -92,4 +123,16 @@ Float64 VirginiaBeamFactory::GetJApprox1(VirginiaBeamType type,IUnitConvert* pCo
 {
    int i = (int)type - (int)VirginiaBeamType::PCBT_29;
    return ComputeJApprox_IBeam(i, pConvert, gs_VirginiaBeamDimensions);
+}
+
+Float64 VirginiaBeamFactory::GetJApprox1(VirginiaBeamType type)
+{
+   int i = (int)type - (int)VirginiaBeamType::PCBT_29;
+   return ComputeJApprox_IBeam(i, gs_VirginiaBeamDimensions);
+}
+
+Float64 VirginiaBeamFactory::GetJApprox3(VirginiaBeamType type)
+{
+   int i = (int)type - (int)VirginiaBeamType::PCBT_29;
+   return ComputeJApprox3_IBeam(i, gs_VirginiaBeamDimensions);
 }

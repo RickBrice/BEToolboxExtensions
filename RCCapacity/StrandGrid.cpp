@@ -159,7 +159,7 @@ void CStrandGrid::AddRow()
 void CStrandGrid::GetStrandData(ROWCOL row, StrandData& strand)
 {
 	CEAFApp* pApp = EAFGetApp();
-	const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+	const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
 	ROWCOL col = 1;
 
@@ -167,16 +167,16 @@ void CStrandGrid::GetStrandData(ROWCOL row, StrandData& strand)
 	Float64 value;
 	strValue = GetCellValue(row, col++);
 	long iValue;
-	sysTokenizer::ParseLong(strValue, &iValue);
+	WBFL::System::Tokenizer::ParseLong(strValue, &iValue);
 	strand.nStrands = iValue;
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
-	strand.spacing = ::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
+	strand.spacing = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
-	strand.location = ::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
+	strand.location = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
 	strValue = GetCellValue(row, col++);
 	if (strValue == _T("Top Girder"))
@@ -194,14 +194,14 @@ void CStrandGrid::GetStrandData(ROWCOL row, StrandData& strand)
 	}
 
 	strValue = GetCellValue(row, col++);
-	sysTokenizer::ParseDouble(strValue, &value);
-	strand.fpe = ::ConvertToSysUnits(value, pDispUnits->Stress.UnitOfMeasure);
+	WBFL::System::Tokenizer::ParseDouble(strValue, &value);
+	strand.fpe = WBFL::Units::ConvertToSysUnits(value, pDispUnits->Stress.UnitOfMeasure);
 }
 
 void CStrandGrid::InsertRow(const StrandData& strand)
 {
 	CEAFApp* pApp = EAFGetApp();
-	const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+	const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
 	CRCCapacityInputView* pParent = (CRCCapacityInputView*)GetParent();
 
@@ -222,12 +222,12 @@ void CStrandGrid::InsertRow(const StrandData& strand)
 
 	SetStyleRange(CGXRange(nRow, col++), CGXStyle()
 		.SetHorizontalAlignment(DT_RIGHT)
-		.SetValue(::ConvertFromSysUnits(strand.spacing, pDispUnits->ComponentDim.UnitOfMeasure))
+		.SetValue(WBFL::Units::ConvertFromSysUnits(strand.spacing, pDispUnits->ComponentDim.UnitOfMeasure))
 	);
 
 	SetStyleRange(CGXRange(nRow, col++), CGXStyle()
 		.SetHorizontalAlignment(DT_RIGHT)
-		.SetValue(::ConvertFromSysUnits(strand.location, pDispUnits->ComponentDim.UnitOfMeasure))
+		.SetValue(WBFL::Units::ConvertFromSysUnits(strand.location, pDispUnits->ComponentDim.UnitOfMeasure))
 	);
 
 	std::array<CString, 4> strMeasuredFrom{ _T("Top Girder"),_T("Bottom Girder"),_T("Top Slab"),_T("Bottom Slab") };
@@ -249,7 +249,7 @@ void CStrandGrid::InsertRow(const StrandData& strand)
 
 	SetStyleRange(CGXRange(nRow, col++), CGXStyle()
 		.SetHorizontalAlignment(DT_RIGHT)
-		.SetValue(::ConvertFromSysUnits(strand.fpe, pDispUnits->Stress.UnitOfMeasure))
+		.SetValue(WBFL::Units::ConvertFromSysUnits(strand.fpe, pDispUnits->Stress.UnitOfMeasure))
 	);
 
 	SetCurrentCell(nRow, GetLeftCol(), GX_SCROLLINVIEW | GX_DISPLAYEDITWND);
@@ -287,7 +287,7 @@ CString CStrandGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   if ( nCol == 2 )
 //   {
 //      long l;
-//      if ( !sysTokenizer::ParseLong(s,&l) )
+//      if ( !WBFL::System::Tokenizer::ParseLong(s,&l) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;
@@ -296,7 +296,7 @@ CString CStrandGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   else
 //   {
 //      Float64 d;
-//      if ( !sysTokenizer::ParseDouble(s,&d) )
+//      if ( !WBFL::System::Tokenizer::ParseDouble(s,&d) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;
@@ -330,7 +330,7 @@ void CStrandGrid::OnUnitsModeChanged()
 void CStrandGrid::UpdateColumnHeaders()
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    // set text along top row
    ROWCOL col = 0;

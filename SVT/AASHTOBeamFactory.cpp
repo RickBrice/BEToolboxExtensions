@@ -67,6 +67,38 @@ void AASHTOBeamFactory::CreateBeam(AASHTOBeamType type, IUnitConvert* pConvert, 
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> AASHTOBeamFactory::CreateBeam(AASHTOBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::PrecastBeam> beam;
+   if ((int)AASHTOBeamType::TypeI <= (int)type && (int)type < (int)AASHTOBeamType::nSections)
+   {
+      int i = (int)type - (int)AASHTOBeamType::TypeI;
+      using namespace IBeam;
+
+      beam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_AASHTOBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(beam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+   }
+
+   return beam;
+}
+
 static std::_tstring gs_AASHTOnames[] = {
    _T("Type I"),
    _T("Type II"),
@@ -93,4 +125,16 @@ Float64 AASHTOBeamFactory::GetJApprox1(AASHTOBeamType type,IUnitConvert* pConver
 {
    int i = (int)type - (int)AASHTOBeamType::TypeI;
    return ComputeJApprox_IBeam(i, pConvert, gs_AASHTOBeamDimensions);
+}
+
+Float64 AASHTOBeamFactory::GetJApprox1(AASHTOBeamType type)
+{
+   int i = (int)type - (int)AASHTOBeamType::TypeI;
+   return ComputeJApprox_IBeam(i, gs_AASHTOBeamDimensions);
+}
+
+Float64 AASHTOBeamFactory::GetJApprox3(AASHTOBeamType type)
+{
+   int i = (int)type - (int)AASHTOBeamType::TypeI;
+   return ComputeJApprox3_IBeam(i, gs_AASHTOBeamDimensions);
 }

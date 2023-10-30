@@ -50,26 +50,26 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CM3CDoc, CBEToolboxDoc)
 
-CM3CDoc::CM3CDoc()
+CM3CDoc::CM3CDoc() : CBEToolboxDoc()
 {
-   std::shared_ptr<CTitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
+   std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
 
-   std::unique_ptr<CReportBuilder> pRptBuilder(std::make_unique<CReportBuilder>(_T("M3C")));
+   std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3C")));
    pRptBuilder->AddTitlePageBuilder( pTitlePageBuilder );
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<CChapterBuilder>(new CM3CChapterBuilder(this)));
-   m_RptMgr.AddReportBuilder(pRptBuilder.release());
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CChapterBuilder>(this)));
+   GetReportManager()->AddReportBuilder(pRptBuilder);
 
-   pRptBuilder = std::make_unique<CReportBuilder>(_T("M3CMaterialsDetails"));
+   pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CMaterialsDetails"));
    pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<CChapterBuilder>(new CM3CMaterialDetailsChapterBuilder(this)));
-   m_RptMgr.AddReportBuilder(pRptBuilder.release());
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CMaterialDetailsChapterBuilder>(this)));
+   GetReportManager()->AddReportBuilder(pRptBuilder);
 
-   pRptBuilder = std::make_unique<CReportBuilder>(_T("M3CAnalysisDetails"));
-   std::shared_ptr<CReportSpecificationBuilder> pRptSpecBuilder(std::make_shared<CM3CAnalysisDetailsReportSpecificationBuilder>());
+   pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CAnalysisDetails"));
+   std::shared_ptr<WBFL::Reporting::ReportSpecificationBuilder> pRptSpecBuilder(std::make_shared<CM3CAnalysisDetailsReportSpecificationBuilder>());
    pRptBuilder->SetReportSpecificationBuilder(pRptSpecBuilder);
    pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<CChapterBuilder>(new CM3CAnalysisDetailsChapterBuilder(this)));
-   m_RptMgr.AddReportBuilder(pRptBuilder.release());
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CAnalysisDetailsChapterBuilder>(this)));
+   GetReportManager()->AddReportBuilder(pRptBuilder);
 
    m_bIsSolutionValid = false;
    m_bIsModelValid = false;
@@ -283,7 +283,7 @@ void CM3CDoc::GetMomentCurvature(IMomentCurvatureSolution** ppSolution) const
    solver->put_SliceGrowthFactor(2);
    solver->put_InitialCurvatureStep(m_ProblemParams.initialStep);
    solver->putref_Section(column_section);
-   solver->put_AxialTolerance(::ConvertToSysUnits(0.01, unitMeasure::Kip));
+   solver->put_AxialTolerance(WBFL::Units::ConvertToSysUnits(0.01, WBFL::Units::Measure::Kip));
    
    m_Solution.Release();
    Float64 NASlope = 0.0;
@@ -352,14 +352,14 @@ void CM3CDoc::BuildRebarModel(IStressStrain** ppSteel) const
    rebar.QueryInterface(ppSteel);
 }
 
-StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
+StrandGradeType GetStrandGradeType(WBFL::Materials::PsStrand::Grade grade)
 {
    StrandGradeType grade_type;
    switch (grade)
    {
-   case matPsStrand::Gr1725: grade_type = sgtGrade250; break;
-   case matPsStrand::Gr1860: grade_type = sgtGrade270; break;
-   case matPsStrand::Gr2070: grade_type = sgtGrade300; break;
+   case WBFL::Materials::PsStrand::Grade::Gr1725: grade_type = sgtGrade250; break;
+   case WBFL::Materials::PsStrand::Grade::Gr1860: grade_type = sgtGrade270; break;
+   case WBFL::Materials::PsStrand::Grade::Gr2070: grade_type = sgtGrade300; break;
    default: ATLASSERT(false); // is there a new strand grade?
    }
    return grade_type;
@@ -368,7 +368,7 @@ StrandGradeType GetStrandGradeType(matPsStrand::Grade grade)
 void CM3CDoc::BuildStrandModel(IStressStrain** ppStrand) const
 {
    StrandGradeType grade = GetStrandGradeType(m_ProblemParams.pStrand->GetGrade());
-   ProductionMethodType type = m_ProblemParams.pStrand->GetType() == matPsStrand::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
+   ProductionMethodType type = m_ProblemParams.pStrand->GetType() == WBFL::Materials::PsStrand::Type::LowRelaxation ? pmtLowRelaxation : pmtStressRelieved;
 
    CComPtr<IPowerFormula> powerFormula;
    powerFormula.CoCreateInstance(CLSID_PSPowerFormula);
@@ -457,7 +457,7 @@ void CM3CDoc::BuildColumnModel(IGeneralSection** ppSection) const
    Float64 aps = m_ProblemParams.pStrand->GetNominalArea();
    points->get_Count(&nBars);
 
-   Float64 Eps = ::ConvertToSysUnits(m_ProblemParams.pStrand->GetE(), unitMeasure::KSI);
+   Float64 Eps = WBFL::Units::ConvertToSysUnits(m_ProblemParams.pStrand->GetE(), WBFL::Units::Measure::KSI);
    for (IndexType i = 0; i < nBars; i++)
    {
       CComPtr<IPoint2d> pnt;

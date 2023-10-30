@@ -69,6 +69,38 @@ void OhioBeamFactory::CreateBeam(OhioBeamType type, IUnitConvert* pConvert, ISha
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> OhioBeamFactory::CreateBeam(OhioBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::PrecastBeam> beam;
+
+   if ((int)OhioBeamType::WF36_49 <= (int)type && (int)type < (int)OhioBeamType::nSections)
+   {
+      int i = (int)type - (int)OhioBeamType::WF36_49;
+      beam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam;
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_OhioBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(beam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+   }
+   return beam;
+}
+
 static std::_tstring gs_OhioNames[] = {
    _T("WF36-49"),
    _T("WF42-49"),
@@ -89,11 +121,23 @@ LPCTSTR OhioBeamFactory::GetName(OhioBeamType type)
 
 int OhioBeamFactory::GetApproxMethods(OhioBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
-Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type,IUnitConvert* pConvert)
+Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type, IUnitConvert* pConvert)
 {
    int i = (int)type - (int)OhioBeamType::WF36_49;
    return ComputeJApprox_IBeam(i, pConvert, gs_OhioBeamDimensions);
+}
+
+Float64 OhioBeamFactory::GetJApprox1(OhioBeamType type)
+{
+   int i = (int)type - (int)OhioBeamType::WF36_49;
+   return ComputeJApprox_IBeam(i, gs_OhioBeamDimensions);
+}
+
+Float64 OhioBeamFactory::GetJApprox3(OhioBeamType type)
+{
+   int i = (int)type - (int)OhioBeamType::WF36_49;
+   return ComputeJApprox3_IBeam(i, gs_OhioBeamDimensions);
 }

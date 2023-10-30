@@ -120,7 +120,7 @@ void DumpSolution(IGeneralSection* section, IMomentCapacitySolution* solution)
 
 IMPLEMENT_DYNCREATE(CRCCapacityDoc, CBEToolboxDoc)
 
-CRCCapacityDoc::CRCCapacityDoc()
+CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
 {
    m_BeamFactories.push_back(std::make_pair(_T("AASHTO"), std::make_unique<CAASHTOBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
@@ -152,11 +152,11 @@ CRCCapacityDoc::CRCCapacityDoc()
 
 
    // when report printing is implemented, we'll need a title page... this commented out code shows how to do it
-   //std::shared_ptr<CTitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
-   std::unique_ptr<CReportBuilder> pRptBuilder(std::make_unique<CReportBuilder>(_T("Analysis Results")));
+   //std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
+   std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("Analysis Results")));
    //pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<CChapterBuilder>(new CRCCapacityChapterBuilder(this)));
-   m_RptMgr.AddReportBuilder(pRptBuilder.release());
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(new CRCCapacityChapterBuilder(this)));
+   GetReportManager()->AddReportBuilder(pRptBuilder);
 }
 
 CRCCapacityDoc::~CRCCapacityDoc()
@@ -262,12 +262,12 @@ HRESULT CRCCapacityDoc::WriteTheDocument(IStructuredSave* pStrSave)
    }
 
    pStrSave->BeginUnit(_T("Rebar"), 1.0);
-   pStrSave->put_Property(_T("RebarType"), CComVariant(m_ModelData.RebarType));
-   pStrSave->put_Property(_T("RebarGrade"), CComVariant(m_ModelData.RebarGrade));
+   pStrSave->put_Property(_T("RebarType"), CComVariant(+m_ModelData.RebarType));
+   pStrSave->put_Property(_T("RebarGrade"), CComVariant(+m_ModelData.RebarGrade));
    for (auto& rebar : m_ModelData.Rebar)
    {
       pStrSave->BeginUnit(_T("RebarData"), 1.0);
-      pStrSave->put_Property(_T("Size"), CComVariant(rebar.size));
+      pStrSave->put_Property(_T("Size"), CComVariant(+rebar.size));
       pStrSave->put_Property(_T("nBars"), CComVariant(rebar.nBars));
       pStrSave->put_Property(_T("Spacing"), CComVariant(rebar.spacing));
       pStrSave->put_Property(_T("Location"), CComVariant(rebar.location));
@@ -364,13 +364,13 @@ HRESULT CRCCapacityDoc::LoadTheDocument(IStructuredLoad* pStrLoad)
 
    pStrLoad->BeginUnit(_T("Rebar"));
    var.vt = VT_I8;
-   pStrLoad->get_Property(_T("RebarType"), &var); m_ModelData.RebarType = (matRebar::Type)var.lVal;
-   pStrLoad->get_Property(_T("RebarGrade"), &var); m_ModelData.RebarGrade = (matRebar::Grade)var.lVal;
+   pStrLoad->get_Property(_T("RebarType"), &var); m_ModelData.RebarType = (WBFL::Materials::Rebar::Type)var.lVal;
+   pStrLoad->get_Property(_T("RebarGrade"), &var); m_ModelData.RebarGrade = (WBFL::Materials::Rebar::Grade)var.lVal;
    while(SUCCEEDED(pStrLoad->BeginUnit(_T("RebarData"))))
    {
       RebarData rebar;
       var.vt = VT_I8;
-      pStrLoad->get_Property(_T("Size"), &var); rebar.size = (matRebar::Size)var.lVal;
+      pStrLoad->get_Property(_T("Size"), &var); rebar.size = (WBFL::Materials::Rebar::Size)var.lVal;
       var.vt = VT_INDEX;
       pStrLoad->get_Property(_T("nBars"), &var); rebar.nBars = VARIANT2INDEX(var);
       var.vt = VT_R8;
@@ -522,11 +522,11 @@ Float64 CRCCapacityDoc::GetStrandDiameter(StrandSize size) const
    Float64 dia;
    switch (size)
    {
-   case Strand_050: dia = ::ConvertToSysUnits(0.50, unitMeasure::Inch); break;
-   case Strand_052: dia = ::ConvertToSysUnits(0.52, unitMeasure::Inch); break;
-   case Strand_060: dia = ::ConvertToSysUnits(0.60, unitMeasure::Inch); break;
-   case Strand_062: dia = ::ConvertToSysUnits(0.62, unitMeasure::Inch); break;
-   case Strand_070: dia = ::ConvertToSysUnits(0.70, unitMeasure::Inch); break;
+   case Strand_050: dia = WBFL::Units::ConvertToSysUnits(0.50, WBFL::Units::Measure::Inch); break;
+   case Strand_052: dia = WBFL::Units::ConvertToSysUnits(0.52, WBFL::Units::Measure::Inch); break;
+   case Strand_060: dia = WBFL::Units::ConvertToSysUnits(0.60, WBFL::Units::Measure::Inch); break;
+   case Strand_062: dia = WBFL::Units::ConvertToSysUnits(0.62, WBFL::Units::Measure::Inch); break;
+   case Strand_070: dia = WBFL::Units::ConvertToSysUnits(0.70, WBFL::Units::Measure::Inch); break;
    default: ATLASSERT(false);
    }
    return dia;
@@ -613,7 +613,7 @@ void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
          // reinforcement failed (strain too high)
          if (hr == RC_E_MATERIALFAILURE)
          {
-            Float64 Eps = ::ConvertToSysUnits(28500, unitMeasure::KSI); // carbon-steel
+            Float64 Eps = WBFL::Units::ConvertToSysUnits(28500, WBFL::Units::Measure::KSI); // carbon-steel
             Float64 esu = 0.035; // carbon-steel, 3.5% strain limit
             if (m_ModelData.StrandType == Other)
             {
@@ -806,7 +806,7 @@ void CRCCapacityDoc::Update()
    // rebar
    CComPtr<IRebarModel> rebar;
    rebar.CoCreateInstance(CLSID_RebarModel);
-   const matRebar* pRebar = lrfdRebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, matRebar::bs3); // use any size, we just want the material properties
+   const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, WBFL::Materials::Rebar::Size::bs3); // use any size, we just want the material properties
    Float64 fy = pRebar->GetYieldStrength();
    Float64 Es = pRebar->GetE();
    Float64 e = pRebar->GetElongation();
@@ -884,7 +884,7 @@ void CRCCapacityDoc::Update()
    int i = 1;
    for (const auto& rebar_data : m_ModelData.Rebar)
    {
-      const matRebar* pRebar = lrfdRebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, rebar_data.size);
+      const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, rebar_data.size);
       Float64 area = pRebar->GetNominalArea();
       area *= rebar_data.nBars;
       CComPtr<IGenericShape> bar_shape;
@@ -948,20 +948,24 @@ void CRCCapacityDoc::Update()
       m_pSection->AddShape(CComBSTR(strName),shape, ss_rebar, nullptr, nullptr, 1.0, VARIANT_FALSE);
    } // next rebar
 
-   std::map<StrandSize, matPsStrand::Size> strandSizeMap;
-   strandSizeMap.insert(std::make_pair(Strand_050, matPsStrand::D1270));
-   strandSizeMap.insert(std::make_pair(Strand_052, matPsStrand::D1320));
-   strandSizeMap.insert(std::make_pair(Strand_060, matPsStrand::D1524));
-   strandSizeMap.insert(std::make_pair(Strand_062, matPsStrand::D1575));
-   strandSizeMap.insert(std::make_pair(Strand_070, matPsStrand::D1778));
+   std::map<StrandSize, WBFL::Materials::PsStrand::Size> strandSizeMap;
+   strandSizeMap.insert(std::make_pair(Strand_050, WBFL::Materials::PsStrand::Size::D1270));
+   strandSizeMap.insert(std::make_pair(Strand_052, WBFL::Materials::PsStrand::Size::D1320));
+   strandSizeMap.insert(std::make_pair(Strand_060, WBFL::Materials::PsStrand::Size::D1524));
+   strandSizeMap.insert(std::make_pair(Strand_062, WBFL::Materials::PsStrand::Size::D1575));
+   strandSizeMap.insert(std::make_pair(Strand_070, WBFL::Materials::PsStrand::Size::D1778));
    Float64 Eps;
    ss_strand->get_ModulusOfElasticity(&Eps);
    i = 1;
    for (const auto& strand_data : m_ModelData.Strands)
    {
       // get the nominal strand area - it doesn't matter what the grade and production type are, we just want the nominal area
-      matPsStrand::Size strand_size = strandSizeMap.find(m_ModelData.StrandSize)->second;
-      const matPsStrand* pStrand = lrfdStrandPool::GetInstance()->GetStrand(matPsStrand::Gr1860, matPsStrand::LowRelaxation, matPsStrand::None, strand_size);
+      WBFL::Materials::PsStrand::Size strand_size = strandSizeMap.find(m_ModelData.StrandSize)->second;
+      const auto* pStrand = WBFL::LRFD::StrandPool::GetInstance()->GetStrand(
+         WBFL::Materials::PsStrand::Grade::Gr1860, 
+         WBFL::Materials::PsStrand::Type::LowRelaxation, 
+         WBFL::Materials::PsStrand::Coating::None, 
+         strand_size);
       Float64 area = pStrand->GetNominalArea();
       area *= strand_data.nStrands;
       CComPtr<IGenericShape> strand_shape;

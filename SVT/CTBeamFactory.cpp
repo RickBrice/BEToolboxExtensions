@@ -172,6 +172,120 @@ void CTBeamFactory::CreateBeam(CTBeamType type, IUnitConvert* pConvert, IShape**
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> CTBeamFactory::CreateBeam(CTBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::Shape> beam;
+
+   if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
+   {
+      int i = (int)type - (int)CTBeamType::BT49;
+
+      auto nu_beam = std::make_unique<WBFL::Geometry::NUBeam>();
+
+      using namespace _NUBeam;
+
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      d1 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      r1 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][R1], WBFL::Units::Measure::Inch);
+      r2 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][R2], WBFL::Units::Measure::Inch);
+      r3 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][R3], WBFL::Units::Measure::Inch);
+      r4 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][R4], WBFL::Units::Measure::Inch);
+      t = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][T],   WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      c1 = WBFL::Units::ConvertToSysUnits(gs_CTNUBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+
+      nu_beam->SetD1(d1);
+      nu_beam->SetD2(d2);
+      nu_beam->SetD3(d3);
+      nu_beam->SetD4(d4);
+      nu_beam->SetD5(d5);
+      nu_beam->SetR1(r1);
+      nu_beam->SetR2(r2);
+      nu_beam->SetR3(r3);
+      nu_beam->SetR4(r4);
+      nu_beam->SetT(t);
+      nu_beam->SetW1(w1);
+      nu_beam->SetW2(w2);
+      nu_beam->SetC1(c1);
+
+      beam = std::move(nu_beam);
+   }
+   else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
+   {
+      int i = (int)type - (int)CTBeamType::I36;
+
+      auto pbeam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam; // this is so we don't have to use the name space below (eg IBeam::C1, IBeam::D2...)
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_CTIBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(pbeam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+      beam = std::move(pbeam);
+   }
+   else if ((int)CTBeamType::Tub55 <= (int)type && (int)type <= (int)CTBeamType::Tub85)
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
+
+      auto u_beam = std::make_unique<WBFL::Geometry::UBeam>();
+
+      using namespace _UBeam; // this is so we don't have to use the name space below (eg _UBeam::D1, _UBeam::D2...)
+
+      Float64 d1, d2, d3, d4, d5, d6, d7, t, w1, w2, w3, w4, w5;
+      d1 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D1],WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D2],WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D3],WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D4],WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D5],WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D6],WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][D7],WBFL::Units::Measure::Inch);
+      t  = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][T], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][W1],WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][W2],WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][W3],WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][W4],WBFL::Units::Measure::Inch);
+      w5 = WBFL::Units::ConvertToSysUnits(gs_CTUBeamDimensions[i][W5], WBFL::Units::Measure::Inch);
+
+      u_beam->SetD1(d1);
+      u_beam->SetD2(d2);
+      u_beam->SetD3(d3);
+      u_beam->SetD4(d4);
+      u_beam->SetD5(d5);
+      u_beam->SetD6(d6);
+      u_beam->SetD7(d7);
+      u_beam->SetT(t);
+      u_beam->SetW1(w1);
+      u_beam->SetW2(w2);
+      u_beam->SetW3(w3);
+      u_beam->SetW4(w4);
+      u_beam->SetW5(w5);
+
+      beam = std::move(u_beam);
+   }
+
+   return beam;
+}
+
+
 static std::_tstring gs_CTnames[] = {
    _T("BT49"),
    _T("BT55"),
@@ -216,11 +330,11 @@ int CTBeamFactory::GetApproxMethods(CTBeamType type)
 {
    if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
    {
-      return AM_J1 | AM_J2;
+      return AM_J1 | AM_J2 | AM_J3;
    }
    else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
    {
-      return AM_J1 | AM_J2;
+      return AM_J1 | AM_J2 | AM_J3;
    }
    else
    {
@@ -244,6 +358,50 @@ Float64 CTBeamFactory::GetJApprox1(CTBeamType type, IUnitConvert* pConvert)
    {
       int i = (int)type - (int)CTBeamType::Tub55;
       return ComputeJApprox_UBeam(i, pConvert, gs_CTUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 CTBeamFactory::GetJApprox1(CTBeamType type)
+{
+   if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
+   {
+      int i = (int)type - (int)CTBeamType::BT49;
+      return ComputeJApprox_NU(i, gs_CTNUBeamDimensions);
+   }
+   else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
+   {
+      int i = (int)type - (int)CTBeamType::I36;
+      return ComputeJApprox_IBeam(i, gs_CTIBeamDimensions);
+   }
+   else
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
+      return ComputeJApprox_UBeam(i, gs_CTUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 CTBeamFactory::GetJApprox3(CTBeamType type)
+{
+   if ((int)CTBeamType::BT49 <= (int)type && (int)type <= (int)CTBeamType::WF120)
+   {
+      int i = (int)type - (int)CTBeamType::BT49;
+      return ComputeJApprox3_NU(i, gs_CTNUBeamDimensions);
+   }
+   else if ((int)CTBeamType::I36 <= (int)type && (int)type <= (int)CTBeamType::I66)
+   {
+      int i = (int)type - (int)CTBeamType::I36;
+      return ComputeJApprox3_IBeam(i, gs_CTIBeamDimensions);
+   }
+   else
+   {
+      int i = (int)type - (int)CTBeamType::Tub55;
+      return ComputeJApprox3_UBeam(i, gs_CTUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

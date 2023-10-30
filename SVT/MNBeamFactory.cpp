@@ -20,6 +20,7 @@ static Float64 gs_MNNUBeamDimensions[][13] = {
    { 3.8125, 1.6875,    44.5,    5.5, 7.5,  8,  8,    0, 2, 6.5, 34, 30, 0.75 }, // MN63
    {    3.5, 2.5625, 62.8125,  7.625, 5.5,  8,  8, 0.75, 2, 6.5, 34, 30, 0.75 }, // 82MW
    {    3.5, 2.5625, 76.8125,  7.625, 5.5,  8,  8, 0.75, 2, 6.5, 34, 30, 0.75 }, // 96MW
+   {4.426136, 1.073864,    35.5,    5.5, 7.5,  8,  8,    0, 2, 3.5, 21, 27, 0 }, // MN54 - FHWA UHPC
 };
 
 void MNBeamFactory::CreateBeam(MNBeamType type, IUnitConvert* pConvert, IShape** ppShape)
@@ -109,6 +110,80 @@ void MNBeamFactory::CreateBeam(MNBeamType type, IUnitConvert* pConvert, IShape**
    }
 }
 
+std::unique_ptr<WBFL::Geometry::Shape> MNBeamFactory::CreateBeam(MNBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::Shape> beam;
+
+   if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
+   {
+      int i = (int)type - (int)MNBeamType::M27;
+
+      auto pbeam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam; // this is so we don't have to use the name space below (eg IBeam::C1, IBeam::D2...)
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_MNIBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(pbeam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+      beam = std::move(pbeam);
+   }
+   else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
+   {
+      int i = (int)type - (int)MNBeamType::MH30;
+
+      auto nu_beam = std::make_unique<WBFL::Geometry::NUBeam>();
+
+      using namespace _NUBeam;
+
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      d1 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      r1 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][R1], WBFL::Units::Measure::Inch);
+      r2 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][R2], WBFL::Units::Measure::Inch);
+      r3 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][R3], WBFL::Units::Measure::Inch);
+      r4 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][R4], WBFL::Units::Measure::Inch);
+      t  = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][T], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      c1 = WBFL::Units::ConvertToSysUnits(gs_MNNUBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+
+      nu_beam->SetD1(d1);
+      nu_beam->SetD2(d2);
+      nu_beam->SetD3(d3);
+      nu_beam->SetD4(d4);
+      nu_beam->SetD5(d5);
+      nu_beam->SetR1(r1);
+      nu_beam->SetR2(r2);
+      nu_beam->SetR3(r3);
+      nu_beam->SetR4(r4);
+      nu_beam->SetT(t);
+      nu_beam->SetW1(w1);
+      nu_beam->SetW2(w2);
+      nu_beam->SetC1(c1);
+
+      beam = std::move(nu_beam);
+   }
+
+   return beam;
+}
+
 
 static std::_tstring gs_MNnames[] = {
    _T("27M"),
@@ -121,6 +196,7 @@ static std::_tstring gs_MNnames[] = {
    _T("MN63"),
    _T("MW82"),
    _T("MW96"),
+   _T("MN54-UHPC")
 };
 
 LPCTSTR MNBeamFactory::GetName(MNBeamType type)
@@ -130,7 +206,7 @@ LPCTSTR MNBeamFactory::GetName(MNBeamType type)
 
 int MNBeamFactory::GetApproxMethods(MNBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 MNBeamFactory::GetJApprox1(MNBeamType type, IUnitConvert* pConvert)
@@ -144,6 +220,40 @@ Float64 MNBeamFactory::GetJApprox1(MNBeamType type, IUnitConvert* pConvert)
    {
       int i = (int)type - (int)MNBeamType::MH30;
       return ComputeJApprox_NU(i, pConvert, gs_MNNUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 MNBeamFactory::GetJApprox1(MNBeamType type)
+{
+   if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
+   {
+      int i = (int)type - (int)MNBeamType::M27;
+      return ComputeJApprox_IBeam(i, gs_MNIBeamDimensions);
+   }
+   else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
+   {
+      int i = (int)type - (int)MNBeamType::MH30;
+      return ComputeJApprox_NU(i, gs_MNNUBeamDimensions);
+   }
+
+   ATLASSERT(false); // should never get here
+   return -1;
+}
+
+Float64 MNBeamFactory::GetJApprox3(MNBeamType type)
+{
+   if ((int)MNBeamType::M27 <= (int)type && (int)type <= (int)MNBeamType::M36)
+   {
+      int i = (int)type - (int)MNBeamType::M27;
+      return ComputeJApprox3_IBeam(i, gs_MNIBeamDimensions);
+   }
+   else if ((int)MNBeamType::MH30 <= (int)type && (int)type < (int)MNBeamType::nSections)
+   {
+      int i = (int)type - (int)MNBeamType::MH30;
+      return ComputeJApprox3_NU(i, gs_MNNUBeamDimensions);
    }
 
    ATLASSERT(false); // should never get here

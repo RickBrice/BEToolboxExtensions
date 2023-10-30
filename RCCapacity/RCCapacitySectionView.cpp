@@ -28,7 +28,6 @@
 #include "RCCapacityMainView.h"
 #include "RCCapacityInputView.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <EAF\EAFHints.h>
 
@@ -173,7 +172,7 @@ void CRCCapacitySectionView::Update()
          CComPtr<ICircle> circle;
          circle.CoCreateInstance(CLSID_Circle);
 
-         const matRebar* pBar = lrfdRebarPool::GetInstance()->GetRebar(modelData.RebarType, modelData.RebarGrade, rebar.size);
+         const auto* pBar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(modelData.RebarType, modelData.RebarGrade, rebar.size);
          circle->put_Radius(pBar->GetNominalDimension() / 2);
          CComPtr<IPoint2d> center;
          circle->get_Center(&center);

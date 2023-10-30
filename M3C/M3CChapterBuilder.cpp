@@ -24,10 +24,11 @@
 #include "M3CChapterBuilder.h"
 #include "BEToolboxColors.h"
 #include <Reporter\Reporter.h>
-#include <GraphicsLib\GraphicsLib.h>
 
 #include <algorithm>
 #include <cctype>
+
+#include <Graphing/GraphXY.h>
 
 
 #ifdef _DEBUG
@@ -61,7 +62,7 @@ Uint16 CM3CChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 level) const
+rptChapter* CM3CChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    rptChapter* pChapter = new rptChapter;
    rptParagraph* pPara;
@@ -70,7 +71,7 @@ rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 lev
    (*pChapter) << pPara;
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    
    rptRcTable* pLayoutTable = rptStyleManager::CreateLayoutTable(2);
@@ -146,15 +147,15 @@ rptChapter* CM3CChapterBuilder::Build(CReportSpecification* pRptSpec, Uint16 lev
    return pChapter;
 }
 
-CChapterBuilder* CM3CChapterBuilder::Clone() const
+std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CChapterBuilder::Clone() const
 {
-   return new CM3CChapterBuilder(m_pDoc);
+   return std::make_unique<CM3CChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution) const
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    CImage image;
    image.Create(500,500,32);
@@ -168,9 +169,9 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    pDC->Rectangle(rect);
    pDC->SelectObject(pOldBrush);
 
-   MomentTool momentTool(pDispUnits->SmallMoment);
-   CurvatureTool  curvatureTool(pDispUnits->Curvature);
-   grGraphXY graph(curvatureTool,momentTool);
+   WBFL::Units::MomentTool momentTool(pDispUnits->SmallMoment);
+   WBFL::Units::CurvatureTool  curvatureTool(pDispUnits->Curvature);
+   WBFL::Graphing::GraphXY graph(&curvatureTool,&momentTool);
 
    graph.SetOutputRect(rect);
    graph.SetClientAreaColor(GRAPH_BACKGROUND);
@@ -183,7 +184,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    strCurvature.Format(_T("Curvature (%s)"), pDispUnits->Curvature.UnitOfMeasure.UnitTag().c_str());
    graph.SetXAxisTitle(strCurvature.LockBuffer());
    strCurvature.UnlockBuffer();
-   graph.SetXAxisNiceRange(true);
+   graph.XAxisNiceRange(true);
    graph.SetXAxisNumberOfMinorTics(5);
    //graph.SetXAxisNumberOfMajorTics(21);
    graph.SetXAxisLabelAngle(350); // 35 degrees
@@ -193,7 +194,7 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
    strMoment.Format(_T("Moment (%s)"),pDispUnits->SmallMoment.UnitOfMeasure.UnitTag().c_str());
    graph.SetYAxisTitle(strMoment.LockBuffer());
    strMoment.UnlockBuffer();
-   graph.SetYAxisNiceRange(true);
+   graph.YAxisNiceRange(true);
    graph.SetYAxisNumberOfMinorTics(0);
    graph.SetYAxisNumberOfMajorTics(11);
 
@@ -211,15 +212,15 @@ rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution)
       pSolution->get_Moment(i, &m);
       pSolution->get_Curvature(i, &k);
 
-      m = ::ConvertFromSysUnits(m, pDispUnits->SmallMoment.UnitOfMeasure);
-      k = ::ConvertFromSysUnits(k, pDispUnits->Curvature.UnitOfMeasure);
+      m = WBFL::Units::ConvertFromSysUnits(m, pDispUnits->SmallMoment.UnitOfMeasure);
+      k = WBFL::Units::ConvertFromSysUnits(k, pDispUnits->Curvature.UnitOfMeasure);
 
       xMin = Min(xMin, k);
       xMax = Max(xMax, k);
       yMin = Min(yMin, m);
       yMax = Max(yMax, m);
 
-      graph.AddPoint(series1, GraphPoint(k,m));
+      graph.AddPoint(series1, WBFL::Graphing::Point(k,m));
    }
 
    graph.SetMinimumSize(xMin, xMax, yMin, yMax);

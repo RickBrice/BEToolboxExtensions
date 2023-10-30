@@ -165,6 +165,7 @@ void CSVTToolView3D::OnDraw(CDC* pDC)
    __super::OnDraw(pDC);
 }
 
+#if defined USE_COM_GEOMETRY
 void CSVTToolView3D::BuildGirderShape()
 {
    CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
@@ -202,7 +203,7 @@ void CSVTToolView3D::BuildGrid()
       CComPtr<IPoint2dCollection> poly_points;
       clone->get_PolyPoints(&poly_points);
 
-      SoGroup* facet = BuildFacet(poly_points,std::tuple<Float64,Float64,Float64>(0,0,1));
+      SoGroup* facet = BuildFacet(poly_points, std::tuple<Float64, Float64, Float64>(0, 0, 1));
       group->addChild(facet);
    }
 
@@ -219,8 +220,8 @@ void CSVTToolView3D::BuildMembrane()
       SoGroup* group = new SoGroup;
 
       std::vector<CComPtr<IRectangle>> vMesh = pDoc->GetMesh();
-      Float64* pNodeValues = pDoc->GetNodeOrdinates();
-      const auto* pFDMesh = pDoc->GetFDMesh();
+      const auto& pNodeValues = pDoc->GetNodeOrdinates();
+      const auto& pFDMesh = pDoc->GetFDMesh();
       IndexType nElements = pFDMesh->GetElementCount();
       ATLASSERT(vMesh.size() == nElements);
       Float64 min_value = 0;
@@ -241,10 +242,7 @@ void CSVTToolView3D::BuildMembrane()
          CComPtr<IPoint2dCollection> points;
          shape->get_PolyPoints(&points);
 
-         IndexType nPoints;
-         points->get_Count(&nPoints);
-
-         const auto* pElement = pFDMesh->GetElement(elementIdx);
+         const auto& pElement = pFDMesh->GetElement(elementIdx);
          Float64 avg_value = 0;
          for (IndexType i = 0; i < 4; i++)
          {
@@ -343,3 +341,165 @@ SoGroup* CSVTToolView3D::BuildFacet(IPoint2dCollection* pPoints,const std::tuple
 
    return group;
 }
+
+#else
+
+void CSVTToolView3D::BuildGirderShape()
+{
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
+   const auto& shape = pDoc->GetShape();
+
+   auto shape_points = shape->GetPolyPoints();
+
+   SoGroup* group = BuildFacet(shape_points, std::tuple<Float64, Float64, Float64>(1, 0, 0));
+
+   SoGroup* root = (SoGroup*)m_pViewer->getSceneGraph();
+   root->replaceChild(m_pGirder, group);
+   m_pGirder = group;
+}
+
+void CSVTToolView3D::BuildGrid()
+{
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
+
+   SoGroup* group = new SoGroup;
+
+   std::vector<WBFL::Geometry::Rectangle> vMesh = pDoc->GetMesh();
+   for (auto& mesh_element : vMesh)
+   {
+      // mirror by changing the sign on the X value of the hook point
+      mesh_element.GetHookPoint()->X() = -mesh_element.GetHookPoint()->X();
+      auto poly_points = mesh_element.GetPolyPoints();
+
+      SoGroup* facet = BuildFacet(poly_points, std::tuple<Float64, Float64, Float64>(0, 0, 1));
+      group->addChild(facet);
+   }
+
+   SoGroup* root = (SoGroup*)m_pViewer->getSceneGraph();
+   root->replaceChild(m_pGrid, group);
+   m_pGrid = group;
+}
+
+void CSVTToolView3D::BuildMembrane()
+{
+   CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
+   if (pDoc->IsComputed())
+   {
+      SoGroup* group = new SoGroup;
+
+      auto vMesh = pDoc->GetMesh();
+      const auto& results = pDoc->GetTorsionalConstant();
+      const auto& pNodeValues = results.solution.GetFiniteDifferenceSolution();
+      const auto& pFDMesh = results.solution.GetFiniteDifferenceMesh();
+      IndexType nElements = pFDMesh->GetElementCount();
+      ATLASSERT(vMesh.size() == nElements);
+      Float64 min_value = 0;
+      Float64 max_value = 0;
+      IndexType nNodes = pFDMesh->GetInteriorNodeCount();
+      for (IndexType nodeIdx = 0; nodeIdx < nNodes; nodeIdx++)
+      {
+         max_value = Max(max_value, pNodeValues[nodeIdx]);
+      }
+
+      SbVec3f* verticies = new SbVec3f[4 * nElements];
+      long* indicies = new long[5 * nElements];
+      SbColor* colors = new SbColor[nElements];
+
+      for (IndexType elementIdx = 0; elementIdx < nElements; elementIdx++)
+      {
+         auto points = vMesh[elementIdx].GetPolyPoints();
+
+         const auto& pElement = pFDMesh->GetElement(elementIdx);
+         Float64 avg_value = 0;
+         for (IndexType i = 0; i < 4; i++)
+         {
+            const auto& pnt = points[i];
+
+            auto [x,y] = pnt.GetLocation();
+
+            Float64 z = pElement->Node[i] == INVALID_INDEX ? 0 : pNodeValues[pElement->Node[i]];
+            avg_value += z;
+
+            verticies[4 * elementIdx + i].setValue((float)x, (float)y, (float)sqrt(z));
+            indicies[5 * elementIdx + i] = (long)(4 * elementIdx + i);
+         }
+         indicies[5 * elementIdx + 4] = SO_END_FACE_INDEX;
+         avg_value /= 4;
+
+         auto c = GetColor(min_value, max_value, avg_value);
+         colors[elementIdx].setValue((float)std::get<0>(c), (float)std::get<1>(c), (float)std::get<2>(c));
+      } // next mesh element
+
+      SoMaterial* material = new SoMaterial;
+      //material->ambientColor.setValues(0, (int)nElements, colors);
+      material->diffuseColor.setValues(0, (int)nElements, colors);
+      //material->emissiveColor.setValues(0, (int)nElements, colors);
+      group->addChild(material);
+
+      SoMaterialBinding* binding = new SoMaterialBinding;
+      binding->value = SoMaterialBinding::PER_FACE_INDEXED;
+      group->addChild(binding);
+
+      SoDrawStyle* style = new SoDrawStyle;
+      style->style = SoDrawStyle::FILLED;
+      group->addChild(style);
+
+      SoShapeHints* hints = new SoShapeHints;
+      hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+      hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE;
+      hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
+      group->addChild(hints);
+
+      SoCoordinate3* coordinates = new SoCoordinate3;
+      coordinates->point.setValues(0, (int)(4 * nElements), verticies);
+      group->addChild(coordinates);
+
+      SoIndexedFaceSet* face_set = new SoIndexedFaceSet;
+      face_set->coordIndex.setValues(0, (int)(5 * nElements), (int32_t*)indicies);
+      group->addChild(face_set);
+
+      SoGroup* root = (SoGroup*)m_pViewer->getSceneGraph();
+      root->replaceChild(m_pMembrane, group);
+      m_pMembrane = group;
+   } // if results computed
+}
+
+SoGroup* CSVTToolView3D::BuildFacet(const std::vector<WBFL::Geometry::Point2d>& points, const std::tuple<Float64, Float64, Float64>& color)
+{
+   SoGroup* group = new SoGroup;
+
+   SoMaterial* material = new SoMaterial;
+   material->emissiveColor.setValue((float)std::get<0>(color), (float)std::get<1>(color), (float)std::get<2>(color));
+   group->addChild(material);
+
+   SoDrawStyle* style = new SoDrawStyle;
+   style->style = SoDrawStyle::LINES;
+   group->addChild(style);
+
+   IndexType nPoints = points.size();
+   SbVec3f* pVerticies = new SbVec3f[nPoints];
+   for (IndexType i = 0; i < nPoints; i++)
+   {
+      auto [x,y] = points[i].GetLocation();
+      pVerticies[i].setValue((float)x, (float)y, 0.0);
+   }
+
+   SoCoordinate3* coords = new SoCoordinate3;
+   coords->point.setValues(0, (int)nPoints, pVerticies);
+   group->addChild(coords);
+
+   int* pIndicies = new int[nPoints + 1];
+   for (int i = 0; i < nPoints; i++)
+   {
+      pIndicies[i] = i;
+   }
+
+   pIndicies[nPoints] = SO_END_FACE_INDEX;
+
+   SoIndexedFaceSet* face_set = new SoIndexedFaceSet;
+   face_set->coordIndex.setValues(0, (int)(nPoints + 1), (int32_t*)pIndicies);
+   group->addChild(face_set);
+
+   return group;
+}
+#endif

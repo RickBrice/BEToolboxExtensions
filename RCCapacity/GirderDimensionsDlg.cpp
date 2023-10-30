@@ -48,7 +48,7 @@ void CGirderDimensionsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_MetaFileStatic(pDX, IDC_PICTURE, m_GirderPicture, AfxGetInstanceHandle(), m_BeamType == WideFlange ? _T("WideFlange") : _T("NU"), _T("Metafile"), EMF_FIT);
 
 	CEAFApp* pApp = EAFGetApp();
-	const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+	const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
 	DDX_UnitValueAndTag(pDX, IDC_VALUE_1,  IDC_UNIT_1,  m_Values[0], pDisplayUnits->ComponentDim);
 	DDX_UnitValueAndTag(pDX, IDC_VALUE_2,  IDC_UNIT_2,  m_Values[1], pDisplayUnits->ComponentDim);

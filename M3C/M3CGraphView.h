@@ -23,7 +23,7 @@
 
 // CM3CGraphView view
 
-#include <UnitMgt\IndirectMeasure.h>
+#include <Units\IndirectMeasure.h>
 
 interface IStressStrain;
 
@@ -51,7 +51,7 @@ protected:
    CRect m_PrintingRect;
    CRect GetDrawingRect();
 
-   unitmgtScalar m_Scalar;
+   WBFL::Units::ScalarData m_Scalar;
 
    virtual void GetMaterialModel(IStressStrain** ppMaterial) = 0;
    virtual LPCTSTR GetGraphTitle() = 0;

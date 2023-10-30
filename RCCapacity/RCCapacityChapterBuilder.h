@@ -22,12 +22,15 @@
 
 #pragma once
 #include <ReportManager\ChapterBuilder.h>
-#include <GraphicsLib\PointMapper.h>
+#include <Graphing/PointMapper.h>
+#include <atlimage.h>
 
 class CRCCapacityDoc;
+class rptRcImage;
+struct IMomentCapacitySolution;
 
 class CRCCapacityChapterBuilder :
-   public CChapterBuilder
+   public WBFL::Reporting::ChapterBuilder
 {
 public:
    CRCCapacityChapterBuilder(CRCCapacityDoc* pDoc);
@@ -35,10 +38,18 @@ public:
 
    virtual LPCTSTR GetName() const override;
    virtual Uint16 GetMaxLevel() const override;
-   virtual rptChapter* Build(CReportSpecification* pRptSpec,Uint16 level) const override;
+   virtual rptChapter* Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec,Uint16 level) const override;
    virtual bool Select() const override { return true; }
-   virtual CChapterBuilder* Clone() const override;
+   virtual std::unique_ptr<WBFL::Reporting::ChapterBuilder> Clone() const override;
 
 private:
    CRCCapacityDoc* m_pDoc;
+
+   rptRcImage* CreateImage(IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
+   void DrawSection(CImage& image, IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
+   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
+
+   // This is a list of temporary files that were created on the fly
+   // Delete them in the destructor
+   std::vector<std::_tstring> m_TemporaryImageFiles;
 };

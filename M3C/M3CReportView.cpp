@@ -89,7 +89,7 @@ void CM3CReportView::OnInitialUpdate()
 {
    CM3CDoc* pDoc = (CM3CDoc*)GetDocument();
 
-   auto names = pDoc->m_RptMgr.GetReportNames();
+   auto names = pDoc->GetReportManager()->GetReportNames();
    std::_tstring strName = GetReportName();
    IndexType idx = 0;
    for (const auto& name : names)
@@ -104,7 +104,7 @@ void CM3CReportView::OnInitialUpdate()
    CEAFReportViewCreationData data;
    data.m_RptIdx = idx;
    data.m_bPromptForSpec = false;
-   data.m_pReportBuilderMgr = &pDoc->m_RptMgr;
+   data.m_pReportBuilderMgr = pDoc->GetReportManager();
    CEAFDocTemplate* pDocTemplate = (CEAFDocTemplate*)pDoc->GetDocTemplate();
    pDocTemplate->SetViewCreationData((void*)&data);
 
@@ -139,7 +139,7 @@ void CM3CAnalysisDetailsReportView::UpdateCurvatureList()
    CM3CDoc* pDoc = (CM3CDoc*)GetDocument();
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
    CComPtr<IMomentCurvatureSolution> curvature_solution;
    pDoc->GetMomentCurvature(&curvature_solution);
@@ -180,7 +180,7 @@ CWnd* CM3CAnalysisDetailsReportView::CreateEditButton()
 void CM3CAnalysisDetailsReportView::CurvatureChanged(IndexType idx)
 {
    m_pReportSpec = m_pReportBrowser->GetReportSpecification();
-   std::shared_ptr<CM3CAnalysisDetailsReportSpecification> pSpec = std::dynamic_pointer_cast<CM3CAnalysisDetailsReportSpecification>(m_pReportSpec);
+   auto pSpec = std::dynamic_pointer_cast<CM3CAnalysisDetailsReportSpecification>(m_pReportSpec);
    pSpec->SetResultsIndex(idx);
    RefreshReport();
 }

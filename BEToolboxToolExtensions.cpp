@@ -28,20 +28,20 @@ HRESULT Register(bool bRegister)
 {
    HRESULT hr = S_OK;
 
-   hr = sysComCatMgr::RegWithCategory(CLSID_M3CTool, CATID_BEToolboxTool, bRegister);
+   hr = WBFL::System::ComCatMgr::RegWithCategory(CLSID_M3CTool, CATID_BEToolboxTool, bRegister);
    if (FAILED(hr))
    {
       return hr;
    }
 
 
-	hr = sysComCatMgr::RegWithCategory(CLSID_SVTTool, CATID_BEToolboxTool, bRegister);
+	hr = WBFL::System::ComCatMgr::RegWithCategory(CLSID_SVTTool, CATID_BEToolboxTool, bRegister);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
-	hr = sysComCatMgr::RegWithCategory(CLSID_RCCapacityTool, CATID_BEToolboxTool, bRegister);
+	hr = WBFL::System::ComCatMgr::RegWithCategory(CLSID_RCCapacityTool, CATID_BEToolboxTool, bRegister);
 	if (FAILED(hr))
 	{
 		return hr;

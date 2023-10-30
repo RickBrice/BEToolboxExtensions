@@ -52,6 +52,7 @@ public:
    virtual void OnInitialUpdate() override;
    virtual void OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint) override;
    afx_msg void OnSize(UINT nType, int cx, int cy);
+   afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };
 
 

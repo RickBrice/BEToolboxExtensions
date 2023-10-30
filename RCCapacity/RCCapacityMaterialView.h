@@ -28,7 +28,6 @@
 #include <EAF\EAFUtilities.h>
 #include "RCCapacityChildFrame.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib/GraphicsLib.h>
 #include <array>
 
 class CMaterialViewController
@@ -74,7 +73,7 @@ public:
 
          std::vector<Float64> vPoints;
          vPoints.push_back(-1.0 * fabs(modelData.ecu));
-         Float64 fc = ::ConvertFromSysUnits(modelData.fcBeam, unitMeasure::KSI);
+         Float64 fc = WBFL::Units::ConvertFromSysUnits(modelData.fcBeam, WBFL::Units::Measure::KSI);
          Float64 Ec = 2500.0 * pow(fc, 0.33); // KSI
 
          Float64 alpha = 0.85;
@@ -82,7 +81,7 @@ public:
          vPoints.push_back(ecp);
 
          Float64 gamma = 0.85;
-         Float64 ftcr = ::ConvertFromSysUnits(modelData.ftcr, unitMeasure::KSI);
+         Float64 ftcr = WBFL::Units::ConvertFromSysUnits(modelData.ftcr, WBFL::Units::Measure::KSI);
          Float64 etcr = gamma * ftcr / Ec;
          vPoints.push_back(etcr);
 
@@ -107,8 +106,8 @@ public:
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
       const auto& modelData = pDoc->GetModelData();
 
-      Float64 fy = matRebar::GetYieldStrength(modelData.RebarType, modelData.RebarGrade);
-      Float64 Es = matRebar::GetE(modelData.RebarType, modelData.RebarGrade);
+      Float64 fy = WBFL::Materials::Rebar::GetYieldStrength(modelData.RebarType, modelData.RebarGrade);
+      Float64 Es = WBFL::Materials::Rebar::GetE(modelData.RebarType, modelData.RebarGrade);
 
       std::vector<Float64> vPoints;
       vPoints.push_back(fy / Es);
@@ -148,7 +147,7 @@ protected:
    CComboBox m_cbMaterial;
    CFont   m_fnEdit;
 
-   unitmgtScalar m_Scalar;
+   WBFL::Units::ScalarData m_Scalar;
 
    CDeckMaterialViewController m_DeckController;
    CGirderMaterialViewController m_GirderController;

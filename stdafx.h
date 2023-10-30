@@ -8,6 +8,7 @@
 #define STRICT
 #endif
 
+#include <WBFLMFC.h>
 #include <WBFLAll.h>
 
 #define _ATL_APARTMENT_THREADED
@@ -37,7 +38,7 @@
 #include <atlcom.h>
 #include <atlctl.h>
 
-#include <UnitMgt\UnitMgt.h>
+#include <Units\Units.h>
 #include <WBFLTools.h>
 #include <MFCTools\MFCTools.h>
 

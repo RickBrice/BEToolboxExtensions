@@ -25,10 +25,10 @@
 #include <ReportManager\ReportSpecification.h>
 
 class CM3CAnalysisDetailsReportSpecification :
-   public CReportSpecification
+   public WBFL::Reporting::ReportSpecification
 {
 public:
-   CM3CAnalysisDetailsReportSpecification(LPCTSTR strReportName);
+   CM3CAnalysisDetailsReportSpecification(const std::_tstring& strReportName);
    ~CM3CAnalysisDetailsReportSpecification(void);
 
    void SetResultsIndex(IndexType idx);

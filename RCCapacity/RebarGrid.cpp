@@ -162,27 +162,27 @@ void CRebarGrid::AddRow()
 void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    ROWCOL col = 1;
 
    CString strValue;
    Float64 value;
    strValue = GetCellValue(row,col++);
-   rebar.size = lrfdRebarPool::GetBarSize(strValue);
+   rebar.size = WBFL::LRFD::RebarPool::GetBarSize(strValue);
 
    strValue = GetCellValue(row, col++);
    long iValue;
-   sysTokenizer::ParseLong(strValue, &iValue);
+   WBFL::System::Tokenizer::ParseLong(strValue, &iValue);
    rebar.nBars = iValue;
 
    strValue = GetCellValue(row, col++);
-   sysTokenizer::ParseDouble(strValue, &value);
-   rebar.spacing = ::ConvertToSysUnits(value,pDispUnits->ComponentDim.UnitOfMeasure);
+   WBFL::System::Tokenizer::ParseDouble(strValue, &value);
+   rebar.spacing = WBFL::Units::ConvertToSysUnits(value,pDispUnits->ComponentDim.UnitOfMeasure);
    
    strValue = GetCellValue(row, col++);
-   sysTokenizer::ParseDouble(strValue, &value);
-   rebar.location = ::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
+   WBFL::System::Tokenizer::ParseDouble(strValue, &value);
+   rebar.location = WBFL::Units::ConvertToSysUnits(value, pDispUnits->ComponentDim.UnitOfMeasure);
 
    strValue = GetCellValue(row, col++);
    if (strValue == _T("Top Girder"))
@@ -203,7 +203,7 @@ void CRebarGrid::GetRebarData(ROWCOL row,RebarData& rebar)
 void CRebarGrid::InsertRow(const RebarData& rebar)
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    CRCCapacityInputView* pParent = (CRCCapacityInputView*)GetParent();
 
@@ -218,13 +218,13 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
          );
 
    CString strBarSizeChoiceList;
-   matRebar::Type type;
-   matRebar::Grade grade;
+   WBFL::Materials::Rebar::Type type;
+   WBFL::Materials::Rebar::Grade grade;
    pParent->GetRebarType(type, grade);
-   lrfdRebarIter rebarIter(type, grade);
+   WBFL::LRFD::RebarIter rebarIter(type, grade);
    for (rebarIter.Begin(); rebarIter; rebarIter.Next())
    {
-      const matRebar* pRebar = rebarIter.GetCurrentRebar();
+      const auto* pRebar = rebarIter.GetCurrentRebar();
       strBarSizeChoiceList += pRebar->GetName().c_str();
       strBarSizeChoiceList += _T("\n");
    }
@@ -235,7 +235,7 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
       .SetControl(GX_IDS_CTRL_CBS_DROPDOWNLIST)
       .SetChoiceList(strBarSizeChoiceList)
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(lrfdRebarPool::GetBarSize(rebar.size).c_str())
+      .SetValue(WBFL::LRFD::RebarPool::GetBarSize(rebar.size).c_str())
    );
 
    SetStyleRange(CGXRange(nRow,col++), CGXStyle()
@@ -245,12 +245,12 @@ void CRebarGrid::InsertRow(const RebarData& rebar)
 
 	SetStyleRange(CGXRange(nRow,col++), CGXStyle()
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(::ConvertFromSysUnits(rebar.spacing,pDispUnits->ComponentDim.UnitOfMeasure))
+      .SetValue(WBFL::Units::ConvertFromSysUnits(rebar.spacing,pDispUnits->ComponentDim.UnitOfMeasure))
          );
 
    SetStyleRange(CGXRange(nRow, col++), CGXStyle()
       .SetHorizontalAlignment(DT_RIGHT)
-      .SetValue(::ConvertFromSysUnits(rebar.location, pDispUnits->ComponentDim.UnitOfMeasure))
+      .SetValue(WBFL::Units::ConvertFromSysUnits(rebar.location, pDispUnits->ComponentDim.UnitOfMeasure))
    );
 
    std::array<CString, 4> strMeasuredFrom{ _T("Top Girder"),_T("Bottom Girder"),_T("Top Slab"),_T("Bottom Slab") };
@@ -307,7 +307,7 @@ CString CRebarGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   if ( nCol == 2 )
 //   {
 //      long l;
-//      if ( !sysTokenizer::ParseLong(s,&l) )
+//      if ( !WBFL::System::Tokenizer::ParseLong(s,&l) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;
@@ -316,7 +316,7 @@ CString CRebarGrid::GetCellValue(ROWCOL nRow, ROWCOL nCol)
 //   else
 //   {
 //      Float64 d;
-//      if ( !sysTokenizer::ParseDouble(s,&d) )
+//      if ( !WBFL::System::Tokenizer::ParseDouble(s,&d) )
 //      {
 //         SetWarningText(_T("Value must be a number"));
 //         return FALSE;
@@ -350,7 +350,7 @@ void CRebarGrid::OnUnitsModeChanged()
 void CRebarGrid::UpdateColumnHeaders()
 {
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
    // set text along top row
    ROWCOL col = 0;

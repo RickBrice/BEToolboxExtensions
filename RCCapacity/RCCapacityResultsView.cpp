@@ -26,10 +26,10 @@
 #include "stdafx.h"
 #include "RCCapacityResultsView.h"
 #include "RCCapacityDoc.h"
-#include <GraphicsLib\GraphicsLib.h>
 #include <MFCTools\Format.h>
 
 #include <EAF\EAFHints.h>
+#include <Graphing/GraphXY.h>
 
 #include <algorithm>
 
@@ -121,14 +121,14 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CFont* pOldFont = pDC->SelectObject(&font);
 
    CEAFApp* pApp = EAFGetApp();
-   const unitmgtIndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
+   const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   CollectionIndexType nSlices;
+   IndexType nSlices;
    general_solution->get_SliceCount(&nSlices);
 
    // determine the bounding box
    CComPtr<IRect2d> bbox;
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -153,8 +153,8 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    bbox->get_Height(&wy);
 
    // set up coordinate mapping to draw cross section
-   grlibPointMapper mapper;
-   mapper.SetMappingMode(grlibPointMapper::Isotropic);
+   WBFL::Graphing::PointMapper mapper;
+   mapper.SetMappingMode(WBFL::Graphing::PointMapper::MapMode::Isotropic);
    mapper.SetWorldExt(wx, wy);
 
    Float64 orgY;
@@ -220,7 +220,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    std::vector<std::pair<CComPtr<IGeneralSectionSlice>, int>> vPieces;
    vPieces.reserve(nSlices);
 
-   for (CollectionIndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
       CComPtr<IGeneralSectionSlice> slice;
       general_solution->get_Slice(sliceIdx, &slice);
@@ -312,7 +312,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CPoint p;
 
    CComPtr<IPlane3d> strain_plane;
-   solution->get_StrainPlane(&strain_plane);
+   solution->get_IncrementalStrainPlane(&strain_plane);
 
    Float64 eTop, eBottom; // strain top and bottom
    strain_plane->GetZ(0, top, &eTop);
@@ -527,12 +527,12 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    pDC->SelectObject(pOldFont);
 }
 
-void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, grlibPointMapper& mapper) const
+void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
 {
    CComPtr<IPoint2dCollection> objPoints;
    pShape->get_PolyPoints(&objPoints);
 
-   CollectionIndexType nPoints;
+   IndexType nPoints;
    objPoints->get_Count(&nPoints);
 
    if (nPoints < 3)
@@ -559,7 +559,7 @@ void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, grlibPointMappe
    else
    {
       CPoint* points = new CPoint[nPoints];
-      for (CollectionIndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
+      for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
          CComPtr<IPoint2d> point;
          objPoints->get_Item(pntIdx, &point);

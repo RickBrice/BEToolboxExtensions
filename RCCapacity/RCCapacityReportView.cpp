@@ -78,7 +78,7 @@ void CRCCapacityReportView::OnInitialUpdate()
 {
    CRCCapacityDoc* pDoc = (CRCCapacityDoc*)GetDocument();
 
-   auto names = pDoc->GetReportManager().GetReportNames();
+   auto names = pDoc->GetReportManager()->GetReportNames();
    std::_tstring strName = GetReportName();
    IndexType idx = 0;
    for (const auto& name : names)
@@ -93,7 +93,7 @@ void CRCCapacityReportView::OnInitialUpdate()
    CEAFReportViewCreationData data;
    data.m_RptIdx = idx;
    data.m_bPromptForSpec = false;
-   data.m_pReportBuilderMgr = &pDoc->GetReportManager();
+   data.m_pReportBuilderMgr = pDoc->GetReportManager();
    CEAFDocTemplate* pDocTemplate = (CEAFDocTemplate*)pDoc->GetDocTemplate();
    pDocTemplate->SetViewCreationData((void*)&data);
 

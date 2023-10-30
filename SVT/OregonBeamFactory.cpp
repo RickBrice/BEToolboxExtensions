@@ -69,6 +69,38 @@ void OregonBeamFactory::CreateBeam(OregonBeamType type, IUnitConvert* pConvert, 
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> OregonBeamFactory::CreateBeam(OregonBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::PrecastBeam> beam;
+
+   if ((int)OregonBeamType::BI51 <= (int)type && (int)type < (int)OregonBeamType::nSections)
+   {
+      int i = (int)type - (int)OregonBeamType::BI51;
+      beam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+      using namespace IBeam;
+
+      Float64 c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4;
+      c1 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+      d1 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      d6 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D6], WBFL::Units::Measure::Inch);
+      d7 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][D7], WBFL::Units::Measure::Inch);
+      t1 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][T1], WBFL::Units::Measure::Inch);
+      t2 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][T2], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      w3 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
+      w4 = WBFL::Units::ConvertToSysUnits(gs_OregonBeamDimensions[i][W4], WBFL::Units::Measure::Inch);
+
+      MapPrecastBeamDimensions(beam, c1, d1, d2, d3, d4, d5, d6, d7, t1, t2, w1, w2, w3, w4);
+   }
+   return beam;
+}
+
 static std::_tstring gs_Oregonnames[] = {
    _T("BI51"),
    _T("BI63"),
@@ -88,11 +120,23 @@ LPCTSTR OregonBeamFactory::GetName(OregonBeamType type)
 
 int OregonBeamFactory::GetApproxMethods(OregonBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
 Float64 OregonBeamFactory::GetJApprox1(OregonBeamType type,IUnitConvert* pConvert)
 {
    int i = (int)type - (int)OregonBeamType::BI51;
    return ComputeJApprox_IBeam(i, pConvert, gs_OregonBeamDimensions);
+}
+
+Float64 OregonBeamFactory::GetJApprox1(OregonBeamType type)
+{
+   int i = (int)type - (int)OregonBeamType::BI51;
+   return ComputeJApprox_IBeam(i, gs_OregonBeamDimensions);
+}
+
+Float64 OregonBeamFactory::GetJApprox3(OregonBeamType type)
+{
+   int i = (int)type - (int)OregonBeamType::BI51;
+   return ComputeJApprox3_IBeam(i, gs_OregonBeamDimensions);
 }

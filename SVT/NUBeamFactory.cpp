@@ -60,6 +60,49 @@ void NUBeamFactory::CreateBeam(NUBeamType type, IUnitConvert* pConvert, IShape**
 }
 
 
+std::unique_ptr<WBFL::Geometry::Shape> NUBeamFactory::CreateBeam(NUBeamType type)
+{
+   std::unique_ptr<WBFL::Geometry::NUBeam> beam;
+
+   if ((int)NUBeamType::NU900 <= (int)type && (int)type <= (int)NUBeamType::NU2000)
+   {
+      int i = (int)type - (int)NUBeamType::NU900;
+      beam = std::make_unique<WBFL::Geometry::NUBeam>();
+
+      using namespace _NUBeam;
+
+      Float64 d1, d2, d3, d4, d5, r1, r2, r3, r4, t, w1, w2, c1;
+      d1 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][D1], WBFL::Units::Measure::Inch);
+      d2 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][D2], WBFL::Units::Measure::Inch);
+      d3 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][D3], WBFL::Units::Measure::Inch);
+      d4 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][D4], WBFL::Units::Measure::Inch);
+      d5 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][D5], WBFL::Units::Measure::Inch);
+      r1 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][R1], WBFL::Units::Measure::Inch);
+      r2 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][R2], WBFL::Units::Measure::Inch);
+      r3 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][R3], WBFL::Units::Measure::Inch);
+      r4 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][R4], WBFL::Units::Measure::Inch);
+      t  = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][T], WBFL::Units::Measure::Inch);
+      w1 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][W1], WBFL::Units::Measure::Inch);
+      w2 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][W2], WBFL::Units::Measure::Inch);
+      c1 = WBFL::Units::ConvertToSysUnits(gs_NUBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
+
+      beam->SetD1(d1);
+      beam->SetD2(d2);
+      beam->SetD3(d3);
+      beam->SetD4(d4);
+      beam->SetD5(d5);
+      beam->SetR1(r1);
+      beam->SetR2(r2);
+      beam->SetR3(r3);
+      beam->SetR4(r4);
+      beam->SetT(t);
+      beam->SetW1(w1);
+      beam->SetW2(w2);
+      beam->SetC1(c1);
+   }
+   return beam;
+}
+
 static std::_tstring gs_NUnames[] = {
    _T("NU900"),
    _T("NU1100"),
@@ -76,11 +119,23 @@ LPCTSTR NUBeamFactory::GetName(NUBeamType type)
 
 int NUBeamFactory::GetApproxMethods(NUBeamType type)
 {
-   return AM_J1 | AM_J2;
+   return AM_J1 | AM_J2 | AM_J3;
 }
 
-Float64 NUBeamFactory::GetJApprox1(NUBeamType type,IUnitConvert* pConvert)
+Float64 NUBeamFactory::GetJApprox1(NUBeamType type, IUnitConvert* pConvert)
 {
    int i = (int)type - (int)NUBeamType::NU900;
    return ComputeJApprox_NU(i, pConvert, gs_NUBeamDimensions);
+}
+
+Float64 NUBeamFactory::GetJApprox1(NUBeamType type)
+{
+   int i = (int)type - (int)NUBeamType::NU900;
+   return ComputeJApprox_NU(i, gs_NUBeamDimensions);
+}
+
+Float64 NUBeamFactory::GetJApprox3(NUBeamType type)
+{
+   int i = (int)type - (int)NUBeamType::NU900;
+   return ComputeJApprox3_NU(i, gs_NUBeamDimensions);
 }

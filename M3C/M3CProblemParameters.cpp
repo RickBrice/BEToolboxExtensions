@@ -25,41 +25,41 @@
 
 CM3CProblemParameters::CM3CProblemParameters()
 {
-   D = ::ConvertToSysUnits(72, unitMeasure::Inch);
+   D = WBFL::Units::ConvertToSysUnits(72, WBFL::Units::Measure::Inch);
 
-   fco = ::ConvertToSysUnits(5.0, unitMeasure::KSI);
+   fco = WBFL::Units::ConvertToSysUnits(5.0, WBFL::Units::Measure::KSI);
    eco = 0.003;
 
-   AsSpiral = ::ConvertToSysUnits(0.44, unitMeasure::Inch2);
-   db = ::ConvertToSysUnits(0.75, unitMeasure::Inch);
-   S = ::ConvertToSysUnits(3, unitMeasure::Inch);
-   FySpiral = ::ConvertToSysUnits(60, unitMeasure::KSI);
+   AsSpiral = WBFL::Units::ConvertToSysUnits(0.44, WBFL::Units::Measure::Inch2);
+   db = WBFL::Units::ConvertToSysUnits(0.75, WBFL::Units::Measure::Inch);
+   S = WBFL::Units::ConvertToSysUnits(3, WBFL::Units::Measure::Inch);
+   FySpiral = WBFL::Units::ConvertToSysUnits(60, WBFL::Units::Measure::KSI);
    esu = 0.06;
 
-   fy = ::ConvertToSysUnits(60.0, unitMeasure::KSI);
-   fu = ::ConvertToSysUnits(90.0, unitMeasure::KSI);
-   Es = ::ConvertToSysUnits(29000, unitMeasure::KSI);
+   fy = WBFL::Units::ConvertToSysUnits(60.0, WBFL::Units::Measure::KSI);
+   fu = WBFL::Units::ConvertToSysUnits(90.0, WBFL::Units::Measure::KSI);
+   Es = WBFL::Units::ConvertToSysUnits(29000, WBFL::Units::Measure::KSI);
    esh = 0.0115;
    efr = 0.06;
 
-   Cover = ::ConvertToSysUnits(1.5, unitMeasure::Inch);
+   Cover = WBFL::Units::ConvertToSysUnits(1.5, WBFL::Units::Measure::Inch);
 
-   Bonded_Rebar_As_per_bar = ::ConvertToSysUnits(1.56, unitMeasure::Inch2);
+   Bonded_Rebar_As_per_bar = WBFL::Units::ConvertToSysUnits(1.56, WBFL::Units::Measure::Inch2);
    Bonded_Rebar_nBars = 28;
 
    Unbonded_Rebar_As_per_bar = 0;
    Unbonded_Rebar_nBars = 0;
-   Unbonded_Rebar_Lu = ::ConvertToSysUnits(5.0, unitMeasure::Feet);
+   Unbonded_Rebar_Lu = WBFL::Units::ConvertToSysUnits(5.0, WBFL::Units::Measure::Feet);
 
-   lrfdStrandPool* pPool = lrfdStrandPool::GetInstance();
-   pStrand = pPool->GetStrand(matPsStrand::Gr1860, matPsStrand::LowRelaxation, matPsStrand::None, matPsStrand::D1524);
-   Tendon_Ring_Diameter = ::ConvertToSysUnits(12, unitMeasure::Inch);
+   const auto* pPool = WBFL::LRFD::StrandPool::GetInstance();
+   pStrand = pPool->GetStrand(WBFL::Materials::PsStrand::Grade::Gr1860, WBFL::Materials::PsStrand::Type::LowRelaxation, WBFL::Materials::PsStrand::Coating::None, WBFL::Materials::PsStrand::Size::D1524);
+   Tendon_Ring_Diameter = WBFL::Units::ConvertToSysUnits(12, WBFL::Units::Measure::Inch);
    Tendon_nStrands = 0;
-   Tendon_fpe = ::ConvertToSysUnits(0.85*202.5, unitMeasure::KSI); // assume 15% loss
-   Tendon_Lu = ::ConvertToSysUnits(20.0, unitMeasure::Feet);
+   Tendon_fpe = WBFL::Units::ConvertToSysUnits(0.85*202.5, WBFL::Units::Measure::KSI); // assume 15% loss
+   Tendon_Lu = WBFL::Units::ConvertToSysUnits(20.0, WBFL::Units::Measure::Feet);
 
    nSlices = 20;
-   initialStep = ::ConvertToSysUnits(0.00001,unitMeasure::PerInch);
+   initialStep = WBFL::Units::ConvertToSysUnits(0.00001,WBFL::Units::Measure::PerInch);
    P = 0;
 }
 

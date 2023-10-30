@@ -67,7 +67,7 @@ public:
    Float64 Unbonded_Rebar_Lu;
 
    // Unbonded Tendons
-   const matPsStrand* pStrand;
+   const WBFL::Materials::PsStrand* pStrand;
    Float64 Tendon_Ring_Diameter;
    long Tendon_nStrands;
    Float64 Tendon_fpe;

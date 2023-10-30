@@ -25,7 +25,7 @@
 #include "M3CAnalysisDetailsReportSpecification.h"
 
 CM3CAnalysisDetailsReportSpecificationBuilder::CM3CAnalysisDetailsReportSpecificationBuilder() :
-   CReportSpecificationBuilder()
+   WBFL::Reporting::ReportSpecificationBuilder()
 {
 }
 
@@ -34,16 +34,16 @@ CM3CAnalysisDetailsReportSpecificationBuilder::~CM3CAnalysisDetailsReportSpecifi
 
 }
 
-std::shared_ptr<CReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateReportSpec(const CReportDescription& rptDesc, std::shared_ptr<CReportSpecification>& pOldRptSpec)
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateReportSpec(const WBFL::Reporting::ReportDescription& rptDesc, std::shared_ptr<WBFL::Reporting::ReportSpecification> pOldRptSpec) const
 {
    return CreateDefaultReportSpec(rptDesc);
 }
 
-std::shared_ptr<CReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateDefaultReportSpec(const CReportDescription& rptDesc)
+std::shared_ptr<WBFL::Reporting::ReportSpecification> CM3CAnalysisDetailsReportSpecificationBuilder::CreateDefaultReportSpec(const WBFL::Reporting::ReportDescription& rptDesc) const
 {
    std::shared_ptr<CM3CAnalysisDetailsReportSpecification> pMyRptSpec(std::make_shared<CM3CAnalysisDetailsReportSpecification>(rptDesc.GetReportName()));
    auto vChInfo = rptDesc.GetChapterInfo();
-   std::shared_ptr<CReportSpecification> pRptSpec(pMyRptSpec);
+   std::shared_ptr<WBFL::Reporting::ReportSpecification> pRptSpec(pMyRptSpec);
    rptDesc.ConfigureReportSpecification(vChInfo, pRptSpec);
    return pMyRptSpec;
 }

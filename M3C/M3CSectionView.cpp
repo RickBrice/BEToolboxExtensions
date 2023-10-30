@@ -171,9 +171,9 @@ void CM3CSectionView::UpdateDisplayObjects()
    }
 
 
-   CollectionIndexType nShapes;
+   IndexType nShapes;
    section->get_ShapeCount(&nShapes);
-   for (CollectionIndexType shapeIdx = 0; shapeIdx < nShapes; shapeIdx++)
+   for (IndexType shapeIdx = 0; shapeIdx < nShapes; shapeIdx++)
    {
       CComPtr<IShape> shape;
       section->get_Shape(shapeIdx, &shape);
