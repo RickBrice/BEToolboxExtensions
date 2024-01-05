@@ -238,6 +238,9 @@
     <ClCompile Include="SVT\PCIUHPCBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RCCapacity\BilinearConcreteModel.cpp">
+      <Filter>RCCapacity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -449,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="SVT\PCIUHPCBeamFactory.h">
       <Filter>SVT\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCCapacity\BilinearConcreteModel.h">
+      <Filter>RCCapacity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

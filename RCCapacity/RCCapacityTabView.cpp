@@ -82,7 +82,7 @@ int CRCCapacityTabView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
    AddView(RUNTIME_CLASS(CRCCapacityMainView), _T("Section"));
    AddView(RUNTIME_CLASS(CRCCapacityMaterialView), _T("Material Models"));
-   AddView(RUNTIME_CLASS(CRCCapacityResultsView), _T("Results"));
+   //AddView(RUNTIME_CLASS(CRCCapacityResultsView), _T("Results"));
    AddView(RUNTIME_CLASS(CRCCapacityReportView), _T("Report"));
 
    SetActiveView(0);

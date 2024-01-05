@@ -52,69 +52,71 @@
 #include <EAF\EAFApp.h>
 #include <EAF\EAFHelp.h>
 
+#include "BilinearConcreteModel.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-void DumpSolution(IGeneralSection* section, IMomentCapacitySolution* solution)
-{
-   USES_CONVERSION;
-
-   std::ostringstream os;
-   
-   CComPtr<IGeneralSectionSolution> general_solution;
-   solution->get_GeneralSectionSolution(&general_solution);
-
-   IndexType nSlices;
-   general_solution->get_SliceCount(&nSlices);
-   os << "Element, Material, Top, Bottom, Ycg, Area, initial strain, incremental strain, total strain, stress, force, moment" << std::endl;
-   TRACE(os.str().c_str());
-
-   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
-   {
-      CComPtr<IGeneralSectionSlice> slice;
-      general_solution->get_Slice(sliceIdx, &slice);
-      Float64 area;
-      CComPtr<IPoint2d> cg;
-      Float64 initial_strain;
-      Float64 incremental_strain;
-      Float64 total_strain;
-      Float64 fgStress;
-      slice->get_Area(&area);
-      slice->get_CG(&cg);
-      slice->get_InitialStrain(&initial_strain);
-      slice->get_IncrementalStrain(&incremental_strain);
-      slice->get_TotalStrain(&total_strain);
-      slice->get_ForegroundStress(&fgStress);
-
-      CComPtr<IStressStrain> ss;
-      slice->get_ForegroundMaterial(&ss);
-      CComBSTR bstrMaterial;
-      ss->get_Name(&bstrMaterial);
-
-      Float64 y;
-      cg->get_Y(&y);
-
-      CComPtr<IShape> shape;
-      slice->get_Shape(&shape);
-      CComPtr<IRect2d> rect;
-      shape->get_BoundingBox(&rect);
-      Float64 top, bottom;
-      rect->get_Top(&top);
-      rect->get_Bottom(&bottom);
-
-      IndexType shapeIdx;
-      slice->get_ShapeIndex(&shapeIdx);
-      CComBSTR bstrName;
-      section->get_Name(shapeIdx, &bstrName);
-
-      std::ostringstream os;
-      os << OLE2A(bstrName) << ", " << OLE2A(bstrMaterial) << ", " << top << ", " << bottom << ", " << y << ", " << area << ", " << initial_strain << ", " << incremental_strain << ", " << total_strain << ", " << fgStress << ", " << area * fgStress << ", " << area * fgStress * y << std::endl;
-      TRACE(os.str().c_str());
-   }
-}
+//void DumpSolution(IGeneralSection* section, IMomentCapacitySolution* solution)
+//{
+//   USES_CONVERSION;
+//
+//   std::ostringstream os;
+//   
+//   CComPtr<IGeneralSectionSolution> general_solution;
+//   solution->get_GeneralSectionSolution(&general_solution);
+//
+//   IndexType nSlices;
+//   general_solution->get_SliceCount(&nSlices);
+//   os << "Element, Material, Top, Bottom, Ycg, Area, initial strain, incremental strain, total strain, stress, force, moment" << std::endl;
+//   TRACE(os.str().c_str());
+//
+//   for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
+//   {
+//      CComPtr<IGeneralSectionSlice> slice;
+//      general_solution->get_Slice(sliceIdx, &slice);
+//      Float64 area;
+//      CComPtr<IPoint2d> cg;
+//      Float64 initial_strain;
+//      Float64 incremental_strain;
+//      Float64 total_strain;
+//      Float64 fgStress;
+//      slice->get_Area(&area);
+//      slice->get_CG(&cg);
+//      slice->get_InitialStrain(&initial_strain);
+//      slice->get_IncrementalStrain(&incremental_strain);
+//      slice->get_TotalStrain(&total_strain);
+//      slice->get_ForegroundStress(&fgStress);
+//
+//      CComPtr<IStressStrain> ss;
+//      slice->get_ForegroundMaterial(&ss);
+//      CComBSTR bstrMaterial;
+//      ss->get_Name(&bstrMaterial);
+//
+//      Float64 y;
+//      cg->get_Y(&y);
+//
+//      CComPtr<IShape> shape;
+//      slice->get_Shape(&shape);
+//      CComPtr<IRect2d> rect;
+//      shape->get_BoundingBox(&rect);
+//      Float64 top, bottom;
+//      rect->get_Top(&top);
+//      rect->get_Bottom(&bottom);
+//
+//      IndexType shapeIdx;
+//      slice->get_ShapeIndex(&shapeIdx);
+//      CComBSTR bstrName;
+//      section->get_Name(shapeIdx, &bstrName);
+//
+//      std::ostringstream os;
+//      os << OLE2A(bstrName) << ", " << OLE2A(bstrMaterial) << ", " << top << ", " << bottom << ", " << y << ", " << area << ", " << initial_strain << ", " << incremental_strain << ", " << total_strain << ", " << fgStress << ", " << area * fgStress << ", " << area * fgStress * y << std::endl;
+//      TRACE(os.str().c_str());
+//   }
+//}
 
 // CRCCapacityDoc
 
@@ -126,7 +128,7 @@ CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
    m_BeamFactories.push_back(std::make_pair(_T("California"), std::make_unique<CCTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Colorado"), std::make_unique<CCDOTBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Florida"), std::make_unique<CFloridaBeamFactory>()));
-   m_BeamFactories.push_back(std::make_pair(_T("Illinios"), std::make_unique<CILBeamFactory>()));
+   m_BeamFactories.push_back(std::make_pair(_T("Illinois"), std::make_unique<CILBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Minnesota"), std::make_unique<CMNBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("Nebraska"), std::make_unique<CNUBeamFactory>()));
    m_BeamFactories.push_back(std::make_pair(_T("New England"), std::make_unique<CNEBeamFactory>()));
@@ -139,23 +141,16 @@ CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
 
    EnableUIHints(FALSE); // not using UIHints feature
 
-   m_UnitServer.CoCreateInstance(CLSID_UnitServer);
-   m_UnitServer->get_UnitConvert(&m_UnitConvert);
-
-   m_Solver.CoCreateInstance(CLSID_MomentCapacitySolver);
-   m_Solver->put_Slices(50);
-   m_Solver->put_SliceGrowthFactor(1);
-   m_Solver->put_AxialTolerance(0.0001);
-
-   m_bUpdateModel = true;
-   m_bUpdateSolution = true;;
+   m_Solver.SetSlices(100);
+   m_Solver.SetSliceGrowthFactor(1);
+   m_Solver.SetTolerance(0.0001);
 
 
    // when report printing is implemented, we'll need a title page... this commented out code shows how to do it
    //std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
    std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("Analysis Results")));
    //pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(new CRCCapacityChapterBuilder(this)));
+   pRptBuilder->AddChapterBuilder(std::make_shared<CRCCapacityChapterBuilder>(this));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 }
 
@@ -197,13 +192,21 @@ BOOL CRCCapacityDoc::Init()
       return FALSE;
    }
 
-   m_pSlabShape.CoCreateInstance(CLSID_Rect);
-   m_pCompositeShape.CoCreateInstance(CLSID_CompositeShape);
-   CComQIPtr<IShape> slab_shape(m_pSlabShape);
-   m_pCompositeShape->AddShape(slab_shape, VARIANT_FALSE);
+   m_pCompositeShape = std::make_shared<WBFL::Geometry::CompositeShape>();
+   
+   m_pSlabShape = std::make_shared<WBFL::Geometry::Rectangle>();
+   m_pCompositeShape->AddShape(m_pSlabShape);
 
-   m_BeamFactories[0].second->CreateBeam(0, m_UnitConvert, &m_pGirderShape);
-   m_pCompositeShape->AddShape(m_pGirderShape, VARIANT_FALSE);
+   m_pGirderShape = std::move(m_BeamFactories[0].second->CreateBeam(0));
+   m_pCompositeShape->AddShape(m_pGirderShape);
+
+   //m_pSlabShape.CoCreateInstance(CLSID_Rect);
+   //m_pCompositeShape.CoCreateInstance(CLSID_CompositeShape);
+   //CComQIPtr<IShape> slab_shape(m_pSlabShape);
+   //m_pCompositeShape->AddShape(slab_shape, VARIANT_FALSE);
+
+   //m_BeamFactories[0].second->CreateBeam(0, m_UnitConvert, &m_pGirderShape);
+   //m_pCompositeShape->AddShape(m_pGirderShape, VARIANT_FALSE);
 
 
    return TRUE;
@@ -228,6 +231,7 @@ HRESULT CRCCapacityDoc::WriteTheDocument(IStructuredSave* pStrSave)
    }
    else
    {
+      pStrSave->BeginUnit(_T("BeamDimensions"), 1.0);
       int i = 0;
       for (auto value : m_ModelData.dimensions)
       {
@@ -235,6 +239,7 @@ HRESULT CRCCapacityDoc::WriteTheDocument(IStructuredSave* pStrSave)
          str.Format(_T("Value%d"), i++);
          pStrSave->put_Property(str, CComVariant(value));
       }
+      pStrSave->EndUnit(); // BeamDimensions
    }
 
    pStrSave->put_Property(_T("BeamConcreteType"), CComVariant(m_ModelData.concreteType));
@@ -255,6 +260,7 @@ HRESULT CRCCapacityDoc::WriteTheDocument(IStructuredSave* pStrSave)
    {
       pStrSave->put_Property(_T("DeckWidth"), CComVariant(m_ModelData.DeckWidth));
       pStrSave->put_Property(_T("DeckThickness"), CComVariant(m_ModelData.DeckThickness));
+      pStrSave->put_Property(_T("HaunchThickness"), CComVariant(m_ModelData.HaunchThickness));
       pStrSave->put_Property(_T("Deck_fc"), CComVariant(m_ModelData.fcDeck));
       pStrSave->put_Property(_T("Deck_Ec"), CComVariant(m_ModelData.EcDeck));
       pStrSave->put_Property(_T("Deck_ft"), CComVariant(m_ModelData.ftDeck));
@@ -316,6 +322,7 @@ HRESULT CRCCapacityDoc::LoadTheDocument(IStructuredLoad* pStrLoad)
 
    CComVariant var;
    var.vt = VT_I8;
+   
    pStrLoad->get_Property(_T("BeamType"), &var); m_ModelData.beamType = (BeamType)(var.lVal);
    if (m_ModelData.beamType == Predefined)
    {
@@ -326,12 +333,14 @@ HRESULT CRCCapacityDoc::LoadTheDocument(IStructuredLoad* pStrLoad)
    else
    {
       var.vt = VT_R8;
+      pStrLoad->BeginUnit(_T("BeamDimensions"));
       for (int i = 0; i < m_ModelData.dimensions.size(); i++)
       {
          CString str;
          str.Format(_T("Value%d"), i);
          pStrLoad->get_Property(str, &var); m_ModelData.dimensions[i] = var.dblVal;
       }
+      pStrLoad->EndUnit(); // BeamDimensions
    }
 
    var.vt = VT_I8;
@@ -356,6 +365,7 @@ HRESULT CRCCapacityDoc::LoadTheDocument(IStructuredLoad* pStrLoad)
       var.vt = VT_R8;
       pStrLoad->get_Property(_T("DeckWidth"), &var); m_ModelData.DeckWidth = var.dblVal;
       pStrLoad->get_Property(_T("DeckThickness"), &var); m_ModelData.DeckThickness = var.dblVal;
+      pStrLoad->get_Property(_T("HaunchThickness"), &var); m_ModelData.HaunchThickness = var.dblVal;
       pStrLoad->get_Property(_T("Deck_fc"), &var); m_ModelData.fcDeck = var.dblVal;
       pStrLoad->get_Property(_T("Deck_Ec"), &var); m_ModelData.EcDeck = var.dblVal;
       pStrLoad->get_Property(_T("Deck_ft"), &var); m_ModelData.ftDeck = var.dblVal;
@@ -493,23 +503,21 @@ LPCTSTR CRCCapacityDoc::GetBeamName(IndexType typeIdx, IndexType beamIdx) const
    return m_BeamFactories[typeIdx].second->GetBeamName(beamIdx);
 }
 
-void CRCCapacityDoc::GetBeamShape(const ModelData& modelData, IShape** ppShape) const
+std::unique_ptr<WBFL::Geometry::Shape> CRCCapacityDoc::CreateBeamShape(const ModelData& modelData) const
 {
    if (modelData.beamType == Predefined)
    {
-      m_BeamFactories[modelData.typeIdx].second->CreateBeam(modelData.beamIdx, m_UnitConvert, ppShape);
+      return m_BeamFactories[modelData.typeIdx].second->CreateBeam(modelData.beamIdx);
    }
    else if (modelData.beamType == WideFlange)
    {
-      CComPtr<IPrecastBeam> beam;
-      CreateBeam(modelData.dimensions, &beam);
-      beam.QueryInterface(ppShape);
+      return CreateBeam(modelData.dimensions);
    }
    else if (modelData.beamType == NU)
    {
-      CComPtr<INUBeam> beam;
-      CreateBeam(modelData.dimensions, &beam);
-      beam.QueryInterface(ppShape);
+      //CComPtr<INUBeam> beam;
+      //CreateBeam(modelData.dimensions, &beam);
+      //beam.QueryInterface(ppShape);
    }
    else
    {
@@ -534,8 +542,8 @@ Float64 CRCCapacityDoc::GetStrandDiameter(StrandSize size) const
 
 void CRCCapacityDoc::SetModelData(const ModelData& modelData)
 {
-   m_bUpdateModel = true;
-   m_bUpdateSolution = true;
+   m_bUpdateModel = { true,true };
+   m_bUpdateSolution = { true, true };
    SetModifiedFlag();
    m_ModelData = modelData;
 }
@@ -545,47 +553,63 @@ const ModelData& CRCCapacityDoc::GetModelData() const
    return m_ModelData;
 }
 
-void CRCCapacityDoc::GetShape(IShape** ppShape)
+const std::shared_ptr<WBFL::Geometry::Shape>& CRCCapacityDoc::GetBeamShape() const
 {
-   Update();
-   if (m_ModelData.bHasDeck)
-      m_pCompositeShape.QueryInterface(ppShape);
-   else
-      m_pGirderShape.CopyTo(ppShape);
+   Update(Parabolic);
+   return m_pGirderShape;
 }
 
-void CRCCapacityDoc::GetMaterial(ElementType element, IStressStrain** ppMaterial)
+const std::shared_ptr<WBFL::Geometry::Shape>& CRCCapacityDoc::GetSlabShape() const
 {
-   Update();
+   Update(Parabolic);
+   return m_pSlabShape;
+}
+
+const WBFL::Geometry::Shape& CRCCapacityDoc::GetShape() const
+{
+   Update(Parabolic);
+   if (m_ModelData.bHasDeck)
+      return *m_pCompositeShape;
+   else
+      return *m_pGirderShape;
+}
+
+const WBFL::Materials::StressStrainModel& CRCCapacityDoc::GetMaterial(ElementType element) const
+{
+   Update(Parabolic);
+
+   std::shared_ptr<WBFL::Materials::StressStrainModel> material;
    switch (element)
    {
-   case Deck:  m_ssDeck.CopyTo(ppMaterial);  break;
-   case Girder: m_ssGirder.CopyTo(ppMaterial); break;
-   case Rebar: m_ssRebar.CopyTo(ppMaterial); break;
-   case Strand: m_ssStrand.CopyTo(ppMaterial); break;
+   case Deck:  material = m_ssDeck[Parabolic]; break;
+   case Girder: material = m_ssGirder[Parabolic]; break;
+   case Rebar: material = m_ssRebar; break;
+   case Strand: material = m_ssStrand; break;
    default: ATLASSERT(false);
    }
+
+   return *material;
 }
 
-void CRCCapacityDoc::GetSection(IGeneralSection** ppSection)
+std::shared_ptr<const WBFL::RCSection::GeneralSection> CRCCapacityDoc::GetSection(ConcreteModel concreteModel) const
 {
-   Update();
-   m_pSection.CopyTo(ppSection);
+   Update(concreteModel);
+   return m_pSection[concreteModel];
 }
 
-void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
+std::shared_ptr<const WBFL::RCSection::MomentCapacitySolution> CRCCapacityDoc::GetCapacity(ConcreteModel concreteModel) const
 {
 #pragma Reminder("WORKING HERE - Need to cache solution so it doesn't recompute over and over")
-   Update();
-   if (m_pSection == nullptr)
+   Update(concreteModel);
+   if (m_pSection[concreteModel] == nullptr)
    {
-      *ppSolution = nullptr;
+      m_pSolution[concreteModel] = nullptr;
    }
 
-   if (m_bUpdateSolution)
+   if (m_bUpdateSolution[concreteModel])
    {
       // solution needs to be updated
-      m_Solver->putref_Section(m_pSection);
+      m_Solver.SetSection(m_pSection[concreteModel]);
 
       // assume conventional concrete deck and/or girder
       Float64 ec = -0.003;
@@ -597,21 +621,18 @@ void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
          ei = m_ModelData.ftBeam / m_ModelData.EcBeam;
       }
 
-      // NOTE: The solver will re-use and existing solution object if provided one. This saves the overhead of allocation a new solution object.
-      // m_pSolution is of type CComPtr<> and an assert fires on &m_pSolution if the underlying "p" pointer is not null. The assert note for the
-      // CComPtr<>::operator& says to take the address of p if you intend to pass in an object... this is what we are doing
-      HRESULT hr = m_Solver->Solve(0.00, 0.00, ec - ei, 0.0, smFixedCompressionStrain, &m_pSolution.p);
-      if (hr == RC_E_MATERIALFAILURE)
+      m_pSolution[concreteModel] = m_Solver.Solve(0.00, 0.00, ec - ei, 0.00, WBFL::RCSection::MomentCapacitySolver::SolutionMethod::FixedCompressionStrain);
+      if(m_pSolution[concreteModel]->GetGeneralSectionSolution() && m_pSolution[concreteModel]->GetGeneralSectionSolution()->ExceededStrainLimits())
       {
          if (m_ModelData.concreteType == UHPC)
          {
             // this is UHPC so limit tension in the concrete as a first attempt
-            hr = m_Solver->Solve(0.00, 0.00, m_ModelData.etloc - m_ModelData.fbBeam/m_ModelData.EcBeam, 0.0, smFixedTensionStrain, &m_pSolution.p);
+            m_pSolution[concreteModel] = m_Solver.Solve(0.00, 0.00, m_ModelData.etloc - m_ModelData.fbBeam/m_ModelData.EcBeam, 0.0, WBFL::RCSection::MomentCapacitySolver::SolutionMethod::FixedTensionStrain);
             //DumpSolution(m_pSection, *ppSolution);
          }
 
          // reinforcement failed (strain too high)
-         if (hr == RC_E_MATERIALFAILURE)
+         if (m_pSolution[concreteModel]->GetGeneralSectionSolution()->ExceededStrainLimits())
          {
             Float64 Eps = WBFL::Units::ConvertToSysUnits(28500, WBFL::Units::Measure::KSI); // carbon-steel
             Float64 esu = 0.035; // carbon-steel, 3.5% strain limit
@@ -622,10 +643,8 @@ void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
             }
 
             // height of girder/section
-            Float64 Hg;
-            CComPtr<IRect2d> bbox;
-            m_pGirderShape->get_BoundingBox(&bbox);
-            bbox->get_Height(&Hg);
+            auto bbox = m_pGirderShape->GetBoundingBox();
+            auto Hg = bbox.Height();
 
             // find reinforcement that is closest to the bottom of the girder
             Float64 y_rebar = Float64_Max;
@@ -648,38 +667,52 @@ void CRCCapacityDoc::GetCapacity(IMomentCapacitySolution** ppSolution)
             }
 
             // need to deduct the initial strain from the target strain to cause the solver to seek the correct incremental strain
-            hr = m_Solver->Solve(0.00, 0.00, esu - ei_ps, Min(y_strand,y_rebar), smFixedStrain, &m_pSolution.p);
-            ATLASSERT(hr != RC_E_MATERIALFAILURE);
+            m_pSolution[concreteModel] = m_Solver.Solve(0.00, 0.00, esu - ei_ps, Min(y_strand,y_rebar), WBFL::RCSection::MomentCapacitySolver::SolutionMethod::FixedStrain);
+            ATLASSERT(m_pSolution[concreteModel]->GetGeneralSectionSolution()->ExceededStrainLimits() == false);
          }
       }
 
-      m_bUpdateSolution = false; // solution is up to date
+      m_bUpdateSolution[concreteModel] = false; // solution is up to date
    }
 
-   m_pSolution.CopyTo(ppSolution);
+   return m_pSolution[concreteModel];
 }
 
-void CRCCapacityDoc::CreateBeam(const std::array<Float64,14>& dimensions,IPrecastBeam** ppBeam) const
+const WBFL::RCSection::RCBeam& CRCCapacityDoc::GetRCCBeam() const
 {
-   CComPtr<IPrecastBeam> beam;
-   beam.CoCreateInstance(CLSID_PrecastBeam);
-   using namespace IBeam;
-   beam->put_C1(dimensions[C1]);
-   beam->put_D1(dimensions[D1]);
-   beam->put_D2(dimensions[D2]);
-   beam->put_D3(dimensions[D3]);
-   beam->put_D4(dimensions[D4]);
-   beam->put_D5(dimensions[D5]);
-   beam->put_D6(dimensions[D6]);
-   beam->put_D7(dimensions[D7]);
-   beam->put_T1(dimensions[T1]);
-   beam->put_T2(dimensions[T2]);
-   beam->put_W1(dimensions[W1]);
-   beam->put_W2(dimensions[W2]);
-   beam->put_W3(dimensions[W3]);
-   beam->put_W4(dimensions[W4]);
+   Update(Parabolic);
+   return m_Beam;
+}
 
-   beam.QueryInterface(ppBeam);
+WBFL::RCSection::RCSolution CRCCapacityDoc::GetRCCCapacity() const
+{
+   Update(Parabolic);
+   return WBFL::RCSection::RCSolver::Solve(m_Beam);
+}
+
+std::unique_ptr<WBFL::Geometry::PrecastBeam> CRCCapacityDoc::CreateBeam(const std::array<Float64,14>& dimensions) const
+{
+   auto beam = std::make_unique<WBFL::Geometry::PrecastBeam>();
+
+   using namespace IBeam;
+   beam->SetC1(dimensions[C1]);
+   beam->SetD1(dimensions[D1]);
+   beam->SetD2(dimensions[D2]);
+   beam->SetD3(dimensions[D3]);
+   beam->SetD4(dimensions[D4]);
+   beam->SetD5(dimensions[D5]);
+   beam->SetD6(dimensions[D6]);
+   beam->SetT1(dimensions[T1]);
+   beam->SetT2(dimensions[T2]);
+   beam->SetW1(dimensions[W1]);
+   beam->SetW2(dimensions[W2]);
+   beam->SetW3(dimensions[W3]);
+   beam->SetW4(dimensions[W4]);
+
+   double h = dimensions[D7] + beam->GetD1() + beam->GetD2() + beam->GetD3() + beam->GetD4() + beam->GetD5() + beam->GetD6();
+   beam->SetHeight(h);
+
+   return beam;
 }
 
 void CRCCapacityDoc::CreateBeam(const std::array<Float64, 14>& dimensions, INUBeam** ppBeam) const
@@ -705,181 +738,168 @@ void CRCCapacityDoc::CreateBeam(const std::array<Float64, 14>& dimensions, INUBe
    beam.QueryInterface(ppBeam);
 }
 
-void CRCCapacityDoc::Update()
+void CRCCapacityDoc::Update(ConcreteModel concreteModel) const
 {
-   if (m_bUpdateModel == false)
+   if (m_bUpdateModel[concreteModel] == false)
       return; // model is up to date
 
-   m_pSlabShape.Release();
-   m_pGirderShape.Release();
-   m_pSection.Release();
+   m_pGirderShape.reset();
+   m_pSlabShape.reset();
+   m_pSection[concreteModel].reset();
 
-   CComPtr<IPoint2d> origin;
-   origin.CoCreateInstance(CLSID_Point2d);
+   WBFL::Geometry::Point2d origin(0, 0);
 
    if (m_ModelData.beamType == Predefined)
    {
-      m_BeamFactories[m_ModelData.typeIdx].second->CreateBeam(m_ModelData.beamIdx, m_UnitConvert, &m_pGirderShape);
+      m_pGirderShape = std::move(m_BeamFactories[m_ModelData.typeIdx].second->CreateBeam(m_ModelData.beamIdx));
    }
    else if (m_ModelData.beamType == WideFlange)
    {
-      CComPtr<IPrecastBeam> beam;
-      CreateBeam(m_ModelData.dimensions,&beam);
-      beam.QueryInterface(&m_pGirderShape);
+      m_pGirderShape = std::move(CreateBeam(m_ModelData.dimensions));
    }
    else if (m_ModelData.beamType == NU)
    {
-      CComPtr<INUBeam> beam;
-      CreateBeam(m_ModelData.dimensions, &beam);
-      beam.QueryInterface(&m_pGirderShape);
+      //CComPtr<INUBeam> beam;
+      //CreateBeam(m_ModelData.dimensions, &beam);
+      //beam.QueryInterface(&m_pGirderShape);
    }
    else
    {
       ATLASSERT(false); // is there a new beam type
    }
 
-   CComPtr<ICompositeShapeItem> girder_item;
-   m_pCompositeShape->get_Item(1, &girder_item);
-   girder_item->putref_Shape(m_pGirderShape);
-
-   CComQIPtr<IXYPosition> position(m_pGirderShape);
-   position->put_LocatorPoint(lpTopCenter, origin);
+   m_pGirderShape->SetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter, origin);
+   m_pCompositeShape->AddShape(m_pGirderShape);
 
    if (m_ModelData.bHasDeck)
    {
-      m_pSlabShape.CoCreateInstance(CLSID_Rect);
-      m_pSlabShape->put_Height(m_ModelData.DeckThickness);
-      m_pSlabShape->put_Width(m_ModelData.DeckWidth);
-      position.Release();
-      m_pSlabShape->get_XYPosition(&position);
-      position->put_LocatorPoint(lpBottomCenter, origin);
+      if (0.0 < m_ModelData.HaunchThickness)
+      {
+         auto flanged_beam = std::dynamic_pointer_cast<WBFL::Geometry::FlangedBeam>(m_pGirderShape);
+         auto wtf = flanged_beam->GetTopWidth();
+         WBFL::Geometry::Rectangle haunch;
+         haunch.SetHeight(m_ModelData.HaunchThickness);
+         haunch.SetWidth(wtf);
+         haunch.SetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter, origin);
 
-      CComPtr<ICompositeShapeItem> slab_item;
-      m_pCompositeShape->get_Item(0, &slab_item);
-      CComQIPtr<IShape> slab_shape(m_pSlabShape);
-      slab_item->putref_Shape(slab_shape);
+         WBFL::Geometry::Rectangle slab;
+         slab.SetHeight(m_ModelData.DeckThickness);
+         slab.SetWidth(m_ModelData.DeckWidth);
+         slab.SetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter, haunch.GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter));
+
+         auto deck = std::make_shared<WBFL::Geometry::CompositeShape>();
+         deck->AddShape(haunch);
+         deck->AddShape(slab);
+
+         m_pCompositeShape->AddShape(deck);
+         m_pSlabShape = deck;
+      }
+      else
+      {
+         WBFL::Geometry::Rectangle slab;
+         slab.SetHeight(m_ModelData.DeckThickness);
+         slab.SetWidth(m_ModelData.DeckWidth);
+         slab.SetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter, origin);
+
+         m_pSlabShape = m_pCompositeShape->AddShape(slab);
+      }
    }
 
-   m_pSection.CoCreateInstance(CLSID_GeneralSection);
+   m_pSection[concreteModel] = std::make_shared<WBFL::RCSection::GeneralSection>();
 
    //
    // materials
    //
 
    // deck
-   CComPtr<IUnconfinedConcrete> deck_concrete;
-   deck_concrete.CoCreateInstance(CLSID_UnconfinedConcrete);
-   CComQIPtr<ISupportUnitServer> sus(deck_concrete);
-   sus->putref_UnitServer(m_UnitServer);
-   deck_concrete->put_fc(m_ModelData.fcDeck);
-   CComQIPtr<IStressStrain> ss_deck_concrete(deck_concrete);
-   m_ssDeck = ss_deck_concrete;
+   if(concreteModel == ConcreteModel::Parabolic)
+      m_ssDeck[concreteModel] = std::make_shared<WBFL::Materials::UnconfinedConcreteModel>(_T("Deck"), m_ModelData.fcDeck);
+   else
+      m_ssDeck[concreteModel] = std::make_shared<BilinearConcreteModel>(_T("Deck"), m_ModelData.fcDeck, m_ModelData.EcDeck, 0.85);
 
    // girder
-   CComPtr<IStressStrain> ss_girder_concrete;
    if (m_ModelData.concreteType == Conventional)
    {
-      CComPtr<IUnconfinedConcrete> girder_concrete;
-      girder_concrete.CoCreateInstance(CLSID_UnconfinedConcrete);
-      sus.Release();
-      girder_concrete.QueryInterface(&sus);
-      sus->putref_UnitServer(m_UnitServer);
-      girder_concrete->put_fc(m_ModelData.fcBeam);
-      girder_concrete.QueryInterface(&ss_girder_concrete);
+      if (concreteModel == ConcreteModel::Parabolic)
+         m_ssGirder[concreteModel] = std::make_shared<WBFL::Materials::UnconfinedConcreteModel>(_T("Girder"), m_ModelData.fcBeam);
+      else
+         m_ssGirder[concreteModel] = std::make_shared<BilinearConcreteModel>(_T("Girder"), m_ModelData.fcBeam, m_ModelData.EcBeam, 0.85);
    }
    else
    {
-      CComPtr<IUHPConcrete> girder_concrete;
-      girder_concrete.CoCreateInstance(CLSID_UHPConcrete);
-      sus.Release();
-      girder_concrete.QueryInterface(&sus);
-      sus->putref_UnitServer(m_UnitServer);
-      girder_concrete->put_fc(m_ModelData.fcBeam);
-      girder_concrete->put_ecu(-1.0*fabs(m_ModelData.ecu));
-      girder_concrete->put_ftcr(m_ModelData.ftcr);
-      girder_concrete->put_ftloc(m_ModelData.ftloc);
-      girder_concrete->put_etloc(m_ModelData.etloc);
-      girder_concrete.QueryInterface(&ss_girder_concrete);
+      auto uhpc = std::make_shared<WBFL::Materials::UHPCModel>(_T("Girder"));
+      uhpc->SetFc(m_ModelData.fcBeam);
+      uhpc->SetCompressiveStrainLimit(-1.0 * fabs(m_ModelData.ecu));
+      uhpc->SetFtcr(m_ModelData.ftcr);
+      uhpc->SetFtloc(m_ModelData.ftloc);
+      uhpc->Set_etloc(m_ModelData.etloc);
+
+      m_ssGirder[concreteModel] = uhpc;
    }
-   m_ssGirder = ss_girder_concrete;
 
    // rebar
-   CComPtr<IRebarModel> rebar;
-   rebar.CoCreateInstance(CLSID_RebarModel);
+   auto rebar = std::make_shared<WBFL::Materials::RebarModel>(_T("Rebar"));
+
    const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, WBFL::Materials::Rebar::Size::bs3); // use any size, we just want the material properties
    Float64 fy = pRebar->GetYieldStrength();
    Float64 Es = pRebar->GetE();
    Float64 e = pRebar->GetElongation();
-   rebar->Init(fy,Es,e);
-   CComQIPtr<IStressStrain> ss_rebar(rebar);
-   m_ssRebar = ss_rebar;
+   rebar->SetProperties(fy, Es, e);
+   m_ssRebar = std::move(rebar);
 
    // strand
-   CComPtr<IStressStrain> ss_strand;
    if(m_ModelData.StrandType == Grade270_LR)
    {
       // use the pre-built power formula
-      CComPtr<IPowerFormula> strand;
-      strand.CoCreateInstance(CLSID_PSPowerFormula);
-      strand->put_Grade(sgtGrade270);
-      strand->put_ProductionMethod(pmtLowRelaxation);
+      auto strand = std::make_unique<WBFL::Materials::PSPowerFormulaModel>(_T("Strand"));
+      strand->SetStrandGrade(WBFL::Materials::StrandGrade::Grade270);
+      strand->SetStrandType(WBFL::Materials::StrandType::LowRelaxation);
 
-      sus.Release();
-      strand.QueryInterface(&sus);
-      sus->putref_UnitServer(m_UnitServer);
-
-      strand.QueryInterface(&ss_strand);
+      m_ssStrand = std::move(strand);
    }
    else
    {
       // use the generalized form of the stress-strain model
-      CComPtr<IRambergOsgoodModel> strand;
-      strand.CoCreateInstance(CLSID_RambergOsgoodModel);
-      strand->Init(m_ModelData.A, m_ModelData.B, m_ModelData.C, m_ModelData.Eps, m_ModelData.fpu, -1.0, m_ModelData.esu);
-      strand.QueryInterface(&ss_strand);
-
+      auto strand = std::make_shared<WBFL::Materials::RambergOsgoodModel>(_T("Strand"));
+      strand->SetModelParameters(m_ModelData.A, m_ModelData.B, m_ModelData.C, m_ModelData.Eps, m_ModelData.fpu, -1.0, m_ModelData.esu);
       // note: strand doesn't really fail in compression so make the compression strain limit (minStrain) -1
       // to not exceed the strain limit during analysis
+      m_ssStrand = strand;
    }
-   m_ssStrand = ss_strand;
 
 
    // Create the general section
    if (m_ModelData.bHasDeck)
    {
-      CComPtr<IPlane3d> initialStrain;
-      initialStrain.CoCreateInstance(CLSID_Plane3d);
       Float64 e_top = m_ModelData.ftDeck / m_ModelData.EcDeck;
       Float64 e_bot = m_ModelData.fbDeck / m_ModelData.EcDeck;
-      CComPtr<IPoint3d> p1, p2, p3;
-      p1.CoCreateInstance(CLSID_Point3d);
-      p2.CoCreateInstance(CLSID_Point3d);
-      p3.CoCreateInstance(CLSID_Point3d);
-      p1->Move(-1000, m_ModelData.DeckThickness, e_top);
-      p2->Move( 1000, m_ModelData.DeckThickness, e_top);
-      p3->Move(0, 0, e_bot);
-      initialStrain->ThroughPoints(p1, p2, p3);
-      CComQIPtr<IShape> slab_shape(m_pSlabShape);
-      m_pSection->AddShape(CComBSTR("Deck"),slab_shape, ss_deck_concrete, nullptr, initialStrain, 1.0, VARIANT_FALSE);
+
+      WBFL::Geometry::Point3d p1(-1000.0, m_ModelData.DeckThickness, e_top);
+      WBFL::Geometry::Point3d p2(1000.0, m_ModelData.DeckThickness, e_top);
+      WBFL::Geometry::Point3d p3(0, 0, e_bot);
+      auto initial_strain = std::make_shared<WBFL::Geometry::Plane3d>(p1, p2, p3);
+
+      m_pSection[concreteModel]->AddShape(_T("Deck"), m_pSlabShape, m_ssDeck[concreteModel], std::shared_ptr<WBFL::Materials::StressStrainModel>(), initial_strain, 1.0);
    }
 
-   CComPtr<IRect2d> bbox;
-   m_pGirderShape->get_BoundingBox(&bbox);
-   Float64 Hg;
-   bbox->get_Height(&Hg);
-   CComPtr<IPlane3d> initialStrain;
-   initialStrain.CoCreateInstance(CLSID_Plane3d);
+   auto bbox = m_pGirderShape->GetBoundingBox();
+   Float64 Hg = bbox.Height();
    Float64 e_top = m_ModelData.ftBeam / m_ModelData.EcBeam;
    Float64 e_bot = m_ModelData.fbBeam / m_ModelData.EcBeam;
-   CComPtr<IPoint3d> p1, p2, p3;
-   p1.CoCreateInstance(CLSID_Point3d);
-   p2.CoCreateInstance(CLSID_Point3d);
-   p3.CoCreateInstance(CLSID_Point3d);
-   p1->Move(-1000, 0, e_top);
-   p2->Move(1000, 0, e_top);
-   p3->Move(0, -Hg, e_bot);
-   initialStrain->ThroughPoints(p1, p2, p3);
-   m_pSection->AddShape(CComBSTR("Girder"),m_pGirderShape, ss_girder_concrete, nullptr, initialStrain, 1.0, VARIANT_TRUE);
+   WBFL::Geometry::Point3d p1(-1000.0, m_ModelData.DeckThickness, e_top);
+   WBFL::Geometry::Point3d p2(1000.0, m_ModelData.DeckThickness, e_top);
+   WBFL::Geometry::Point3d p3(0, -Hg, e_bot);
+   auto initial_strain = std::make_shared<WBFL::Geometry::Plane3d>(p1, p2, p3);
+   m_pSection[concreteModel]->AddShape(_T("Girder"),m_pGirderShape, m_ssGirder[concreteModel], std::shared_ptr<WBFL::Materials::StressStrainModel>(), initial_strain, 1.0, true);
+
+   Float64 Y_top = bbox.Top();
+
+   if (m_ModelData.bHasDeck)
+      Y_top = m_pSlabShape->GetBoundingBox().Top();
+
+   Float64 As = 0.0;
+   Float64 As_ds = 0.0;
+   Float64 ds_min = 0.0;
 
    int i = 1;
    for (const auto& rebar_data : m_ModelData.Rebar)
@@ -887,65 +907,52 @@ void CRCCapacityDoc::Update()
       const auto* pRebar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(m_ModelData.RebarType, m_ModelData.RebarGrade, rebar_data.size);
       Float64 area = pRebar->GetNominalArea();
       area *= rebar_data.nBars;
-      CComPtr<IGenericShape> bar_shape;
-      bar_shape.CoCreateInstance(CLSID_GenericShape);
-      bar_shape->put_Area(area);
 
-      CComPtr<IPoint2d> cg;
-      cg.CoCreateInstance(CLSID_Point2d);
+      WBFL::Geometry::GenericShape bar_shape;
+      bar_shape.SetArea(area);
+
+      WBFL::Geometry::Point2d cg;
+
       switch (rebar_data.measure)
       {
       case TopGirder:
          {
-            CComQIPtr<IXYPosition> position(m_pGirderShape);
-            CComPtr<IPoint2d> pntTC;
-            position->get_LocatorPoint(lpTopCenter, &pntTC);
-            Float64 Y;
-            pntTC->get_Y(&Y);
-            cg->put_Y(Y - rebar_data.location);
+         auto tc = m_pGirderShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter);
+         cg.Y() = tc.Y() - rebar_data.location;
          }
          break;
       case BottomGirder:
          {
-            CComQIPtr<IXYPosition> position(m_pGirderShape);
-            CComPtr<IPoint2d> pntBC;
-            position->get_LocatorPoint(lpBottomCenter, &pntBC);
-            Float64 Y;
-            pntBC->get_Y(&Y);
-            cg->put_Y(Y + rebar_data.location);
+         auto bc = m_pGirderShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter);
+         cg.Y() = bc.Y() + rebar_data.location;
          }
          break;
       case TopDeck:
          {
-            CComQIPtr<IXYPosition> position(m_pSlabShape);
-            CComPtr<IPoint2d> pntTC;
-            position->get_LocatorPoint(lpTopCenter, &pntTC);
-            Float64 Y;
-            pntTC->get_Y(&Y);
-            cg->put_Y(Y - rebar_data.location);
+         auto tc = m_pSlabShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter);
+         cg.Y() = tc.Y() - rebar_data.location;
          }
          break;
       case BottomDeck:
          {
-            CComQIPtr<IXYPosition> position(m_pSlabShape);
-            CComPtr<IPoint2d> pntBC;
-            position->get_LocatorPoint(lpBottomCenter, &pntBC);
-            Float64 Y;
-            pntBC->get_Y(&Y);
-            cg->put_Y(Y + rebar_data.location);
+         auto bc = m_pSlabShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter);
+         cg.Y() = bc.Y() + rebar_data.location;
          }
          break;
       default:
          ATLASSERT(false);
       }
 
-      bar_shape->putref_Centroid(cg);
+      bar_shape.SetCentroid(cg);
 
-      CString strName;
-      strName.Format(_T("Rebar Layer %d"), i++);
+      As += area;
+      As_ds += area * cg.Y();
 
-      CComQIPtr<IShape> shape(bar_shape);
-      m_pSection->AddShape(CComBSTR(strName),shape, ss_rebar, nullptr, nullptr, 1.0, VARIANT_FALSE);
+      ds_min = min(ds_min, cg.Y());
+
+      std::_tostringstream os;
+      os << _T("Rebar Layer ") << i++ << std::endl;
+      m_pSection[concreteModel]->AddShape(os.str().c_str(), bar_shape, m_ssRebar, std::shared_ptr<WBFL::Materials::StressStrainModel>(), std::shared_ptr<WBFL::Geometry::Plane3d>(), 1.0);
    } // next rebar
 
    std::map<StrandSize, WBFL::Materials::PsStrand::Size> strandSizeMap;
@@ -954,8 +961,13 @@ void CRCCapacityDoc::Update()
    strandSizeMap.insert(std::make_pair(Strand_060, WBFL::Materials::PsStrand::Size::D1524));
    strandSizeMap.insert(std::make_pair(Strand_062, WBFL::Materials::PsStrand::Size::D1575));
    strandSizeMap.insert(std::make_pair(Strand_070, WBFL::Materials::PsStrand::Size::D1778));
-   Float64 Eps;
-   ss_strand->get_ModulusOfElasticity(&Eps);
+   Float64 Eps = m_ssStrand->GetModulusOfElasticity();
+
+   Float64 Aps = 0.0;
+   Float64 Aps_dps = 0.0;
+   Float64 Aps_fpe = 0.0;
+   Float64 dps_min = 0.0;
+
    i = 1;
    for (const auto& strand_data : m_ModelData.Strands)
    {
@@ -968,70 +980,73 @@ void CRCCapacityDoc::Update()
          strand_size);
       Float64 area = pStrand->GetNominalArea();
       area *= strand_data.nStrands;
-      CComPtr<IGenericShape> strand_shape;
-      strand_shape.CoCreateInstance(CLSID_GenericShape);
-      strand_shape->put_Area(area);
 
-      CComPtr<IPoint2d> cg;
-      cg.CoCreateInstance(CLSID_Point2d);
+      WBFL::Geometry::GenericShape strand_shape;
+      strand_shape.SetArea(area);
+
+      WBFL::Geometry::Point2d cg;
       switch (strand_data.measure)
       {
       case TopGirder:
       {
-         CComQIPtr<IXYPosition> position(m_pGirderShape);
-         CComPtr<IPoint2d> pntTC;
-         position->get_LocatorPoint(lpTopCenter, &pntTC);
-         Float64 Y;
-         pntTC->get_Y(&Y);
-         cg->put_Y(Y - strand_data.location);
+         auto tc = m_pGirderShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter);
+         cg.Y() = tc.Y() - strand_data.location;
       }
       break;
       case BottomGirder:
       {
-         CComQIPtr<IXYPosition> position(m_pGirderShape);
-         CComPtr<IPoint2d> pntBC;
-         position->get_LocatorPoint(lpBottomCenter, &pntBC);
-         Float64 Y;
-         pntBC->get_Y(&Y);
-         cg->put_Y(Y + strand_data.location);
+         auto bc = m_pGirderShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter);
+         cg.Y() = bc.Y() + strand_data.location;
       }
       break;
       case TopDeck:
       {
-         CComQIPtr<IXYPosition> position(m_pSlabShape);
-         CComPtr<IPoint2d> pntTC;
-         position->get_LocatorPoint(lpTopCenter, &pntTC);
-         Float64 Y;
-         pntTC->get_Y(&Y);
-         cg->put_Y(Y - strand_data.location);
+         auto tc = m_pSlabShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::TopCenter);
+         cg.Y() = tc.Y() - strand_data.location;
       }
       break;
       case BottomDeck:
       {
-         CComQIPtr<IXYPosition> position(m_pSlabShape);
-         CComPtr<IPoint2d> pntBC;
-         position->get_LocatorPoint(lpBottomCenter, &pntBC);
-         Float64 Y;
-         pntBC->get_Y(&Y);
-         cg->put_Y(Y + strand_data.location);
+         auto bc = m_pSlabShape->GetLocatorPoint(WBFL::Geometry::Shape::LocatorPoint::BottomCenter);
+         cg.Y() = bc.Y() + strand_data.location;
       }
       break;
       default:
          ATLASSERT(false);
       }
 
-      strand_shape->putref_Centroid(cg);
+      strand_shape.SetCentroid(cg);
 
-      CString strName;
-      strName.Format(_T("Strand Layer %d"), i++);
+      Aps += area;
+      Aps_dps += area * cg.Y();
+      Aps_fpe += area * strand_data.fpe;
 
-      CComQIPtr<IShape> shape(strand_shape);
+      dps_min = min(dps_min, cg.Y());
+
       Float64 eps = strand_data.fpe / Eps;
-      CComPtr<IPlane3d> initialStrain;
-      initialStrain.CoCreateInstance(CLSID_Plane3d);
-      initialStrain->ThroughAltitude(eps);
-      m_pSection->AddShape(CComBSTR(strName), shape, ss_strand, nullptr, initialStrain, 1.0, VARIANT_FALSE);
+      auto initial_strain = std::make_shared<WBFL::Geometry::Plane3d>(eps);
+
+      std::_tostringstream os;
+      os << _T("Strand Layer ") << i++ << std::endl;
+      m_pSection[concreteModel]->AddShape(os.str().c_str(), strand_shape, m_ssStrand, std::shared_ptr<WBFL::Materials::StressStrainModel>(), initial_strain, 1.0);
    } // next strand
 
-   m_bUpdateModel = false; // model is up to date
+   Float64 ds = IsZero(As) ? 0.0 : Y_top -1.0*(As_ds / As);
+   Float64 ds_max = Y_top - ds_min;
+
+   Float64 dps = IsZero(Aps) ? 0.0 : Y_top -1.0*(Aps_dps / Aps);
+   Float64 dps_max = Y_top - dps_min;
+
+   Float64 fpe = IsZero(Aps) ? 0.0 : Aps_fpe / Aps;
+
+   Float64 fpu = WBFL::Units::ConvertToSysUnits(270.0, WBFL::Units::Measure::KSI);
+   Float64 fpy = 0.9 * fpu;
+   Float64 hf = m_ModelData.DeckThickness;
+   Float64 b = m_ModelData.DeckWidth;
+   auto flanged_beam = std::dynamic_pointer_cast<WBFL::Geometry::FlangedBeam>(m_pGirderShape);
+   Float64 bw = flanged_beam->GetMinWebWidth();
+
+   m_Beam.Init(m_ModelData.fcBeam, m_ModelData.fcDeck, fpy, fpu, fy, Aps, As, hf, b, bw, ds, ds_max, dps, dps_max, fpe);
+
+   m_bUpdateModel[concreteModel] = false; // model is up to date
 }

@@ -27,14 +27,16 @@
 #include <EAF\EAFView.h>
 #include "RCCapacityChildFrame.h"
 
-interface IShape;
-interface IGeneralSectionSolution;
-
 namespace WBFL
 {
    namespace Graphing
    {
       class PointMapper;
+   };
+
+   namespace Geometry
+   {
+      class Shape;
    };
 };
 
@@ -60,7 +62,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
    void OnDraw(CDC* pDC) override;
-   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
+   void DrawSlice(const WBFL::Geometry::Shape& shape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
 
 public:
    virtual void OnInitialUpdate() override;

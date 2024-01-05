@@ -25,9 +25,23 @@
 #include <Graphing/PointMapper.h>
 #include <atlimage.h>
 
+#include "RCCapacityDoc.h"
+
 class CRCCapacityDoc;
 class rptRcImage;
-struct IMomentCapacitySolution;
+
+namespace WBFL
+{
+   namespace RCSection
+   {
+      class MomentCapacitySolution;
+   }
+
+   namespace Geometry
+   {
+      class Shape;
+   }
+}
 
 class CRCCapacityChapterBuilder :
    public WBFL::Reporting::ChapterBuilder
@@ -43,11 +57,14 @@ public:
    virtual std::unique_ptr<WBFL::Reporting::ChapterBuilder> Clone() const override;
 
 private:
+   void ReportStrainCompatibility(rptChapter* pChapter,ConcreteModel concreteModel, rptRcTable* pSummaryTable, ColumnIndexType col) const;
+   void ReportClosedForm(rptChapter* pChapter, rptRcTable* pSummaryTable, ColumnIndexType col) const;
+
    CRCCapacityDoc* m_pDoc;
 
-   rptRcImage* CreateImage(IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
-   void DrawSection(CImage& image, IMomentCapacitySolution* pSolution, bool bPositiveMoment) const;
-   void DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
+   rptRcImage* CreateImage(const WBFL::RCSection::MomentCapacitySolution& solution, bool bPositiveMoment, const WBFL::Units::IndirectMeasure* pDisplayUnits) const;
+   void DrawSection(CImage& image, const WBFL::RCSection::MomentCapacitySolution& solution, bool bPositiveMoment, const WBFL::Units::IndirectMeasure* pDisplayUnits) const;
+   void DrawSlice(const WBFL::Geometry::Shape& shape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const;
 
    // This is a list of temporary files that were created on the fly
    // Delete them in the destructor

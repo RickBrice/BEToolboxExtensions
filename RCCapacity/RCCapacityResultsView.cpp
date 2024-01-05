@@ -103,18 +103,12 @@ void CRCCapacityResultsView::OnSize(UINT nType, int cx, int cy)
 void CRCCapacityResultsView::OnDraw(CDC* pDC)
 {
    CRCCapacityDoc* pDoc = (CRCCapacityDoc*)GetDocument();
-   CComPtr<IMomentCapacitySolution> solution;
-   pDoc->GetCapacity(&solution);
+   auto solution = pDoc->GetCapacity(Parabolic);
 
    if (solution == nullptr)
       return;
 
-   CComPtr<IGeneralSectionSolution> general_solution;
-   solution->get_GeneralSectionSolution(&general_solution);
-
-   if (general_solution == nullptr)
-      return;
-
+   const auto* general_solution = solution->GetGeneralSectionSolution();
 
    CFont font;
    font.Attach(GetStockObject(DEFAULT_GUI_FONT));
@@ -123,42 +117,34 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CEAFApp* pApp = EAFGetApp();
    const WBFL::Units::IndirectMeasure* pDispUnits = pApp->GetDisplayUnits();
 
-   IndexType nSlices;
-   general_solution->get_SliceCount(&nSlices);
+   IndexType nSlices = general_solution->GetSliceCount();
 
    // determine the bounding box
-   CComPtr<IRect2d> bbox;
+   WBFL::Geometry::Rect2d bbox;
    for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
-      CComPtr<IGeneralSectionSlice> slice;
-      general_solution->get_Slice(sliceIdx, &slice);
-
-      CComPtr<IShape> shape;
-      slice->get_Shape(&shape);
+      const auto* slice = general_solution->GetSlice(sliceIdx);
+      const auto& shape = slice->GetShape();
 
       if (sliceIdx == 0)
       {
-         shape->get_BoundingBox(&bbox);
+         bbox = shape->GetBoundingBox();
       }
       else
       {
-         CComPtr<IRect2d> box;
-         shape->get_BoundingBox(&box);
-         bbox->Union(box);
+         bbox.Union(shape->GetBoundingBox());
       }
    }
 
-   Float64 wx, wy;
-   bbox->get_Width(&wx);
-   bbox->get_Height(&wy);
+   auto wx = bbox.Width();
+   auto wy = bbox.Height();
 
    // set up coordinate mapping to draw cross section
    WBFL::Graphing::PointMapper mapper;
    mapper.SetMappingMode(WBFL::Graphing::PointMapper::MapMode::Isotropic);
    mapper.SetWorldExt(wx, wy);
 
-   Float64 orgY;
-   bbox->get_Top(&orgY);
+   Float64 orgY = bbox.Top();
    mapper.SetWorldOrg(0, orgY);
 
    CRect clientRect;
@@ -217,24 +203,20 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    const int Tension = 2;
    const int Compression = 3;
 
-   std::vector<std::pair<CComPtr<IGeneralSectionSlice>, int>> vPieces;
+   std::vector<std::pair<const WBFL::RCSection::GeneralSectionSlice*, int>> vPieces;
    vPieces.reserve(nSlices);
 
    for (IndexType sliceIdx = 0; sliceIdx < nSlices; sliceIdx++)
    {
-      CComPtr<IGeneralSectionSlice> slice;
-      general_solution->get_Slice(sliceIdx, &slice);
-
-      Float64 fgStress, bgStress;
-      slice->get_ForegroundStress(&fgStress);
-      slice->get_BackgroundStress(&bgStress);
+      const auto* slice = general_solution->GetSlice(sliceIdx);
+      auto fgStress = slice->GetForegroundStress();
+      auto bgStress = slice->GetBackgroundStress();
 
       Float64 stress = fgStress - bgStress;
       stress = IsZero(stress) ? 0 : stress;
 
-      CComPtr<IStressStrain> fgMaterial, bgMaterial;
-      slice->get_ForegroundMaterial(&fgMaterial);
-      slice->get_BackgroundMaterial(&bgMaterial);
+      auto fgMaterial = slice->GetForegroundMaterial();
+      auto bgMaterial = slice->GetBackgroundMaterial();
 
       if (fgMaterial == nullptr && bgMaterial != nullptr)
       {
@@ -260,9 +242,8 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
 
    auto sort_by_area = [](auto& pieceA, auto& pieceB)
    {
-      Float64 areaA, areaB;
-      pieceA.first->get_Area(&areaA);
-      pieceB.first->get_Area(&areaB);
+      auto areaA = pieceA.first->GetArea();
+      auto areaB = pieceB.first->GetArea();
       return areaB < areaA;
    };
 
@@ -290,11 +271,10 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
          break;
       }
 
-      CComPtr<IGeneralSectionSlice> slice = pieceInfo.first;
-      CComPtr<IShape> shape;
-      slice->get_Shape(&shape);
+      const auto* slice = pieceInfo.first;
+      const auto& shape = slice->GetShape();
 
-      DrawSlice(shape, pDC, mapper);
+      DrawSlice(*shape, pDC, mapper);
    }
 
    //
@@ -303,20 +283,18 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CPen pen(PS_SOLID, 1, BLACK);
    pDC->SelectObject(&pen);
 
-   Float64 top, bottom, left, right;
-   bbox->get_Top(&top);
-   bbox->get_Bottom(&bottom);
-   bbox->get_Left(&left);
-   bbox->get_Right(&right);
+   auto top = bbox.Top();
+   auto bottom = bbox.Bottom();
+   auto left = bbox.Left();
+   auto right = bbox.Right();
 
    CPoint p;
 
-   CComPtr<IPlane3d> strain_plane;
-   solution->get_IncrementalStrainPlane(&strain_plane);
+   const auto& strain_plane = solution->GetIncrementalStrainPlane();
 
-   Float64 eTop, eBottom; // strain top and bottom
-   strain_plane->GetZ(0, top, &eTop);
-   strain_plane->GetZ(0, bottom, &eBottom);
+   // strain top and bottom
+   auto eTop = strain_plane.GetZ(0, top);
+   auto eBottom = strain_plane.GetZ(0, bottom);
 
    // capture top/bottom strain as a string before the scaling factor is applied
    CString str_eTop;
@@ -349,15 +327,12 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CRect rect(0, 0, 5, 5);
    for (auto& pieceInfo : vPieces)
    {
-      CComPtr<IPoint2d> cg;
-      pieceInfo.first->get_CG(&cg);
-      Float64 Ycg;
-      cg->get_Y(&Ycg);
+      const auto& cg = pieceInfo.first->GetCentroid();
+      auto Ycg = cg.Y();
 
-      Float64 initial_strain, incremental_strain, total_strain;
-      pieceInfo.first->get_InitialStrain(&initial_strain);
-      pieceInfo.first->get_IncrementalStrain(&incremental_strain);
-      pieceInfo.first->get_TotalStrain(&total_strain);
+      auto initial_strain = pieceInfo.first->GetInitialStrain();
+      auto incremental_strain = pieceInfo.first->GetIncrementalStrain();
+      auto total_strain = pieceInfo.first->GetTotalStrain();
       
       pDC->SelectObject(&initialStrainPen);
       mapper.WPtoDP(0, Ycg, &p.x, &p.y);
@@ -384,8 +359,7 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    mapper.SetDeviceExt(stressRect.Width(), stressRect.Height());
    mapper.SetDeviceOrg(stressRect.left + stressRect.Width() / 2, stressRect.top);
 
-   Float64 T;
-   solution->get_TensionResultant(&T);
+   auto T = solution->GetTensionResultant();
    //mapper.SetWorldExt(T, wy);
 
    // vertical line (zero stress line)
@@ -400,14 +374,12 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    Float64 maxStress = -Float64_Max;
    for (auto& pieceInfo : vPieces)
    {
-      Float64 fgStress, bgStress;
-      pieceInfo.first->get_ForegroundStress(&fgStress);
-      pieceInfo.first->get_BackgroundStress(&bgStress);
-      Float64 stress = fgStress - bgStress;
+      auto fgStress = pieceInfo.first->GetForegroundStress();
+      auto bgStress = pieceInfo.first->GetBackgroundStress();
+      auto stress = fgStress - bgStress;
 
-      CComPtr<IShape> shape;
-      pieceInfo.first->get_Shape(&shape);
-      CComQIPtr<IGenericShape> generic_shape(shape);
+      const auto& shape = pieceInfo.first->GetShape();
+      auto generic_shape = std::dynamic_pointer_cast<const WBFL::Geometry::GenericShape>(shape);
       if (generic_shape) stress = 0;
 
       minStress = Min(stress, minStress);
@@ -439,16 +411,13 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
          break;
       }
 
-      CComPtr<IGeneralSectionSlice> slice = pieceInfo.first;
-      CComPtr<IPoint2d> cg;
-      slice->get_CG(&cg);
-      Float64 Ycg;
-      cg->get_Y(&Ycg);
+      const auto* slice = pieceInfo.first;
+      const auto& cg = slice->GetCentroid();
+      auto Ycg = cg.Y();
 
-      Float64 fgStress, bgStress;
-      slice->get_ForegroundStress(&fgStress);
-      slice->get_BackgroundStress(&bgStress);
-      Float64 stress = fgStress - bgStress;
+      auto fgStress = slice->GetForegroundStress();
+      auto bgStress = slice->GetBackgroundStress();
+      auto stress = fgStress - bgStress;
 
       stress *= scale;
 
@@ -462,13 +431,10 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CPen cPen(PS_SOLID, 5, COMPRESSION_COLOR);
    pDC->SelectObject(&cPen);
 
-   CComPtr<IPoint2d> pntC;
-   solution->get_CompressionResultantLocation(&pntC);
-   Float64 yc;
-   pntC->get_Y(&yc);
+   const auto& pntC = solution->GetCompressionResultantLocation();
+   auto yc = pntC.Y();
 
-   Float64 C;
-   solution->get_CompressionResultant(&C);
+   auto C = solution->GetCompressionResultant();
    mapper.WPtoDP(strain, yc, &p.x, &p.y);
    pDC->MoveTo(p);
    CPoint pntCompression = p;
@@ -491,10 +457,8 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    CPen tPen(PS_SOLID, 5, TENSION_COLOR);
    pDC->SelectObject(&tPen);
 
-   CComPtr<IPoint2d> pntT;
-   solution->get_TensionResultantLocation(&pntT);
-   Float64 yt;
-   pntT->get_Y(&yt);
+   const auto& pntT = solution->GetTensionResultantLocation();
+   auto yt = pntT.Y();
 
    mapper.WPtoDP(0, yt, &p.x, &p.y);
    pDC->MoveTo(p);
@@ -527,24 +491,17 @@ void CRCCapacityResultsView::OnDraw(CDC* pDC)
    pDC->SelectObject(pOldFont);
 }
 
-void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
+void CRCCapacityResultsView::DrawSlice(const WBFL::Geometry::Shape& shape, CDC* pDC, WBFL::Graphing::PointMapper& mapper) const
 {
-   CComPtr<IPoint2dCollection> objPoints;
-   pShape->get_PolyPoints(&objPoints);
+   auto poly_points = shape.GetPolyPoints();
 
-   IndexType nPoints;
-   objPoints->get_Count(&nPoints);
+   IndexType nPoints = poly_points.size();
 
    if (nPoints < 3)
    {
-      CComPtr<IPoint2d> pnt;
-      objPoints->get_Item(0, &pnt);
-
-      Float64 x, y;
-      pnt->Location(&x, &y);
-
+      const auto& pnt = poly_points[0];
       LONG dx, dy;
-      mapper.WPtoDP(x, y, &dx, &dy);
+      mapper.WPtoDP(pnt.X(),pnt.Y(), &dx, &dy);
 
       CRect box(CPoint(dx, dy), CSize(0, 0));
       const int r = 5;
@@ -561,14 +518,10 @@ void CRCCapacityResultsView::DrawSlice(IShape* pShape, CDC* pDC, WBFL::Graphing:
       CPoint* points = new CPoint[nPoints];
       for (IndexType pntIdx = 0; pntIdx < nPoints; pntIdx++)
       {
-         CComPtr<IPoint2d> point;
-         objPoints->get_Item(pntIdx, &point);
-         Float64 x, y;
-         point->get_X(&x);
-         point->get_Y(&y);
+         const auto& point = poly_points[pntIdx];
 
          LONG dx, dy;
-         mapper.WPtoDP(x, y, &dx, &dy);
+         mapper.WPtoDP(point.X(), point.Y(), &dx, &dy);
 
          points[pntIdx] = CPoint(dx, dy);
       }

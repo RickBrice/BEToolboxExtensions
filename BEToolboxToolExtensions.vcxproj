@@ -179,6 +179,7 @@
     <ClCompile Include="M3C\M3CTabView.cpp" />
     <ClCompile Include="M3C\M3CTitlePageBuilder.cpp" />
     <ClCompile Include="M3C\M3CView.cpp" />
+    <ClCompile Include="RCCapacity\BilinearConcreteModel.cpp" />
     <ClCompile Include="RCCapacity\GirderDimensionsDlg.cpp" />
     <ClCompile Include="RCCapacity\RCCapacityChapterBuilder.cpp" />
     <ClCompile Include="RCCapacity\RCCapacityChildFrame.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="M3C\M3CTitlePageBuilder.h" />
     <ClInclude Include="M3C\M3CView.h" />
     <ClInclude Include="M3C\M3CTools.h" />
+    <ClInclude Include="RCCapacity\BilinearConcreteModel.h" />
     <ClInclude Include="RCCapacity\GirderDimensionsDlg.h" />
     <ClInclude Include="RCCapacity\RCCapacityChapterBuilder.h" />
     <ClInclude Include="RCCapacity\RCCapacityMainView.h" />

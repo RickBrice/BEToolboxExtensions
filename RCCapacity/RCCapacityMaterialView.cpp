@@ -38,7 +38,7 @@ static char THIS_FILE[] = __FILE__;
 
 // CRCCapacityMaterialView
 
-#define IDC_MATERIAL 1
+#define IDC_MATERIAL 100
 
 IMPLEMENT_DYNCREATE(CRCCapacityMaterialView, CEAFView)
 
@@ -105,7 +105,7 @@ int CRCCapacityMaterialView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
    m_fnEdit.Attach(GetStockObject(DEFAULT_GUI_FONT));
 
-   VERIFY(m_cbMaterial.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | CBS_DROPDOWNLIST, CRect(0, 0, 200, 100), this, IDC_MATERIAL));
+   VERIFY(m_cbMaterial.Create(WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP, CRect(0, 0, 200, 100), this, IDC_MATERIAL));
    m_cbMaterial.SetFont(&m_fnEdit);
 
    for (auto* controller : m_ViewControllers)
@@ -143,11 +143,9 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
    graph.SetClientAreaColor(GRAPH_BACKGROUND);
    graph.SetGridPenStyle(GRAPH_GRID_PEN_STYLE, GRAPH_GRID_PEN_WEIGHT, GRAPH_GRID_COLOR);
 
-   CComPtr<IStressStrain> ss;
-   m_pViewController->GetMaterial(&ss);
+   const auto& ss = m_pViewController->GetMaterial();
 
-   Float64 minStrain, maxStrain;
-   ss->StrainLimits(&minStrain, &maxStrain);
+   auto [minStrain, maxStrain] = ss.GetStrainLimits();
    if (0.99 < maxStrain)
       maxStrain = 0;
 
@@ -166,8 +164,7 @@ void CRCCapacityMaterialView::OnDraw(CDC* pDC)
    IndexType idx = graph.CreateDataSeries(_T(""), PS_SOLID, 1, BLUE);
    for (auto strain : vStrain)
    {
-      Float64 stress;
-      ss->ComputeStress(strain, &stress);
+      auto [stress,bResult] = ss.ComputeStress(strain);
       stress = WBFL::Units::ConvertFromSysUnits(stress, pDispUnits->Stress.UnitOfMeasure);
       WBFL::Graphing::Point point(signX * strain * 1000, signY * stress);
       graph.AddPoint(idx, point);

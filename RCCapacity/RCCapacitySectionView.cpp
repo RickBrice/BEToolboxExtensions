@@ -115,16 +115,8 @@ void CRCCapacitySectionView::Update()
 
    CDManipClientDC dc(this);
 
-   const ModelData& modelData = m_pInputView->GetModelData();
-
-   CComPtr<IShape> pShape;
    CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
-   pDoc->GetBeamShape(modelData, &pShape);
-
-   CComPtr<IPoint2d> origin;
-   origin.CoCreateInstance(CLSID_Point2d);
-   CComQIPtr<IXYPosition> position(pShape);
-   position->put_LocatorPoint(lpTopCenter, origin);
+   auto beam_shape = pDoc->GetBeamShape();
 
    CComPtr<iPointDisplayObject> dispObj;
    dispObj.CoCreateInstance(CLSID_PointDisplayObject);
@@ -132,56 +124,42 @@ void CRCCapacitySectionView::Update()
    CComPtr<iCompoundDrawPointStrategy> compound_strategy;
    compound_strategy.CoCreateInstance(CLSID_CompoundDrawPointStrategy);
 
-
    // the main girder shape
-   CComPtr<iShapeDrawStrategy> girder_draw_strategy;
-   girder_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
-   girder_draw_strategy->SetShape(pShape);
+   CComPtr<iShapeDrawStrategy2> girder_draw_strategy;
+   girder_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+   girder_draw_strategy->SetShape(std::move(beam_shape->CreateClone()));
    girder_draw_strategy->SetSolidLineColor(BLACK);
+   girder_draw_strategy->HasBoundingShape(false);
    compound_strategy->AddStrategy(girder_draw_strategy);
+   auto Hg = beam_shape->GetBoundingBox().Height();
 
-   if (modelData.bHasDeck)
+   auto slab_shape = pDoc->GetSlabShape();
+   if(slab_shape)
    {
-      CComPtr<IRectangle> rect;
-      rect.CoCreateInstance(CLSID_Rect);
-      rect->put_Width(modelData.DeckWidth);
-      rect->put_Height(modelData.DeckThickness);
-
-      CComQIPtr<IXYPosition> position(rect);
-      position->put_LocatorPoint(lpBottomCenter, origin);
-
-      CComPtr<iShapeDrawStrategy> deck_draw_strategy;
-      deck_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
-      CComQIPtr<IShape> shape(rect);
-      deck_draw_strategy->SetShape(shape);
-      deck_draw_strategy->SetSolidLineColor(BLACK);
-      compound_strategy->AddStrategy(deck_draw_strategy);
+      CComPtr<iShapeDrawStrategy2> slab_draw_strategy;
+      slab_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+      slab_draw_strategy->SetShape(slab_shape->CreateClone());
+      slab_draw_strategy->SetSolidLineColor(BLACK);
+      slab_draw_strategy->HasBoundingShape(false);
+      compound_strategy->AddStrategy(slab_draw_strategy);
    }
 
-   CComPtr<IRect2d> bbox;
-   pShape->get_BoundingBox(&bbox);
-   Float64 Hg;
-   bbox->get_Height(&Hg);
-
+   const auto& modelData = pDoc->GetModelData();
    for (const auto& rebar : modelData.Rebar)
    {
       Float64 y = pDoc->GetReinforcementLocation(rebar, Hg, modelData.DeckThickness);
       Float64 x = -1.0* (rebar.nBars - 1) * rebar.spacing / 2.0;
       for (int i = 0; i < rebar.nBars; i++)
       {
-         CComPtr<ICircle> circle;
-         circle.CoCreateInstance(CLSID_Circle);
+         WBFL::Geometry::Circle circle;
 
          const auto* pBar = WBFL::LRFD::RebarPool::GetInstance()->GetRebar(modelData.RebarType, modelData.RebarGrade, rebar.size);
-         circle->put_Radius(pBar->GetNominalDimension() / 2);
-         CComPtr<IPoint2d> center;
-         circle->get_Center(&center);
-         center->Move(x, y);
+         circle.SetRadius(pBar->GetNominalDimension() / 2);
+         circle.Move(WBFL::Geometry::Shape::LocatorPoint::CenterCenter, WBFL::Geometry::Point2d(x, y));
 
-         CComPtr<iShapeDrawStrategy> rebar_draw_strategy;
-         rebar_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
-         CComQIPtr<IShape> shape(circle);
-         rebar_draw_strategy->SetShape(shape);
+         CComPtr<iShapeDrawStrategy2> rebar_draw_strategy;
+         rebar_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         rebar_draw_strategy->SetShape(std::move(circle.CreateClone()));
          rebar_draw_strategy->SetSolidLineColor(GREEN);
          rebar_draw_strategy->SetSolidFillColor(GREEN);
          rebar_draw_strategy->DoFill(true);
@@ -197,17 +175,14 @@ void CRCCapacitySectionView::Update()
       Float64 x = -1.0* (strand.nStrands - 1) * strand.spacing / 2.0;
       for (int i = 0; i < strand.nStrands; i++)
       {
-         CComPtr<ICircle> circle;
-         circle.CoCreateInstance(CLSID_Circle);
-         circle->put_Radius(pDoc->GetStrandDiameter(modelData.StrandSize) / 2.0);
-         CComPtr<IPoint2d> center;
-         circle->get_Center(&center);
-         center->Move(x, y);
+         WBFL::Geometry::Circle circle;
 
-         CComPtr<iShapeDrawStrategy> strand_draw_strategy;
-         strand_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy);
-         CComQIPtr<IShape> shape(circle);
-         strand_draw_strategy->SetShape(shape);
+         circle.SetRadius(pDoc->GetStrandDiameter(modelData.StrandSize) / 2.0);
+         circle.Move(WBFL::Geometry::Shape::LocatorPoint::CenterCenter, WBFL::Geometry::Point2d(x, y));
+
+         CComPtr<iShapeDrawStrategy2> strand_draw_strategy;
+         strand_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         strand_draw_strategy->SetShape(std::move(circle.CreateClone()));
          strand_draw_strategy->SetSolidLineColor(BLUE);
          strand_draw_strategy->SetSolidFillColor(BLUE);
          strand_draw_strategy->DoFill(true);

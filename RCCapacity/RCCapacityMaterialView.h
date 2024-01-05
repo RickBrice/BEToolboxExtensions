@@ -33,36 +33,36 @@
 class CMaterialViewController
 {
 public:
-   virtual LPCTSTR GetTitle() = 0;
-   virtual void GetMaterial(IStressStrain** ppMaterial) = 0;
-   virtual void GetSign(Float64* pX, Float64* pY) = 0;
-   virtual std::vector<Float64> GetSpecialPoints() { return std::vector<Float64>(); }
+   virtual LPCTSTR GetTitle() const = 0;
+   virtual const WBFL::Materials::StressStrainModel& GetMaterial() const = 0;
+   virtual void GetSign(Float64* pX, Float64* pY) const = 0;
+   virtual std::vector<Float64> GetSpecialPoints() const { return std::vector<Float64>(); }
 };
 
 class CDeckMaterialViewController : public CMaterialViewController
 {
 public:
-   virtual LPCTSTR GetTitle() override { return _T("Deck Concrete"); }
-   virtual void GetMaterial(IStressStrain** ppMaterial) override
+   virtual LPCTSTR GetTitle() const override { return _T("Deck Concrete"); }
+   virtual const WBFL::Materials::StressStrainModel& GetMaterial() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
-      pDoc->GetMaterial(Deck, ppMaterial);
+      return pDoc->GetMaterial(Deck);
    }
-   virtual void GetSign(Float64* pX, Float64* pY) override { *pX = -1.0; *pY = -1.0; }
+   virtual void GetSign(Float64* pX, Float64* pY) const override { *pX = -1.0; *pY = -1.0; }
 };
 
 class CGirderMaterialViewController : public CMaterialViewController
 {
 public:
-   virtual LPCTSTR GetTitle() override { return _T("Girder Concrete"); }
-   virtual void GetMaterial(IStressStrain** ppMaterial) override
+   virtual LPCTSTR GetTitle() const override { return _T("Girder Concrete"); }
+   virtual const WBFL::Materials::StressStrainModel& GetMaterial() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
-      pDoc->GetMaterial(Girder, ppMaterial);
+      return pDoc->GetMaterial(Girder);
    }
-   virtual void GetSign(Float64* pX, Float64* pY) override { *pX = -1.0; *pY = -1.0; }
+   virtual void GetSign(Float64* pX, Float64* pY) const override { *pX = -1.0; *pY = -1.0; }
 
-   virtual std::vector<Float64> GetSpecialPoints() override
+   virtual std::vector<Float64> GetSpecialPoints() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
       if (pDoc->GetModelData().concreteType == Conventional)
@@ -94,14 +94,14 @@ public:
 class CRebarMaterialViewController : public CMaterialViewController
 {
 public:
-   virtual LPCTSTR GetTitle() override { return _T("Rebar"); }
-   virtual void GetMaterial(IStressStrain** ppMaterial) override
+   virtual LPCTSTR GetTitle() const override { return _T("Rebar"); }
+   virtual const WBFL::Materials::StressStrainModel& GetMaterial() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
-      pDoc->GetMaterial(Rebar, ppMaterial);
+      return pDoc->GetMaterial(Rebar);
    }
-   virtual void GetSign(Float64* pX, Float64* pY) override { *pX = 1.0; *pY = 1.0; }
-   virtual std::vector<Float64> GetSpecialPoints() override
+   virtual void GetSign(Float64* pX, Float64* pY) const override { *pX = 1.0; *pY = 1.0; }
+   virtual std::vector<Float64> GetSpecialPoints() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
       const auto& modelData = pDoc->GetModelData();
@@ -119,13 +119,13 @@ public:
 class CStrandMaterialViewController : public CMaterialViewController
 {
 public:
-   virtual LPCTSTR GetTitle() override { return _T("Strand"); }
-   virtual void GetMaterial(IStressStrain** ppMaterial) override
+   virtual LPCTSTR GetTitle() const override { return _T("Strand"); }
+   virtual const WBFL::Materials::StressStrainModel& GetMaterial() const override
    {
       CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
-      pDoc->GetMaterial(Strand, ppMaterial);
+      return pDoc->GetMaterial(Strand);
    }
-   virtual void GetSign(Float64* pX, Float64* pY) override { *pX = 1.0; *pY = 1.0; }
+   virtual void GetSign(Float64* pX, Float64* pY) const override { *pX = 1.0; *pY = 1.0; }
 };
 
 class CRCCapacityMaterialView : public CEAFView

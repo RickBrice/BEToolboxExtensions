@@ -182,6 +182,7 @@ void CRCCapacityInputView::DoDataExchange(CDataExchange* pDX)
    DDX_Check(pDX, IDC_HAS_SLAB, m_ModelData.bHasDeck);
    DDX_UnitValueAndTag(pDX, IDC_WIDTH, IDC_WIDTH_UNIT, m_ModelData.DeckWidth, pDisplayUnits->ComponentDim);
    DDX_UnitValueAndTag(pDX, IDC_DEPTH, IDC_DEPTH_UNIT, m_ModelData.DeckThickness, pDisplayUnits->ComponentDim);
+   DDX_UnitValueAndTag(pDX, IDC_HAUNCH, IDC_HAUNCH_UNIT, m_ModelData.HaunchThickness, pDisplayUnits->ComponentDim);
    DDX_UnitValueAndTag(pDX, IDC_FC_DECK, IDC_FC_DECK_UNIT, m_ModelData.fcDeck, pDisplayUnits->Stress);
    DDX_UnitValueAndTag(pDX, IDC_EC_DECK, IDC_EC_DECK_UNIT, m_ModelData.EcDeck, pDisplayUnits->Stress);
    DDX_UnitValueAndTag(pDX, IDC_FTOP_DECK, IDC_FTOP_DECK_UNIT, m_ModelData.ftDeck, pDisplayUnits->Stress);
@@ -262,7 +263,9 @@ void CRCCapacityInputView::UpdateGirderList()
       LPCTSTR beam = pDoc->GetBeamName(typeIdx, beamIdx);
       pcbGirders->AddString(beam);
    }
-   pcbGirders->SetCurSel((int)m_ModelData.beamIdx);
+   auto cursel = pcbGirders->SetCurSel((int)m_ModelData.beamIdx);
+   if (cursel == CB_ERR)
+      pcbGirders->SetCurSel(0);
 }
 
 void CRCCapacityInputView::GetGirder(IndexType& typeIdx, IndexType& beamIdx)

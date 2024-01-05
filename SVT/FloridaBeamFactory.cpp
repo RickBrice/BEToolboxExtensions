@@ -179,6 +179,8 @@ std::unique_ptr<WBFL::Geometry::Shape> FloridaBeamFactory::CreateBeam(FloridaBea
    {
       int i = (int)type - (int)FloridaBeamType::FIB36;
 
+      auto pbeam = std::make_unique<WBFL::Geometry::FIBeam>();
+
       using namespace _FIBBeam;
 
       Float64 d1, d2, d3, d4, d5, h, t, r, w1, w2, w3, c1;
@@ -195,68 +197,20 @@ std::unique_ptr<WBFL::Geometry::Shape> FloridaBeamFactory::CreateBeam(FloridaBea
       w3 = WBFL::Units::ConvertToSysUnits(gs_FIBeamDimensions[i][W3], WBFL::Units::Measure::Inch);
       c1 = WBFL::Units::ConvertToSysUnits(gs_FIBeamDimensions[i][C1], WBFL::Units::Measure::Inch);
 
-      std::unique_ptr<WBFL::Geometry::Polygon> poly_shape(std::make_unique<WBFL::Geometry::Polygon>());
+      pbeam->SetD1(d1);
+      pbeam->SetD2(d2);
+      pbeam->SetD3(d3);
+      pbeam->SetD4(d4);
+      pbeam->SetD5(d5);
+      pbeam->SetH(h);
+      pbeam->SetT(t);
+      pbeam->SetR(r);
+      pbeam->SetW1(w1);
+      pbeam->SetW2(w2);
+      pbeam->SetW3(w3);
+      pbeam->SetC1(c1);
 
-      const long nSpaces = 100; // number of spaces used to approximate the curved fillets
-      Float64 cx, cy;           // center of arc
-      Float64 delta;            // sweep angle of arc
-      Float64 startAngle;       // start angle for generating points along arc
-
-                                // Start at the lower left corner of the shape
-      if (IsZero(c1))
-      {
-         poly_shape->AddPoint(-w3 / 2, 0.0);
-      }
-      else
-      {
-         poly_shape->AddPoint(-w3 / 2 + c1, 0.0);
-         poly_shape->AddPoint(-w3 / 2, c1);
-      }
-
-      poly_shape->AddPoint(-w3 / 2, d4);
-
-      // compute angle of bottom flange (measured from vertical)
-      delta = atan2((w3 - t) / 2, d5);
-
-      // generate bottom left flange-web fillet
-      cx = -t / 2 - r;
-      cy = d5 + d4 + r * tan(delta / 2);
-      startAngle = TWO_PI - delta;
-      GenerateFillet(poly_shape, cx, cy, r, startAngle, delta, nSpaces);
-
-      // going around the top flange
-      poly_shape->AddPoint(-t / 2, h - d1 - d2 - d3);
-      poly_shape->AddPoint(-t / 2 - w2, h - d1 - d2);
-      poly_shape->AddPoint(-t / 2 - w2 - w1, h - d1);
-      poly_shape->AddPoint(-t / 2 - w2 - w1, h);
-      poly_shape->AddPoint(t / 2 + w2 + w1, h);
-      poly_shape->AddPoint(t / 2 + w2 + w1, h - d1);
-      poly_shape->AddPoint(t / 2 + w2, h - d1 - d2);
-      poly_shape->AddPoint(t / 2, h - d1 - d2 - d3);
-
-      // compute angle of bottom flange (measured from vertical)
-      delta = atan2((w3 - t) / 2, d5);
-
-      // generate bottom right flange-web fillet
-      cx = t / 2 + r;
-      cy = d5 + d4 + r * tan(delta / 2);
-      startAngle = M_PI;
-      GenerateFillet(poly_shape, cx, cy, r, startAngle, delta, nSpaces);
-
-      poly_shape->AddPoint(w3 / 2, d4);
-
-      // bottom right point
-      if (IsZero(c1))
-      {
-         poly_shape->AddPoint(w3 / 2, 0.0);
-      }
-      else
-      {
-         poly_shape->AddPoint(w3 / 2, c1);
-         poly_shape->AddPoint(w3 / 2 - c1, 0.0);
-      }
-
-      beam = std::move(poly_shape);
+      beam = std::move(pbeam);
    }
    else if ((int)FloridaBeamType::FUB48 <= (int)type && (int)type < (int)FloridaBeamType::nSections)
    {
