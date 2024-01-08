@@ -965,7 +965,6 @@ void CRCCapacityDoc::Update(ConcreteModel concreteModel) const
 
    Float64 Aps = 0.0;
    Float64 Aps_dps = 0.0;
-   Float64 Aps_fpe = 0.0;
    Float64 dps_min = 0.0;
 
    i = 1;
@@ -1019,7 +1018,6 @@ void CRCCapacityDoc::Update(ConcreteModel concreteModel) const
 
       Aps += area;
       Aps_dps += area * cg.Y();
-      Aps_fpe += area * strand_data.fpe;
 
       dps_min = min(dps_min, cg.Y());
 
@@ -1037,8 +1035,6 @@ void CRCCapacityDoc::Update(ConcreteModel concreteModel) const
    Float64 dps = IsZero(Aps) ? 0.0 : Y_top -1.0*(Aps_dps / Aps);
    Float64 dps_max = Y_top - dps_min;
 
-   Float64 fpe = IsZero(Aps) ? 0.0 : Aps_fpe / Aps;
-
    Float64 fpu = WBFL::Units::ConvertToSysUnits(270.0, WBFL::Units::Measure::KSI);
    Float64 fpy = 0.9 * fpu;
    Float64 hf = m_ModelData.DeckThickness;
@@ -1046,7 +1042,7 @@ void CRCCapacityDoc::Update(ConcreteModel concreteModel) const
    auto flanged_beam = std::dynamic_pointer_cast<WBFL::Geometry::FlangedBeam>(m_pGirderShape);
    Float64 bw = flanged_beam->GetMinWebWidth();
 
-   m_Beam.Init(m_ModelData.fcBeam, m_ModelData.fcDeck, fpy, fpu, fy, Aps, As, hf, b, bw, ds, ds_max, dps, dps_max, fpe);
+   m_Beam.Init(m_ModelData.fcBeam, m_ModelData.fcDeck, fpy, fpu, fy, Aps, As, hf, b, bw, ds, ds_max, dps, dps_max);
 
    m_bUpdateModel[concreteModel] = false; // model is up to date
 }

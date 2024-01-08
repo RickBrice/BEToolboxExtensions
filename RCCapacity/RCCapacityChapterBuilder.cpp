@@ -328,16 +328,19 @@ void CRCCapacityChapterBuilder::ReportClosedForm(rptChapter* pChapter, rptRcTabl
    CEAFApp* pApp = EAFGetApp();
    const WBFL::Units::IndirectMeasure* pDisplayUnits = pApp->GetDisplayUnits();
 
-   INIT_UV_PROTOTYPE(rptLengthUnitValue, cg, pDisplayUnits->ComponentDim, false);
-   INIT_UV_PROTOTYPE(rptStressUnitValue, stress, pDisplayUnits->Stress, false);
+   INIT_UV_PROTOTYPE(rptLengthUnitValue, cg, pDisplayUnits->ComponentDim, true);
+   INIT_UV_PROTOTYPE(rptStressUnitValue, stress, pDisplayUnits->Stress, true);
+   INIT_UV_PROTOTYPE(rptAreaUnitValue, area, pDisplayUnits->Area, true);
    INIT_UV_PROTOTYPE(rptMomentUnitValue, moment, pDisplayUnits->SmallMoment, true);
    INIT_UV_PROTOTYPE(rptMomentUnitValue, moment2, pDisplayUnits->Moment, true);
 
-   cg.ShowUnitTag(true);
-   moment.ShowUnitTag(true);
-   moment2.ShowUnitTag(true);
-   stress.ShowUnitTag(true);
-
+   (*pPara) << _T("Slab ") << RPT_FC << _T(" = ") << stress.SetValue(beam.GetFcSlab()) << rptNewLine;
+   (*pPara) << _T("Beam ") << RPT_FC << _T(" = ") << stress.SetValue(beam.GetFcBeam()) << rptNewLine;
+   (*pPara) << RPT_FPU << _T(" = ") << stress.SetValue(beam.GetFpu()) << rptNewLine;
+   (*pPara) << RPT_FPY << _T(" = ") << stress.SetValue(beam.GetFpy()) << rptNewLine;
+   (*pPara) << RPT_APS << _T(" = ") << area.SetValue(beam.GetAps()) << rptNewLine;
+   (*pPara) << _T("b = ") << cg.SetValue(beam.GetB()) << rptNewLine;
+   (*pPara) << Sub2(_T("b"),_T("w")) << _T(" = ") << cg.SetValue(beam.GetBw()) << rptNewLine;
    (*pPara) << Sub2(_T("d"),_T("ps")) << _T(" = ") << cg.SetValue(beam.GetDps()) << rptNewLine;
    (*pPara) << Sub2(_T("d"), _T("t")) << _T(" = ") << cg.SetValue(beam.GetDpsMax()) << rptNewLine;
    (*pPara) << Sub2(_T("h"),_T("f")) << _T(" = ") << cg.SetValue(beam.GetHf()) << rptNewLine;
@@ -353,7 +356,7 @@ void CRCCapacityChapterBuilder::ReportClosedForm(rptChapter* pChapter, rptRcTabl
    auto etl = WBFL::LRFD::Rebar::GetTensionControlledStrainLimit(WBFL::Materials::Rebar::Grade::Grade60);
    auto phi = WBFL::LRFD::ConcreteUtil::GetFlexureCapacityResistanceFactor(cap.Get_et(), ecl, etl, 0.75, 1.0);
    (*pPara) << symbol(phi) << _T(" = ") << phi << rptNewLine;
-   (*pPara) << RPT_MU << _T(" = ") << RPT_PHI_MN << _T(" = ") << moment2.SetValue(phi * cap.GetMn()) << rptNewLine;
+   (*pPara) << RPT_MR << _T(" = ") << RPT_PHI_MN << _T(" = ") << moment2.SetValue(phi * cap.GetMn()) << rptNewLine;
 
    cg.ShowUnitTag(false);
    moment2.ShowUnitTag(false);
