@@ -14,8 +14,6 @@
 #include <WBFLGeometry_i.c>
 #include <WBFLUnitServer_i.c>
 
-#include <DManip\DManip.h>
-
 #include "M3C\M3CTools.h"
 #include "SVT\SVTTools.h"
 #include "RCCapacity\RCCapacityTool.h"

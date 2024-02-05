@@ -24,7 +24,7 @@
 
 
 // CRCCapacitySectionView view
-#include <DManip\DManip.h>
+#include <DManip/DManip.h>
 
 
 class CRCCapacityInputView;

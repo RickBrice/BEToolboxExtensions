@@ -63,7 +63,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include;$(BOOSTDIR)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -111,7 +111,7 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include;$(BOOSTDIR)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>

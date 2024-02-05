@@ -29,12 +29,6 @@
 
 #include <EAF\EAFHints.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 
 // CSVTToolView
 
@@ -80,15 +74,9 @@ void CSVTToolView::OnInitialUpdate()
 
    m_pFrame = (CSVTToolChildFrame*)GetParentFrame();
 
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
+   SetMappingMode(WBFL::DManip::MapMode::Isotropic);
 
-   SetMappingMode(DManip::Isotropic);
-
-   CComPtr<iDisplayList> dl;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&dl);
-   dl->SetID(DISPLAY_LIST_ID);
-   dispMgr->AddDisplayList(dl);
+   m_pDispMgr->CreateDisplayList(DISPLAY_LIST_ID);
 
    CDisplayView::OnInitialUpdate();
 }
@@ -200,31 +188,23 @@ void CSVTToolView::OnUpdate(CView* pSender,LPARAM lHint,CObject* pHint)
 void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
    CDisplayView::OnUpdate(pSender, lHint, pHint);
-
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
-
    CDManipClientDC dc(this);
 
    CSVTToolDoc* pDoc = (CSVTToolDoc*)GetDocument();
    const auto& shape = pDoc->GetShape();
 
-   dispMgr->ClearDisplayObjects();
+   m_pDispMgr->ClearDisplayObjects();
 
-   CComPtr<iDisplayList> display_list;
-   dispMgr->FindDisplayList(DISPLAY_LIST_ID, &display_list);
+   auto display_list = m_pDispMgr->FindDisplayList(DISPLAY_LIST_ID);
    display_list->Clear();
 
-   CComPtr<iPointDisplayObject> dispObj;
-   dispObj.CoCreateInstance(CLSID_PointDisplayObject);
+   auto dispObj = WBFL::DManip::PointDisplayObject::Create();
 
-   CComPtr<iCompoundDrawPointStrategy> compound_strategy;
-   compound_strategy.CoCreateInstance(CLSID_CompoundDrawPointStrategy);
+   auto compound_strategy = WBFL::DManip::CompoundDrawPointStrategy::Create();
 
 
    // the main girder shape
-   CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
-   shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+   auto shape_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
    shape_draw_strategy->SetShape(shape->CreateClone());
    shape_draw_strategy->SetSolidLineColor(BLUE);
    compound_strategy->AddStrategy(shape_draw_strategy);
@@ -235,8 +215,7 @@ void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
    auto vMesh = pDoc->GetMesh();
    for (auto& mesh_element : vMesh)
    {
-      CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
-      shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+      auto shape_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
       auto element_shape = mesh_element.CreateClone();
       element_shape->Reflect(y_axis);
       shape_draw_strategy->SetShape(std::move(element_shape));
@@ -275,11 +254,10 @@ void CSVTToolView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
          value /= 4;
 
          auto color = GetColor(min_value, max_value, value);
-         CComPtr<iShapeDrawStrategy2> shape_draw_strategy;
-         shape_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         auto shape_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
          shape_draw_strategy->SetShape(vMesh[elementIdx].CreateClone());
-         shape_draw_strategy->SetSolidLineStyle(lsNull);
-         shape_draw_strategy->DoFill(true);
+         shape_draw_strategy->SetSolidLineStyle(WBFL::DManip::LineStyleType::Null);
+         shape_draw_strategy->Fill(true);
          shape_draw_strategy->SetSolidFillColor(RGB(255 * std::get<0>(color), 255 * std::get<1>(color), 255 * std::get<2>(color)));
 
          if (elementIdx == results.MaxSlopeElementIdx)
@@ -332,5 +310,5 @@ void CSVTToolView::OnRButtonDown(UINT nFlags, CPoint point)
 
    CDisplayView::OnRButtonDown(nFlags, point);
 
-   DoZoom();
+   ActivateZoomTask();
 }

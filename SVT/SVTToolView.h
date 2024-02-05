@@ -24,7 +24,7 @@
 
 
 // CSVTToolView view
-#include <DManip\DManip.h>
+#include <DManip/DManip.h>
 #include "SVTToolChildFrame.h"
 
 class CSVTToolView : public CDisplayView

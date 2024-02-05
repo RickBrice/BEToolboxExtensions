@@ -31,6 +31,8 @@
 
 #include <EAF\EAFHints.h>
 
+#include <WBFLGeometry/GeomHelpers.h>
+
 #include <algorithm>
 
 #ifdef _DEBUG
@@ -79,15 +81,9 @@ void CRCCapacitySectionView::Dump(CDumpContext& dc) const
 #define DISPLAY_LIST_ID 100
 void CRCCapacitySectionView::OnInitialUpdate()
 {
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
+   SetMappingMode(WBFL::DManip::MapMode::Isotropic);
 
-   SetMappingMode(DManip::Isotropic);
-
-   CComPtr<iDisplayList> dl;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&dl);
-   dl->SetID(DISPLAY_LIST_ID);
-   dispMgr->AddDisplayList(dl);
+   m_pDispMgr->CreateDisplayList(DISPLAY_LIST_ID);
 
    __super::OnInitialUpdate();
 
@@ -101,32 +97,25 @@ void CRCCapacitySectionView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHi
 
 void CRCCapacitySectionView::Update()
 {
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
-
-   CComPtr<iDisplayList> display_list;
-   dispMgr->FindDisplayList(DISPLAY_LIST_ID, &display_list);
+   auto display_list = m_pDispMgr->FindDisplayList(DISPLAY_LIST_ID);
    if (display_list == nullptr)
       return; // the view isn't initialized yet
 
    display_list->Clear();
 
-   dispMgr->ClearDisplayObjects();
+   m_pDispMgr->ClearDisplayObjects();
 
    CDManipClientDC dc(this);
 
    CRCCapacityDoc* pDoc = (CRCCapacityDoc*)EAFGetDocument();
    auto beam_shape = pDoc->GetBeamShape();
 
-   CComPtr<iPointDisplayObject> dispObj;
-   dispObj.CoCreateInstance(CLSID_PointDisplayObject);
+   auto dispObj = WBFL::DManip::PointDisplayObject::Create();
 
-   CComPtr<iCompoundDrawPointStrategy> compound_strategy;
-   compound_strategy.CoCreateInstance(CLSID_CompoundDrawPointStrategy);
+   auto compound_strategy = WBFL::DManip::CompoundDrawPointStrategy::Create();
 
    // the main girder shape
-   CComPtr<iShapeDrawStrategy2> girder_draw_strategy;
-   girder_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+   auto girder_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
    girder_draw_strategy->SetShape(std::move(beam_shape->CreateClone()));
    girder_draw_strategy->SetSolidLineColor(BLACK);
    girder_draw_strategy->HasBoundingShape(false);
@@ -136,8 +125,7 @@ void CRCCapacitySectionView::Update()
    auto slab_shape = pDoc->GetSlabShape();
    if(slab_shape)
    {
-      CComPtr<iShapeDrawStrategy2> slab_draw_strategy;
-      slab_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+      auto slab_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
       slab_draw_strategy->SetShape(slab_shape->CreateClone());
       slab_draw_strategy->SetSolidLineColor(BLACK);
       slab_draw_strategy->HasBoundingShape(false);
@@ -157,12 +145,11 @@ void CRCCapacitySectionView::Update()
          circle.SetRadius(pBar->GetNominalDimension() / 2);
          circle.Move(WBFL::Geometry::Shape::LocatorPoint::CenterCenter, WBFL::Geometry::Point2d(x, y));
 
-         CComPtr<iShapeDrawStrategy2> rebar_draw_strategy;
-         rebar_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         auto rebar_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
          rebar_draw_strategy->SetShape(std::move(circle.CreateClone()));
          rebar_draw_strategy->SetSolidLineColor(GREEN);
          rebar_draw_strategy->SetSolidFillColor(GREEN);
-         rebar_draw_strategy->DoFill(true);
+         rebar_draw_strategy->Fill(true);
          compound_strategy->AddStrategy(rebar_draw_strategy);
 
          x += rebar.spacing;
@@ -180,12 +167,11 @@ void CRCCapacitySectionView::Update()
          circle.SetRadius(pDoc->GetStrandDiameter(modelData.StrandSize) / 2.0);
          circle.Move(WBFL::Geometry::Shape::LocatorPoint::CenterCenter, WBFL::Geometry::Point2d(x, y));
 
-         CComPtr<iShapeDrawStrategy2> strand_draw_strategy;
-         strand_draw_strategy.CoCreateInstance(CLSID_ShapeDrawStrategy2);
+         auto strand_draw_strategy = WBFL::DManip::ShapeDrawStrategy::Create();
          strand_draw_strategy->SetShape(std::move(circle.CreateClone()));
          strand_draw_strategy->SetSolidLineColor(BLUE);
          strand_draw_strategy->SetSolidFillColor(BLUE);
-         strand_draw_strategy->DoFill(true);
+         strand_draw_strategy->Fill(true);
          compound_strategy->AddStrategy(strand_draw_strategy);
 
          x += strand.spacing;

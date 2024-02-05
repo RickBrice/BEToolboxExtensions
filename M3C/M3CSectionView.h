@@ -23,7 +23,7 @@
 
 // CM3CSectionView view
 
-#include <DManip\DManip.h>
+#include <DManip/DManip.h>
 
 class CM3CSectionView : public CDisplayView
 {
