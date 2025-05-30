@@ -28,11 +28,6 @@
 
 #include <WBFLRCCapacity.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 static const COLORREF BACKGROUND_COLOR = WHITE;
 static const COLORREF VOID_COLOR = WHITE;
@@ -367,11 +362,6 @@ void CRCCapacityChapterBuilder::ReportClosedForm(rptChapter* pChapter, rptRcTabl
    (*pSummaryTable)(4, col) << cap.Get_et();
    (*pSummaryTable)(5, col) << phi;
    (*pSummaryTable)(6, col) << moment2.SetValue(phi * cap.GetMn());
-}
-
-std::unique_ptr<WBFL::Reporting::ChapterBuilder> CRCCapacityChapterBuilder::Clone() const
-{
-   return std::make_unique<CRCCapacityChapterBuilder>(m_pDoc);
 }
 
 

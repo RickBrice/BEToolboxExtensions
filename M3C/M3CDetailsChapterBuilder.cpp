@@ -25,15 +25,6 @@
 #include "BEToolboxColors.h"
 #include <Reporter\Reporter.h>
 
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
-//////////////////////////////////
 CM3CMaterialDetailsChapterBuilder::CM3CMaterialDetailsChapterBuilder(CM3CDoc* pDoc)
 {
    m_pDoc = pDoc;
@@ -60,11 +51,6 @@ rptChapter* CM3CMaterialDetailsChapterBuilder::Build(const std::shared_ptr<const
    BuildRebarModel(pChapter);
    BuildStrandModel(pChapter);
    return pChapter;
-}
-
-std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CMaterialDetailsChapterBuilder::Clone() const
-{
-   return std::make_unique<CM3CMaterialDetailsChapterBuilder>(m_pDoc);
 }
 
 void CM3CMaterialDetailsChapterBuilder::BuildConcreteModel(rptChapter* pChapter) const

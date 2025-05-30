@@ -30,13 +30,6 @@
 #include <EAF\EAFDocument.h>
 #include <MFCTools\WsdotCalculationSheet.h>
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
-
-
 CM3CPrintJob::CM3CPrintJob(CM3CChildFrame* pframe)
 {
    m_pFrame = pframe;

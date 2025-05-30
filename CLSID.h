@@ -22,20 +22,16 @@
 
 #pragma once
 
-#include "resource.h"
-#include <ToolImpl.h>
+#include <initguid.h>
 
-#include "M3CDocTemplate.h"
-#include "M3CDoc.h"
-#include "M3CChildFrame.h"
-#include "M3CTabView.h"
+// {DB437766-BF3D-4E62-8FBD-5D9D4F2FF875}
+DEFINE_GUID(CLSID_RCCapacityTool,
+   0xdb437766, 0xbf3d, 0x4e62, 0x8f, 0xbd, 0x5d, 0x9d, 0x4f, 0x2f, 0xf8, 0x75);
+
+// {888B471B-44EA-45C4-B793-C601FD282069}
+DEFINE_GUID(CLSID_SVTTool,
+   0x888b471b, 0x44ea, 0x45c4, 0xb7, 0x93, 0xc6, 0x1, 0xfd, 0x28, 0x20, 0x69);
 
 // {DACA33E6-D45C-4FBA-B04F-50F0A7A8E132}
 DEFINE_GUID(CLSID_M3CTool,
    0xdaca33e6, 0xd45c, 0x4fba, 0xb0, 0x4f, 0x50, 0xf0, 0xa7, 0xa8, 0xe1, 0x32);
-class CM3CTool : public CToolImpl<CM3CTool, &CLSID_M3CTool, IDR_M3CTOOL, CM3CDoc, CM3CChildFrame, CM3CTabView, CM3CDocTemplate, IDR_M3C>
-{
-public:
-   virtual CString GetName() const override { return _T("M3C"); }
-};
-OBJECT_ENTRY_AUTO(CLSID_M3CTool, CM3CTool)

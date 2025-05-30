@@ -24,11 +24,6 @@
 #include "Helpers.h"
 #include <MathEx.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 std::tuple<Float64, Float64, Float64> GetColor(Float64 min, Float64 max, Float64 value)
 {

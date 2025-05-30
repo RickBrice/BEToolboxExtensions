@@ -31,11 +31,6 @@
 #include <Graphing/GraphXY.h>
 
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 
 //////////////////////////////////
@@ -145,11 +140,6 @@ rptChapter* CM3CChapterBuilder::Build(const std::shared_ptr<const WBFL::Reportin
 
 
    return pChapter;
-}
-
-std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CChapterBuilder::Clone() const
-{
-   return std::make_unique<CM3CChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CChapterBuilder::CreateImage(IMomentCurvatureSolution* pSolution) const

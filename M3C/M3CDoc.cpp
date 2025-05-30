@@ -37,13 +37,8 @@
 #include <EAF\EAFApp.h>
 
 #include "M3C.hh"
-#include <EAF\EAFHelp.h>
+#include <EAF\Help.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 
 // CM3CDoc
@@ -153,7 +148,7 @@ HRESULT CM3CDoc::WriteTheDocument(IStructuredSave* pStrSave)
 
    CEAFApp* pApp = EAFGetApp();
 
-   hr = pStrSave->put_Property(_T("Units"),CComVariant(pApp->GetUnitsMode()));
+   hr = pStrSave->put_Property(_T("Units"),CComVariant(+pApp->GetUnitsMode()));
    if ( FAILED(hr) )
       return hr;
 
@@ -182,7 +177,7 @@ HRESULT CM3CDoc::LoadTheDocument(IStructuredLoad* pStrLoad)
    hr = pStrLoad->get_Property(_T("Units"),&var);
    if ( FAILED(hr) )
       return hr;
-   pApp->SetUnitsMode(eafTypes::UnitMode(var.lVal));
+   pApp->SetUnitsMode(WBFL::EAF::UnitMode(var.lVal));
 
    hr = m_ProblemParams.Load(pStrLoad);
    if (FAILED(hr))
