@@ -25,17 +25,13 @@
 #include "resource.h"
 #include <ToolImpl.h>
 
-#include "SVTToolDocTemplate.h"
-#include "SVTToolDoc.h"
-#include "SVTToolView.h"
-#include "SVTToolChildFrame.h"
+#include "M3CDocTemplate.h"
+#include "M3CDoc.h"
+#include "M3CChildFrame.h"
+#include "M3CTabView.h"
 
-// {888B471B-44EA-45C4-B793-C601FD282069}
-DEFINE_GUID(CLSID_SVTTool, 
-0x888b471b, 0x44ea, 0x45c4, 0xb7, 0x93, 0xc6, 0x1, 0xfd, 0x28, 0x20, 0x69);
-class CSVTTool : public CToolImpl<CSVTTool, &CLSID_SVTTool, IDR_SVTTOOL, CSVTToolDoc, CSVTToolChildFrame, CSVTToolView, CSVTToolDocTemplate, IDR_SVT>
+class CM3CTool : public CToolImpl<CM3CDoc, CM3CChildFrame, CM3CTabView, CM3CDocTemplate, IDR_M3C>
 {
 public:
-   virtual CString GetName() const override { return _T("St. Venant Torsional Constant"); }
+   virtual CString GetName() const override { return _T("M3C"); }
 };
-OBJECT_ENTRY_AUTO(CLSID_SVTTool, CSVTTool)

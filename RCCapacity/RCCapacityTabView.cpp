@@ -32,11 +32,6 @@
 
 #include <EAF\EAFHints.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 
 // CRCCapacityTabView
@@ -82,7 +77,7 @@ int CRCCapacityTabView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
    AddView(RUNTIME_CLASS(CRCCapacityMainView), _T("Section"));
    AddView(RUNTIME_CLASS(CRCCapacityMaterialView), _T("Material Models"));
-   AddView(RUNTIME_CLASS(CRCCapacityResultsView), _T("Results"));
+   //AddView(RUNTIME_CLASS(CRCCapacityResultsView), _T("Results"));
    AddView(RUNTIME_CLASS(CRCCapacityReportView), _T("Report"));
 
    SetActiveView(0);

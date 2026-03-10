@@ -36,14 +36,7 @@ static const COLORREF TENSION_COLOR = BLUE;
 static const COLORREF SEGMENT_FILL_COLOR = GREY70;
 
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
-
-//////////////////////////////////
 CM3CAnalysisDetailsChapterBuilder::CM3CAnalysisDetailsChapterBuilder(CM3CDoc* pDoc)
 {
    m_pDoc = pDoc;
@@ -196,11 +189,6 @@ void CM3CAnalysisDetailsChapterBuilder::BuildAnalysisModel(rptChapter* pChapter,
    //(*pPara) << _T("Depth to Compression Resultant, ") << Sub2(_T("d"), _T("c")) << _T(" = ") << dist.SetValue(pmcd->dc) << rptNewLine;
    //(*pPara) << _T("Tension Resultant, T = ") << force.SetValue(pmcd->T) << rptNewLine;
    //(*pPara) << _T("Depth to Tension Resultant, ") << Sub2(_T("d"), _T("e")) << _T(" = ") << dist.SetValue(pmcd->de) << rptNewLine;
-}
-
-std::unique_ptr<WBFL::Reporting::ChapterBuilder> CM3CAnalysisDetailsChapterBuilder::Clone() const
-{
-   return std::make_unique<CM3CAnalysisDetailsChapterBuilder>(m_pDoc);
 }
 
 rptRcImage* CM3CAnalysisDetailsChapterBuilder::CreateImage(IMomentCapacitySolution* pSolution) const

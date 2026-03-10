@@ -30,11 +30,6 @@
 #include "M3CAnalysisDetailsReportSpecification.h"
 #include <MFCTools\Format.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 
 // CM3CReportView
@@ -164,12 +159,10 @@ void CM3CAnalysisDetailsReportView::UpdateCurvatureList()
 
 CWnd* CM3CAnalysisDetailsReportView::CreateEditButton()
 {
-   CWnd* pWeb = m_pReportBrowser->GetBrowserWnd();
-
    CRect rect(0, 0, 200, 21);
    CCurvatureList* pCB = new CCurvatureList();
    pCB->Register(this);
-   pCB->Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | CBS_DROPDOWNLIST, rect, pWeb, 1);
+   pCB->Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | CBS_DROPDOWNLIST, rect, this, 1);
 
    UpdateCurvatureList();
    pCB->SetFont(&m_fnEdit);

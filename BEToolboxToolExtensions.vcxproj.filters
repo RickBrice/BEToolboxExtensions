@@ -238,6 +238,9 @@
     <ClCompile Include="SVT\PCIUHPCBeamFactory.cpp">
       <Filter>SVT\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RCCapacity\BilinearConcreteModel.cpp">
+      <Filter>RCCapacity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -247,9 +250,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dllmain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BEToolboxToolExtensions_i.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="M3C\M3C.hh">
@@ -309,7 +309,7 @@
     <ClInclude Include="M3C\M3CView.h">
       <Filter>M3C\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="M3C\M3CTools.h">
+    <ClInclude Include="M3C\M3CTool.h">
       <Filter>M3C\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\SVTToolChildFrame.h">
@@ -327,7 +327,7 @@
     <ClInclude Include="SVT\SVTTool.hh">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVT\SVTTools.h">
+    <ClInclude Include="SVT\SVTTool.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVT\SVTDlgBar.h">
@@ -450,6 +450,12 @@
     <ClInclude Include="SVT\PCIUHPCBeamFactory.h">
       <Filter>SVT\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RCCapacity\BilinearConcreteModel.h">
+      <Filter>RCCapacity</Filter>
+    </ClInclude>
+    <ClInclude Include="CLSID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BEToolboxToolExtensions.rc">
@@ -462,21 +468,6 @@
   <ItemGroup>
     <None Include="BEToolboxToolExtensions.def">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="BEToolboxToolExtensions.rgs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="M3C\M3CTool.rgs">
-      <Filter>M3C\Resource Files</Filter>
-    </None>
-    <None Include="SVT\SVTTool.rgs">
-      <Filter>SVT\Resource Files</Filter>
-    </None>
-    <None Include="SVT\SVT.rgs">
-      <Filter>SVT\Resource Files</Filter>
-    </None>
-    <None Include="RCCapacity\RCCapacityTool.rgs">
-      <Filter>RCCapacity\Resource Files</Filter>
     </None>
     <None Include="res\IBeam.emf">
       <Filter>Resource Files</Filter>

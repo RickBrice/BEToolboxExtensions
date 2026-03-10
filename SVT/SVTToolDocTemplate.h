@@ -28,7 +28,7 @@ class CSVTToolDocTemplate : public CEAFDocTemplate
 {
 public:
    CSVTToolDocTemplate(UINT nIDResource,
-                      IEAFCommandCallback* pCallback,
+                      std::shared_ptr<WBFL::EAF::ICommandCallback> pCallback,
                       CRuntimeClass* pDocClass,
                       CRuntimeClass* pFrameClass,
                       CRuntimeClass* pViewClass,

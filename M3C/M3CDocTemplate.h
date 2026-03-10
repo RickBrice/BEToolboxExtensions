@@ -28,7 +28,7 @@ class CM3CDocTemplate : public CEAFDocTemplate
 {
 public:
    CM3CDocTemplate(UINT nIDResource,
-                      IEAFCommandCallback* pCallback,
+                      std::shared_ptr<WBFL::EAF::ICommandCallback> pCallback,
                       CRuntimeClass* pDocClass,
                       CRuntimeClass* pFrameClass,
                       CRuntimeClass* pViewClass,

@@ -27,6 +27,8 @@
 #include "M3CDoc.h"
 #include "BEToolboxColors.h"
 
+#include <WBFLGeometry/GeomHelpers.h>
+
 static const COLORREF COLUMN_COLOR = GREY70;
 static const COLORREF BONDED_REBAR_COLOR = GREEN;
 static const COLORREF UNBONDED_REBAR_COLOR = PURPLE;
@@ -66,31 +68,13 @@ void CM3CSectionView::DoPrint(CDC* pDC, CPrintInfo* pInfo)
 
 void CM3CSectionView::BuildDisplayLists()
 {
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
-
-   CDisplayView::SetMappingMode(DManip::Isotropic);
+   CDisplayView::SetMappingMode(WBFL::DManip::MapMode::Isotropic);
 
    // Setup display lists
-   CComPtr<iDisplayList> tendon_list;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&tendon_list);
-   tendon_list->SetID(TENDON_DISPLAY_LIST);
-   dispMgr->AddDisplayList(tendon_list);
-
-   CComPtr<iDisplayList> unbonded_rebar_list;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&unbonded_rebar_list);
-   unbonded_rebar_list->SetID(UNBONDED_REBAR_DISPLAY_LIST);
-   dispMgr->AddDisplayList(unbonded_rebar_list);
-
-   CComPtr<iDisplayList> bonded_rebar_list;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&bonded_rebar_list);
-   bonded_rebar_list->SetID(BONDED_REBAR_DISPLAY_LIST);
-   dispMgr->AddDisplayList(bonded_rebar_list);
-
-   CComPtr<iDisplayList> column_list;
-   ::CoCreateInstance(CLSID_DisplayList, nullptr, CLSCTX_ALL, IID_iDisplayList, (void**)&column_list);
-   column_list->SetID(COLUMN_DISPLAY_LIST);
-   dispMgr->AddDisplayList(column_list);
+   m_pDispMgr->CreateDisplayList(TENDON_DISPLAY_LIST);
+   m_pDispMgr->CreateDisplayList(UNBONDED_REBAR_DISPLAY_LIST);
+   m_pDispMgr->CreateDisplayList(BONDED_REBAR_DISPLAY_LIST);
+   m_pDispMgr->CreateDisplayList(COLUMN_DISPLAY_LIST);
 
    // OnInitialUpdate eventually calls OnUpdate... OnUpdate calls the
    // following two methods so there isn't any need to call them here
@@ -124,18 +108,13 @@ void CM3CSectionView::UpdateDrawingScale()
 
 void CM3CSectionView::UpdateDisplayObjects()
 {
-   // get the display manager
-   CComPtr<iDisplayMgr> dispMgr;
-   GetDisplayMgr(&dispMgr);
-
    // clean out all the display objects
-   dispMgr->ClearDisplayObjects();
+   m_pDispMgr->ClearDisplayObjects();
 
-   CComPtr<iDisplayList> dlColumn, dlBondedRebar, dlUnbondedRebar, dlTendon;
-   dispMgr->FindDisplayList(COLUMN_DISPLAY_LIST, &dlColumn);
-   dispMgr->FindDisplayList(BONDED_REBAR_DISPLAY_LIST, &dlBondedRebar);
-   dispMgr->FindDisplayList(UNBONDED_REBAR_DISPLAY_LIST, &dlUnbondedRebar);
-   dispMgr->FindDisplayList(TENDON_DISPLAY_LIST, &dlTendon);
+   auto dlColumn = m_pDispMgr->FindDisplayList(COLUMN_DISPLAY_LIST);
+   auto dlBondedRebar = m_pDispMgr->FindDisplayList(BONDED_REBAR_DISPLAY_LIST);
+   auto dlUnbondedRebar = m_pDispMgr->FindDisplayList(UNBONDED_REBAR_DISPLAY_LIST);
+   auto dlTendon = m_pDispMgr->FindDisplayList(TENDON_DISPLAY_LIST);
 
    CM3CDoc* pDoc = (CM3CDoc*)GetDocument();
 
@@ -213,16 +192,12 @@ void CM3CSectionView::UpdateDisplayObjects()
          }
       }
 
-      CComPtr<iPointDisplayObject> doPnt;
-      ::CoCreateInstance(CLSID_PointDisplayObject, nullptr, CLSCTX_ALL, IID_iPointDisplayObject, (void**)&doPnt);
-      doPnt->SetID(shapeIdx);
-
-      CComPtr<iShapeDrawStrategy> strategy;
-      ::CoCreateInstance(CLSID_ShapeDrawStrategy, nullptr, CLSCTX_ALL, IID_iShapeDrawStrategy, (void**)&strategy);
+      auto doPnt = WBFL::DManip::PointDisplayObject::Create(shapeIdx);
+      auto strategy = WBFL::DManip::ShapeDrawStrategy::Create();
       doPnt->SetDrawingStrategy(strategy);
 
-      strategy->SetShape(shape);
-      strategy->DoFill(true);
+      strategy->SetShape(geomUtil::ConvertShape(shape));
+      strategy->Fill(true);
 
       if (startColumnIdx <= shapeIdx && shapeIdx <= endColumnIdx )
       {

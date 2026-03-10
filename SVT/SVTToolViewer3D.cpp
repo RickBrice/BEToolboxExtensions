@@ -3,11 +3,6 @@
 
 #include <Inventor/nodes/SoDirectionalLight.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 CSVTToolViewer3D::CSVTToolViewer3D(HWND hwnd) :
    SoWinExaminerViewer(hwnd,"SVT Viewer 3D",

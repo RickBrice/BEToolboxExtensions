@@ -38,10 +38,12 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(GRID_PROPS)" />
+    <Import Project="..\WBFL\WBFL.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(GRID_PROPS)" />
+    <Import Project="..\WBFL\WBFL.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -63,7 +65,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include;$(BOOSTDIR)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -88,7 +90,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\BEToolboxToolExtensions.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(ARPDIR)\WBFL\RegFreeCOM\$(Platform)\$(Configuration);$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ARPDIR)\WBFL\RegFreeCOM\$(Platform)\$(Configuration);$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration);$(BOOSTDIR)\stage\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <OptimizeReferences>false</OptimizeReferences>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
@@ -111,7 +113,7 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;COIN_DLL;SOWIN_DLL;xUSE_COM_GEOMETRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\BEToolbox;$(ARPDIR)\WBFL\Include;$(ARPDIR)\WBFL\Include\$(Configuration);$(ARPDIR)\WBFL\Include\$(Platform);$(COINDIR)\Include;$(ARPDIR)\BridgeLink\Include;$(BOOSTDIR)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -179,6 +181,7 @@
     <ClCompile Include="M3C\M3CTabView.cpp" />
     <ClCompile Include="M3C\M3CTitlePageBuilder.cpp" />
     <ClCompile Include="M3C\M3CView.cpp" />
+    <ClCompile Include="RCCapacity\BilinearConcreteModel.cpp" />
     <ClCompile Include="RCCapacity\GirderDimensionsDlg.cpp" />
     <ClCompile Include="RCCapacity\RCCapacityChapterBuilder.cpp" />
     <ClCompile Include="RCCapacity\RCCapacityChildFrame.cpp" />
@@ -225,7 +228,7 @@
     <ClCompile Include="SVT\WSDOTBeamFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BEToolboxToolExtensions_i.h" />
+    <ClInclude Include="CLSID.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="M3C\M3C.hh" />
     <ClInclude Include="M3C\M3CAnalysisDetailsChapterBuilder.h" />
@@ -246,7 +249,8 @@
     <ClInclude Include="M3C\M3CTabView.h" />
     <ClInclude Include="M3C\M3CTitlePageBuilder.h" />
     <ClInclude Include="M3C\M3CView.h" />
-    <ClInclude Include="M3C\M3CTools.h" />
+    <ClInclude Include="M3C\M3CTool.h" />
+    <ClInclude Include="RCCapacity\BilinearConcreteModel.h" />
     <ClInclude Include="RCCapacity\GirderDimensionsDlg.h" />
     <ClInclude Include="RCCapacity\RCCapacityChapterBuilder.h" />
     <ClInclude Include="RCCapacity\RCCapacityMainView.h" />
@@ -283,7 +287,7 @@
     <ClInclude Include="SVT\PCIUHPCBeamFactory.h" />
     <ClInclude Include="SVT\SVT.h" />
     <ClInclude Include="SVT\SVTDlgBar.h" />
-    <ClInclude Include="SVT\SVTTools.h" />
+    <ClInclude Include="SVT\SVTTool.h" />
     <ClInclude Include="SVT\SVTTool.hh" />
     <ClInclude Include="SVT\SVTToolChildFrame.h" />
     <ClInclude Include="SVT\SVTToolDoc.h" />
@@ -304,13 +308,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BEToolboxToolExtensions.def" />
-    <None Include="BEToolboxToolExtensions.rgs" />
-    <None Include="M3C\M3CTool.rgs" />
-    <None Include="RCCapacity\RCCapacityTool.rgs" />
     <None Include="res\IBeam.emf" />
     <None Include="res\NUbeam.emf" />
-    <None Include="SVT\SVT.rgs" />
-    <None Include="SVT\SVTTool.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\M3C.ico" />

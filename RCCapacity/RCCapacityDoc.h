@@ -23,11 +23,12 @@
 #pragma once
 
 #include "BEToolboxDoc.h"
-#include <WBFLGeometry.h>
-#include <WBFLRCCapacity.h>
+#include <GeomModel\GeomModel.h>
+#include <RCSection\RCSection.h>
+#include <Materials/Materials.h>
+
 #include "..\SVT\AbstractBeamFactory.h"
 
-#include <Materials/Materials.h>
 #include <LRFD\Lrfd.h>
 #include <ReportManager\ReportManager.h>
 
@@ -84,6 +85,12 @@ struct StrandData
    }
 };
 
+typedef enum ConcreteModel
+{
+   Parabolic,
+   Bilinear
+} ConcreteModel;
+
 typedef enum ConcreteType
 {
    Conventional,
@@ -132,6 +139,7 @@ struct ModelData
    BOOL bHasDeck;
    Float64 DeckWidth;
    Float64 DeckThickness;
+   Float64 HaunchThickness;
    Float64 fcDeck;
    Float64 EcDeck;
    Float64 ftDeck;
@@ -166,6 +174,7 @@ struct ModelData
       bHasDeck = TRUE;
       DeckWidth = WBFL::Units::ConvertToSysUnits(72.0,WBFL::Units::Measure::Inch);
       DeckThickness = WBFL::Units::ConvertToSysUnits(8.0,WBFL::Units::Measure::Inch);
+      HaunchThickness = 0.0;
       fcDeck = WBFL::Units::ConvertToSysUnits(4.0, WBFL::Units::Measure::KSI);
       EcDeck = WBFL::Units::ConvertToSysUnits(2500 * pow(4.0, 0.33), WBFL::Units::Measure::KSI);
       ftDeck = 0;
@@ -200,11 +209,11 @@ public:
    LPCTSTR GetTypeName(IndexType typeIdx) const;
    IndexType GetBeamCount(IndexType typeIdx) const;
    LPCTSTR GetBeamName(IndexType typeIdx, IndexType beamIdx) const;
-   void GetBeamShape(const ModelData& modelData,IShape** pShape) const;
+   std::unique_ptr<WBFL::Geometry::Shape> CreateBeamShape(const ModelData& modelData) const;
 
 
    template <typename T>
-   Float64 GetReinforcementLocation(const T& reinf, Float64 Hg, Float64 ts)
+   Float64 GetReinforcementLocation(const T& reinf, Float64 Hg, Float64 ts) const
    {
       Float64 y;
       switch (reinf.measure)
@@ -223,10 +232,16 @@ public:
    const ModelData& GetModelData() const;
 
 
-   void GetShape(IShape** ppShape);
-   void GetMaterial(ElementType element, IStressStrain** ppMaterial);
-   void GetSection(IGeneralSection** ppSection);
-   void GetCapacity(IMomentCapacitySolution** ppSolution);
+   const std::shared_ptr<WBFL::Geometry::Shape>& GetBeamShape() const;
+   const std::shared_ptr<WBFL::Geometry::Shape>& GetSlabShape() const;
+
+   const WBFL::Geometry::Shape& GetShape() const;
+   const WBFL::Materials::StressStrainModel& GetMaterial(ElementType element) const;
+   std::shared_ptr<const WBFL::RCSection::GeneralSection> GetSection(ConcreteModel concreteModel) const;
+   std::shared_ptr<const WBFL::RCSection::MomentCapacitySolution> GetCapacity(ConcreteModel concreteModel) const;
+
+   WBFL::RCSection::RCSolution GetRCCCapacity() const;
+   const WBFL::RCSection::RCBeam& GetRCCBeam() const;
 
 #ifdef _DEBUG
 	virtual void AssertValid() const override;
@@ -262,31 +277,32 @@ protected:
    virtual void LoadToolbarResource() override;
 
 private:
-   bool m_bUpdateModel; // state flag indicating if the model needs to be update
-   bool m_bUpdateSolution; // state flag indicating if the solution needs to be updated (not valid if model state is invalid)
+   mutable std::array<bool, 2> m_bUpdateModel{ true,true }; // state flag indicating if the model needs to be update
+   mutable std::array<bool, 2> m_bUpdateSolution{ true, true }; // state flag indicating if the solution needs to be updated (not valid if model state is invalid)
 
    ModelData m_ModelData;
 
-   std::vector < std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
-   CComPtr<IShape> m_pGirderShape;
-   CComPtr<IRectangle> m_pSlabShape;
-   CComPtr<ICompositeShape> m_pCompositeShape;
-   CComPtr<IGeneralSection> m_pSection;
+   std::vector<std::pair<std::_tstring, std::unique_ptr<CAbstractBeamFactory>>> m_BeamFactories;
 
-   CComPtr<IMomentCapacitySolver> m_Solver;
-   CComPtr<IMomentCapacitySolution> m_pSolution;
+   mutable std::shared_ptr<WBFL::Geometry::Shape> m_pGirderShape;
+   mutable std::shared_ptr<WBFL::Geometry::Shape> m_pSlabShape;
+   mutable std::shared_ptr<WBFL::Geometry::CompositeShape> m_pCompositeShape;
 
-   CComPtr<IStressStrain> m_ssDeck;
-   CComPtr<IStressStrain> m_ssGirder;
-   CComPtr<IStressStrain> m_ssRebar;
-   CComPtr<IStressStrain> m_ssStrand;
+   mutable std::array<std::shared_ptr<WBFL::RCSection::GeneralSection>, 2> m_pSection;
 
-   CComPtr<IUnitServer> m_UnitServer;
-   CComPtr<IUnitConvert> m_UnitConvert;
+   mutable std::array<std::shared_ptr<WBFL::Materials::StressStrainModel>, 2> m_ssDeck;
+   mutable std::array<std::shared_ptr<WBFL::Materials::StressStrainModel>, 2> m_ssGirder;
+   mutable std::shared_ptr<WBFL::Materials::StressStrainModel> m_ssRebar;
+   mutable std::shared_ptr<WBFL::Materials::StressStrainModel> m_ssStrand;
 
-   void Update();
+   mutable WBFL::RCSection::MomentCapacitySolver m_Solver;
+   mutable std::array<std::shared_ptr<WBFL::RCSection::MomentCapacitySolution>, 2> m_pSolution;
 
-   void CreateBeam(const std::array<Float64, 14>& dimensions, IPrecastBeam** ppBeam) const;
+   mutable WBFL::RCSection::RCBeam m_Beam;
+
+   void Update(ConcreteModel concreteModel) const;
+
+   std::unique_ptr<WBFL::Geometry::PrecastBeam> CreateBeam(const std::array<Float64, 14>& dimensions) const;
    void CreateBeam(const std::array<Float64, 14>& dimensions, INUBeam** ppBeam) const;
 
 };

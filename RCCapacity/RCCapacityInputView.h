@@ -81,6 +81,7 @@ protected:
 	afx_msg void OnBeamTypeChanged();
 	afx_msg void OnEditDimensions();
 
+	void FillConcreteModelType();
 	void FillBeamType();
 	void FillTypeList();
 	void UpdateGirderList();

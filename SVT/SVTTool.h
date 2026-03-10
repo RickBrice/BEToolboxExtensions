@@ -25,13 +25,13 @@
 #include "resource.h"
 #include <ToolImpl.h>
 
-#include "RCCapacityDocTemplate.h"
-#include "RCCapacityDoc.h"
-#include "RCCapacityTabView.h"
-#include "RCCapacityChildFrame.h"
+#include "SVTToolDocTemplate.h"
+#include "SVTToolDoc.h"
+#include "SVTToolView.h"
+#include "SVTToolChildFrame.h"
 
-class CRCCapacityTool : public CToolImpl<CRCCapacityDoc, CRCCapacityChildFrame, CRCCapacityTabView, CRCCapacityDocTemplate, IDR_RCCAPACITY>
+class CSVTTool : public CToolImpl<CSVTToolDoc, CSVTToolChildFrame, CSVTToolView, CSVTToolDocTemplate, IDR_SVT>
 {
 public:
-   virtual CString GetName() const override { return _T("RCCapacityTool"); }
+   virtual CString GetName() const override { return _T("St. Venant Torsional Constant"); }
 };
