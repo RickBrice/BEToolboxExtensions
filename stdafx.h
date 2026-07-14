@@ -8,6 +8,8 @@
 #define STRICT
 #endif
 
+#include <targetver.h>
+
 #include <WBFLMFC.h>
 #include <WBFLAll.h>
 
