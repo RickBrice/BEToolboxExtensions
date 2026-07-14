@@ -6,7 +6,7 @@
 #pragma once
 
 
-#include "targetver.h"
+#include <targetver.h>
 
 #include "afx.h"
 
