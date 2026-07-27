@@ -99,7 +99,7 @@ Results2 ComputeJ(T type)
 }
 
 template<typename T, class FACTORY>
-void Beams(TCHAR* strAgency)
+void Beams(const TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
    _tprintf(_T("Name,Area (in2),Yt (in),Yb (in),Ix (in4),Iy (in4),J (in4),t.max_T (1/in3),Height (in),Width (in),Amesh (in4),Amesh/A,J1 (in4),J1/J,J2 (in4),J2/J,J3 (in4),J3/J,Number of Equations,Solution Time (ms)\n"));
@@ -290,7 +290,7 @@ void SingleBeam(T type)
 }
 
 template<typename T, class FACTORY>
-void BDMTable(TCHAR* strAgency)
+void BDMTable(const TCHAR* strAgency)
 {
    _tprintf(_T("%s\n"), strAgency);
    _tprintf(_T("Name,Depth (in),Area (in2),Yb (in),Ix (in4),Iy (in4),J (in4),Wt (k/ft),VS (in)\n"));
