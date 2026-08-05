@@ -25,7 +25,7 @@
 #include <ReportManager\ReportSpecification.h>
 
 class CM3CAnalysisDetailsReportSpecification :
-   public WBFL::Reporting::ReportSpecification
+   public WBFL::ReportMgr::ReportSpecification
 {
 public:
    CM3CAnalysisDetailsReportSpecification(const std::_tstring& strReportName);

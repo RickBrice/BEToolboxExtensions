@@ -47,23 +47,23 @@ IMPLEMENT_DYNCREATE(CM3CDoc, CBEToolboxDoc)
 
 CM3CDoc::CM3CDoc() : CBEToolboxDoc()
 {
-   std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
+   std::shared_ptr<WBFL::ReportMgr::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
 
-   std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3C")));
+   std::shared_ptr<WBFL::ReportMgr::ReportBuilder> pRptBuilder(std::make_shared<WBFL::ReportMgr::ReportBuilder>(_T("M3C")));
    pRptBuilder->SetTitlePageBuilder( pTitlePageBuilder );
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CChapterBuilder>(this)));
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::ReportMgr::ChapterBuilder>(std::make_shared<CM3CChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 
-   pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CMaterialsDetails"));
+   pRptBuilder = std::make_shared<WBFL::ReportMgr::ReportBuilder>(_T("M3CMaterialsDetails"));
    pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CMaterialDetailsChapterBuilder>(this)));
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::ReportMgr::ChapterBuilder>(std::make_shared<CM3CMaterialDetailsChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 
-   pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CAnalysisDetails"));
-   std::shared_ptr<WBFL::Reporting::ReportSpecificationBuilder> pRptSpecBuilder(std::make_shared<CM3CAnalysisDetailsReportSpecificationBuilder>());
+   pRptBuilder = std::make_shared<WBFL::ReportMgr::ReportBuilder>(_T("M3CAnalysisDetails"));
+   std::shared_ptr<WBFL::ReportMgr::ReportSpecificationBuilder> pRptSpecBuilder(std::make_shared<CM3CAnalysisDetailsReportSpecificationBuilder>());
    pRptBuilder->SetReportSpecificationBuilder(pRptSpecBuilder);
    pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
-   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CAnalysisDetailsChapterBuilder>(this)));
+   pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::ReportMgr::ChapterBuilder>(std::make_shared<CM3CAnalysisDetailsChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 
    m_bIsSolutionValid = false;

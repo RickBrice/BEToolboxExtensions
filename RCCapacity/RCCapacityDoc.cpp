@@ -142,8 +142,8 @@ CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
 
 
    // when report printing is implemented, we'll need a title page... this commented out code shows how to do it
-   //std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
-   std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("Analysis Results")));
+   //std::shared_ptr<WBFL::ReportMgr::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
+   std::shared_ptr<WBFL::ReportMgr::ReportBuilder> pRptBuilder(std::make_shared<WBFL::ReportMgr::ReportBuilder>(_T("Analysis Results")));
    //pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
    pRptBuilder->AddChapterBuilder(std::make_shared<CRCCapacityChapterBuilder>(this));
    GetReportManager()->AddReportBuilder(pRptBuilder);

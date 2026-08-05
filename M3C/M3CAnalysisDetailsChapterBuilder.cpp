@@ -60,7 +60,7 @@ Uint16 CM3CAnalysisDetailsChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
+rptChapter* CM3CAnalysisDetailsChapterBuilder::Build(const std::shared_ptr<const WBFL::ReportMgr::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    auto pMySpec = std::dynamic_pointer_cast<const CM3CAnalysisDetailsReportSpecification>(pRptSpec);
    IndexType idx = pMySpec->GetResultsIndex();

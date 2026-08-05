@@ -32,7 +32,7 @@ CM3CTitlePageBuilder::CM3CTitlePageBuilder(void)
 }
 
 CM3CTitlePageBuilder::CM3CTitlePageBuilder(const CM3CTitlePageBuilder& other) :
-WBFL::Reporting::TitlePageBuilder(other)
+WBFL::ReportMgr::TitlePageBuilder(other)
 {
 }
 
@@ -40,7 +40,7 @@ CM3CTitlePageBuilder::~CM3CTitlePageBuilder(void)
 {
 }
 
-rptChapter* CM3CTitlePageBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec) const
+rptChapter* CM3CTitlePageBuilder::Build(const std::shared_ptr<const WBFL::ReportMgr::ReportSpecification>& pRptSpec) const
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -88,7 +88,7 @@ rptChapter* CM3CTitlePageBuilder::Build(const std::shared_ptr<const WBFL::Report
    return pTitlePage;
 }
 
-std::unique_ptr<WBFL::Reporting::TitlePageBuilder> CM3CTitlePageBuilder::Clone() const
+std::unique_ptr<WBFL::ReportMgr::TitlePageBuilder> CM3CTitlePageBuilder::Clone() const
 {
    return std::make_unique<CM3CTitlePageBuilder>(*this);
 }

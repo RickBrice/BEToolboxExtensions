@@ -24,7 +24,7 @@
 #include "M3CAnalysisDetailsReportSpecification.h"
 
 CM3CAnalysisDetailsReportSpecification::CM3CAnalysisDetailsReportSpecification(const std::_tstring& strReportName) :
-WBFL::Reporting::ReportSpecification(strReportName)
+WBFL::ReportMgr::ReportSpecification(strReportName)
 {
    m_Index = 1;
 }

@@ -61,7 +61,7 @@ Uint16 CRCCapacityChapterBuilder::GetMaxLevel() const
    return 1;
 }
 
-rptChapter* CRCCapacityChapterBuilder::Build(const std::shared_ptr<const WBFL::Reporting::ReportSpecification>& pRptSpec, Uint16 level) const
+rptChapter* CRCCapacityChapterBuilder::Build(const std::shared_ptr<const WBFL::ReportMgr::ReportSpecification>& pRptSpec, Uint16 level) const
 {
    rptChapter* pChapter = new rptChapter;
    rptParagraph* pPara = new rptParagraph(rptStyleManager::GetHeadingStyle());
