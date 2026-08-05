@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2026  Washington State Department of Transportation
+// Copyright ï¿½ 1999-2026  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -50,19 +50,19 @@ CM3CDoc::CM3CDoc() : CBEToolboxDoc()
    std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
 
    std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3C")));
-   pRptBuilder->AddTitlePageBuilder( pTitlePageBuilder );
+   pRptBuilder->SetTitlePageBuilder( pTitlePageBuilder );
    pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 
    pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CMaterialsDetails"));
-   pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
+   pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
    pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CMaterialDetailsChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 
    pRptBuilder = std::make_shared<WBFL::Reporting::ReportBuilder>(_T("M3CAnalysisDetails"));
    std::shared_ptr<WBFL::Reporting::ReportSpecificationBuilder> pRptSpecBuilder(std::make_shared<CM3CAnalysisDetailsReportSpecificationBuilder>());
    pRptBuilder->SetReportSpecificationBuilder(pRptSpecBuilder);
-   pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
+   pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
    pRptBuilder->AddChapterBuilder(std::shared_ptr<WBFL::Reporting::ChapterBuilder>(std::make_shared<CM3CAnalysisDetailsChapterBuilder>(this)));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 

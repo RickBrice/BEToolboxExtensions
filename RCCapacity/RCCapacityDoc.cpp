@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // BEToolbox
-// Copyright © 1999-2026  Washington State Department of Transportation
+// Copyright ï¿½ 1999-2026  Washington State Department of Transportation
 //                        Bridge and Structures Office
 //
 // This program is free software; you can redistribute it and/or modify
@@ -144,7 +144,7 @@ CRCCapacityDoc::CRCCapacityDoc() : CBEToolboxDoc()
    // when report printing is implemented, we'll need a title page... this commented out code shows how to do it
    //std::shared_ptr<WBFL::Reporting::TitlePageBuilder> pTitlePageBuilder(std::make_shared<CM3CTitlePageBuilder>());
    std::shared_ptr<WBFL::Reporting::ReportBuilder> pRptBuilder(std::make_shared<WBFL::Reporting::ReportBuilder>(_T("Analysis Results")));
-   //pRptBuilder->AddTitlePageBuilder(pTitlePageBuilder);
+   //pRptBuilder->SetTitlePageBuilder(pTitlePageBuilder);
    pRptBuilder->AddChapterBuilder(std::make_shared<CRCCapacityChapterBuilder>(this));
    GetReportManager()->AddReportBuilder(pRptBuilder);
 }
